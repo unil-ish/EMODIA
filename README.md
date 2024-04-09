@@ -1,4 +1,5 @@
-# Analyse émotionnelle des dialogues dans les films en utilisant le modèle inspiré des équations de Navier-Stokes
+# EMODIA: ÉMotions et DIalogues Analyse
+## Analyse émotionnelle des dialogues dans les films en utilisant le modèle inspiré des équations de Navier-Stokes
 
 #### Objectif du projet
 L'objectif principal de ce projet est d'explorer et de quantifier la manière dont les émotions se développent et interagissent dans les dialogues des films, en utilisant une approche innovante inspirée des équations de Navier-Stokes. Le modèle vise à offrir une nouvelle lentille à travers laquelle examiner les dynamiques émotionnelles entre les personnages, permettant une compréhension plus profonde des stratégies narratives et des relations interpersonnelles au sein des films.
