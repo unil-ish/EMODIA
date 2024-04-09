@@ -10,7 +10,7 @@ Le projet non seulement enrichira la compréhension des techniques narratives et
 #### Phases du projet
 
 1. **Sélection des films et collecte des dialogues** :
-   - Choisir un ensemble représentatif de films célèbres, couvrant différents genres pour avoir une variété de dynamiques émotionnelles.
+   - A partir de ce [dataset](./movie_dialog.zip) représentatif de films célèbres, couvrant différents genres pour avoir une variété de dynamiques émotionnelles.
    - Obtenir les transcriptions complètes des dialogues de ces films. Celles-ci peuvent être trouvées dans des bases de données publiques, sur des sites de fans ou via des services offrant des transcriptions de films.
 
 2. **Préparation des données** :
