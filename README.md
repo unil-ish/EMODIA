@@ -12,13 +12,24 @@ Le projet non seulement enrichira la compréhension des techniques narratives et
 1. **Sélection des films et collecte des dialogues** :
    - Pour la sélection des données et la préparation du projet EMODIA ("ÉMotions et DIalogues Analyse"), nous utiliserons le ["Cornell Movie-Dialog Corpus"](./movie_dialog.zip). Ce corpus         comprend un ensemble diversifié de dialogues extraits de scénarios de films, couvrant un large éventail de genres et offrant une riche variété de dynamiques émotionnelles. Cette              ressource nous permettra d'accéder directement à des transcriptions de dialogues de qualité, facilitant l'analyse des interactions et des évolutions émotionnelles entre les personnages        sans nécessiter une collecte de données supplémentaire.
 
-3. **Préparation des données** :
-   - Pré-traiter les textes des dialogues pour éliminer le bruit et les formatages inutiles. Cela inclut le nettoyage des indications de scène, des instructions pour les acteurs et d'autres annotations non verbales.
-   - Segmenter les dialogues en unités analysables, telles que les répliques ou les échanges de dialogue, en les associant aux personnages respectifs.
 
-4. **Mappage des propriétés émotionnelles** :
-   - Développer ou adapter un algorithme en Python qui attribue à chaque unité de dialogue des valeurs correspondant aux "propriétés des fluides" émotionnelles : vitesse (variation rapide émotionnelle), densité (concentration d'émotions), et pression (intensité émotionnelle).
-   - Utiliser des ressources existantes comme des dictionnaires émotionnels ou des API d'analyse des sentiments pour attribuer des valeurs initiales de sentiment aux segments de texte.
+2. **Extraction et Préparation des Dialogues**
+
+- **Extraction des Échanges Conversationnels** : À partir du "Cornell Movie-Dialog Corpus", nous procéderons à l'extraction de 220,579 échanges conversationnels entre 10,292 paires de personnages de films. Cette riche collection de dialogues, tirée de 617 films, fournira la base de données pour notre analyse émotionnelle approfondie.
+
+- **Nettoyage et Standardisation** : Les données seront nettoyées pour éliminer d'éventuels artéfacts dus à la conversion du séparateur de champs original " +++$+++ " en tabulations (\t), ainsi qu'à la décodification de l'encodage original ISO-8859-2. Ce processus garantira que notre focus soit strictement sur le texte verbal des échanges, en excluant toute annotation non verbale ou instruction scénique superflue.
+
+3. **Segmentation et Association des Dialogues**
+
+- **Délimitation des Unités de Dialogue** : Utilisant le fichier `movie_lines.txt`, chaque réplique sera traitée comme une unité de dialogue individuelle, portant une attention particulière à la correspondance entre les identifiants des lignes de dialogue et les métadonnées des personnages pour préserver l'association précise avec les personnages qui les prononcent.
+
+- **Reconstruction des Conversations** : En s'appuyant sur le fichier `movie_conversations.txt`, nous reconstruirons les conversations intégrales en ordre chronologique en associant les identifiants des répliques aux lignes de dialogue correspondantes. Cette étape est essentielle pour analyser les flux et les dynamiques émotionnels à travers les interactions narratives authentiques entre les personnages.
+
+4. **Enrichissement des Données avec Métadonnées**
+
+- **Intégration des Métadonnées des Films et des Personnages** : Les fichiers `movie_titles_metadata.txt` et `movie_characters_metadata.txt` seront utilisés pour enrichir notre analyse avec des informations contextuelles telles que le genre des films, l'année de sortie, la note IMDB, ainsi que le genre et la position dans les crédits des personnages. Cette dimension ajoutée permettra d'explorer comment les caractéristiques des films et les attributs des personnages influencent les dynamiques émotionnelles des dialogues.
+
+- **Analyse selon les Genres et les Caractéristiques des Personnages** : L'incorporation de ces métadonnées offrira l'opportunité d'examiner les variations des flux émotionnels en fonction du genre cinématographique et des rôles des personnages au sein du récit, fournissant ainsi une compréhension plus nuancée des stratégies narratives employées.
 
 5. **Application du modèle de Navier-Stokes** :
    - Adapter les équations de Navier-Stokes pour modéliser les dynamiques émotionnelles des dialogues, traitant les émotions comme des "flux" qui peuvent varier en intensité et direction au fil du temps et entre les personnages.
