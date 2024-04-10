@@ -32,14 +32,20 @@ Le projet non seulement enrichira la compréhension des techniques narratives et
    - **Analyse selon les Genres et les Caractéristiques des Personnages** : L'incorporation de ces métadonnées offrira l'opportunité d'examiner les variations des flux émotionnels en fonction du genre cinématographique et des rôles des personnages au sein du récit, fournissant ainsi une compréhension plus nuancée des stratégies narratives employées.
 
 5. **Application du modèle de Navier-Stokes** :
-   - Adapter les équations de Navier-Stokes pour modéliser les dynamiques émotionnelles des dialogues, traitant les émotions comme des "flux" qui peuvent varier en intensité et direction au fil du temps et entre les personnages.
+   - Utiliser les équations de Navier-Stokes pour modéliser les dynamiques émotionnelles des dialogues à l'aide de ce [fichier](./analysis_navier_stocker.py), traitant les émotions comme des "flux" qui peuvent varier en intensité et direction au fil du temps et entre les personnages.
    - Analyser les séquences de dialogue pour identifier comment les émotions "coulent" entre les personnages et comment ce flux évolue au cours de la narration.
+   - Pour se faire une idée de l'approche vous pouvez faire référence à cet article 
+     **ATTENTION: Notes de mise en œuvre**
+     - SentimentDynamics : Encapsule les fonctions liées au calcul du flux de sentiments à l'aide de l'équation de Navier-Stokes. Accepte une liste de mots-clés (positifs et négatifs) pour
+       calculer la pression du sentiment.
+     - SpeechAnalysis : gère l'analyse de la parole à l'aide des méthodes définies dans SentimentDynamics. Prend en entrée le DataFrame des discours et une instance de SentimentDynamics pour 
+       effectuer les calculs. **Regarder dans le fichier un exemple d'utilisation**
 
-6. **Analyse et interprétation** :
-   - Évaluer les modèles émergents de l'analyse, tels que la présence de points de tournant émotionnels, la distribution des émotions entre les personnages principaux et secondaires, et les variations d'intensité émotionnelle par rapport aux événements clés de l'intrigue.
-   - Interpréter les résultats à la lumière des théories de la narratologie et de la psychologie des émotions, cherchant à relier les dynamiques émotionnelles identifiées avec l'impact sur le public et avec les techniques narratives utilisées.
-
-7. **Visualisation des résultats** :
+6. **Visualisation des résultats** :
    - Créer des visualisations dynamiques qui cartographient l'évolution des émotions dans les dialogues, comme des cartes de chaleur ou des graphiques de flux, pour illustrer visuellement comment les émotions se déplacent et changent au cours du film.
    - Utiliser ces visualisations pour présenter les résultats de manière intuitive, mettant en évidence les découvertes clés du projet.
+
+7. **Analyse et interprétation** :
+   - Évaluer les modèles émergents de l'analyse, tels que la présence de points de tournant émotionnels, la distribution des émotions entre les personnages principaux et secondaires, et les variations d'intensité émotionnelle par rapport aux événements clés de l'intrigue.
+   - Interpréter les résultats à la lumière des théories de la narratologie et de la psychologie des émotions, cherchant à relier les dynamiques émotionnelles identifiées avec l'impact sur le public et avec les techniques narratives utilisées.
 
