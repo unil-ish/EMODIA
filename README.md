@@ -42,7 +42,7 @@ Le projet non seulement enrichira la compréhension des techniques narratives et
      - SpeechAnalysis : gère l'analyse de la parole à l'aide des méthodes définies dans SentimentDynamics. Prend en entrée le DataFrame des discours et une instance de SentimentDynamics pour 
        effectuer les calculs. **Regarder dans le fichier un exemple d'utilisation**
 
-**6. Visualisation des Résultats**
+6. **Visualisation des Résultats**
 
 La phase de visualisation des résultats du projet EMODIA impliquera l'utilisation de bibliothèques Python spécialisées comme [SeaBorn](https://seaborn.pydata.org/)
 
@@ -51,6 +51,7 @@ La phase de visualisation des résultats du projet EMODIA impliquera l'utilisati
    - **Graphiques de Flux** : Les graphiques de flux illustreront le mouvement et la transition des émotions entre les personnages au fil des conversations. En visualisant ces flux, nous pourrons identifier des patterns tels que l'échange d'émotions spécifiques entre les protagonistes, les moments où les émotions s'intensifient ou se dissipent, et la manière dont ces dynamiques contribuent à l'avancement de l'histoire. Ces graphiques permettront de suivre le parcours émotionnel des personnages, mettant en évidence les interactions qui jouent un rôle pivot dans le développement de leur relation et dans la progression du récit.
 
    - **Présentation Intuitive des Résultats** : L'utilisation de ces visualisations nous permettra de présenter nos résultats de manière intuitive et engageante. En illustrant visuellement les découvertes clés du projet, nous faciliterons la compréhension des dynamiques émotionnelles complexes qui sous-tendent les dialogues des films. Cette approche visuelle permettra aux chercheurs, aux cinéastes et au public de saisir rapidement les aspects essentiels de notre analyse, renforçant ainsi l'accessibilité et l'impact de notre recherche.
+
 
 7. **Analyse et interprétation (TENTATIVE)** :
    - Évaluer les modèles émergents de l'analyse, tels que la présence de points de tournant émotionnels, la distribution des émotions entre les personnages principaux et secondaires, et les variations d'intensité émotionnelle par rapport aux événements clés de l'intrigue.
