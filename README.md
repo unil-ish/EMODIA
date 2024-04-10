@@ -34,7 +34,7 @@ Le projet non seulement enrichira la compréhension des techniques narratives et
 5. **Application du modèle de Navier-Stokes** :
    - Utiliser les équations de Navier-Stokes pour modéliser les dynamiques émotionnelles des dialogues à l'aide de ce [fichier](./analysis_navier_stocker.py), traitant les émotions comme des "flux" qui peuvent varier en intensité et direction au fil du temps et entre les personnages.
    - Analyser les séquences de dialogue pour identifier comment les émotions "coulent" entre les personnages et comment ce flux évolue au cours de la narration.
-   - Pour se faire une idée de l'approche vous pouvez faire référence à cet article 
+   - Pour se faire une idée de l'approche vous pouvez faire référence à cet [article](./MathNLP24__Fluid_Dynamics_Inspired_Emotional_Analysis_in_Shakespearean_Tragedies__A_Novel_Computational_Linguistics_Methodology%20(5).pdf)
      **ATTENTION: Notes de mise en œuvre**
      - SentimentDynamics : Encapsule les fonctions liées au calcul du flux de sentiments à l'aide de l'équation de Navier-Stokes. Accepte une liste de mots-clés (positifs et négatifs) pour
        calculer la pression du sentiment.
