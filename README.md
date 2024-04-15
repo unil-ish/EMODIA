@@ -7,7 +7,62 @@ L'objectif principal de ce projet est d'explorer et de quantifier la manière do
 #### Implications et applications potentielles
 Le projet non seulement enrichira la compréhension des techniques narratives et de la construction des personnages dans les films mais pourra également avoir des applications pratiques dans le domaine de la production cinématographique, dans la critique de films, et dans l'industrie du divertissement en général. Il pourrait offrir aux réalisateurs et scénaristes de nouveaux outils pour évaluer et perfectionner l'efficacité émotionnelle de leurs œuvres, ainsi que fournir aux analystes et critiques une nouvelle méthode pour discuter et évaluer les œuvres cinématographiques.
 
+### Description du dataset
+
+**Contenu**
+Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et a été converti en tabulations (\t). De plus, l'encodage original du fichier était ISO-8859-2. Il est possible que la conversion et le décodage du séparateur de champs aient laissé quelques artefacts.
+
+* _movie_titles_metadata.txt_
+
+   contient des informations sur chaque titre de film
+   champs :
+      * movieID,
+      * titre du film,
+      * année du film,
+      * cote IMDB,
+      * non. votes IMDB,
+      * genres au format ['genre1', 'genre2',É, 'genreN']
+* _movie_characters_metadata.txt_
+
+   contient des informations sur chaque personnage de film
+   champs :
+  
+      * characterID
+      * nom du personnage
+      * movieID
+      * titre du film
+      * sexe (" ?" pour les cas non étiquetés)
+      * position dans le générique (" ?" pour les cas non étiquetés)
+  
+* _movie_lines_.txt
+
+   contient le texte réel de chaque énoncé
+   champs :
+  
+      * lineID
+      * characterID (qui a prononcé cette phrase)
+      * identifiant du film
+      * nom du personnage
+      * texte de la phrase
+
+* _movie_conversations_.txt
+
+   la structure des conversations
+   champs
+  
+      * characterID du premier personnage impliqué dans la conversation
+       * characterID du deuxième personnage impliqué dans la conversation
+      * movieID du film dans lequel la conversation a eu lieu
+      * liste des énoncés qui composent la conversation, dans l'ordre chronologique
+      * chronologique : ['lineID1', 'lineID2',É, 'lineIDN'] doit être mis en correspondance avec movie_lines.txt pour reconstituer le contenu réel
+
+* _raw_script_urls.txt_
+  
+   les URL à partir desquelles les sources brutes ont été récupérées
+
 #### Phases du projet
+
+**Le projet doit être entièrement construit selon une architecture de programmation orientée objet.**
 
 1. **Sélection des films et collecte des dialogues** :
    - Pour la sélection des données et la préparation du projet EMODIA ("ÉMotions et DIalogues Analyse"), nous utiliserons le ["Cornell Movie-Dialog Corpus"](./movie_dialog.zip). Ce corpus         comprend un ensemble diversifié de dialogues extraits de scénarios de films, couvrant un large éventail de genres et offrant une riche variété de dynamiques émotionnelles. Cette              ressource nous permettra d'accéder directement à des transcriptions de dialogues de qualité, facilitant l'analyse des interactions et des évolutions émotionnelles entre les personnages        sans nécessiter une collecte de données supplémentaire.
@@ -16,8 +71,6 @@ Le projet non seulement enrichira la compréhension des techniques narratives et
 2. **Extraction et Préparation des Dialogues**
 
    - **Extraction des Échanges Conversationnels** : À partir du "Cornell Movie-Dialog Corpus", nous procéderons à l'extraction de 220,579 échanges conversationnels entre 10,292 paires de personnages de films. Cette riche collection de dialogues, tirée de 617 films, fournira la base de données pour notre analyse émotionnelle approfondie.
-
-   - **Nettoyage et Standardisation** : Les données seront nettoyées pour éliminer d'éventuels artéfacts dus à la conversion du séparateur de champs original " +++$+++ " en tabulations (\t), ainsi qu'à la décodification de l'encodage original ISO-8859-2. Ce processus garantira que notre focus soit strictement sur le texte verbal des échanges, en excluant toute annotation non verbale ou instruction scénique superflue.
 
 3. **Segmentation et Association des Dialogues**
 
@@ -46,12 +99,44 @@ Le projet non seulement enrichira la compréhension des techniques narratives et
 
    La phase de visualisation des résultats du projet EMODIA impliquera l'utilisation de bibliothèques Python spécialisées comme [SeaBorn](https://seaborn.pydata.org/)
 
-      - **Création de Cartes de Chaleur** : Les cartes de chaleur seront conçues pour démontrer la distribution et l'intensité des émotions à travers différents segments de dialogue au sein d'un film. En utilisant une gamme de couleurs, ces cartes révèleront les zones où les émotions comme la joie, la tristesse, la colère, et la surprise sont particulièrement concentrées, fournissant ainsi une vue d'ensemble de la dynamique émotionnelle du récit. Les variations de couleur au sein de la carte indiqueront l'évolution des émotions du début à la fin, offrant des insights sur la manière dont les événements clés ou les interactions entre personnages affectent le paysage émotionnel du film.
+    Basé sur le descriptif du dataset et le plan du projet, voici une série d'analyses et de visualisations potentielles que vous pouvez envisager pour explorer et comprendre les dynamiques    narratives et émotionnelles des dialogues de films :
 
-      - **Graphiques de Flux** : Les graphiques de flux illustreront le mouvement et la transition des émotions entre les personnages au fil des conversations. En visualisant ces flux, nous pourrons identifier des patterns tels que l'échange d'émotions spécifiques entre les protagonistes, les moments où les émotions s'intensifient ou se dissipent, et la manière dont ces dynamiques contribuent à l'avancement de l'histoire. Ces graphiques permettront de suivre le parcours émotionnel des personnages, mettant en évidence les interactions qui jouent un rôle pivot dans le développement de leur relation et dans la progression du récit.
+   ### Analyses Statistiques et Visualisations
 
-      - **Présentation Intuitive des Résultats** : L'utilisation de ces visualisations nous permettra de présenter nos résultats de manière intuitive et engageante. En illustrant visuellement les découvertes clés du projet, nous faciliterons la compréhension des dynamiques émotionnelles complexes qui sous-tendent les dialogues des films. Cette approche visuelle permettra aux chercheurs, aux cinéastes et au public de saisir rapidement les aspects essentiels de notre analyse, renforçant ainsi l'accessibilité et l'impact de notre recherche.
+      1. **Distribution des Genres de Films**
+         - Créer un histogramme ou un diagramme circulaire pour visualiser la distribution des genres de films dans le dataset.
+         - Examiner les genres de films les plus communs et ceux moins représentés pour déterminer des tendances ou des biais potentiels dans la sélection des films.
+      
+      2. **Analyse Temporelle des Films**
+         - Tracer la distribution des films par année de sortie pour observer les tendances cinématographiques au fil du temps.
+         - Corréler l’évolution des genres avec les périodes historiques pour voir si certaines époques favorisent certains types de films.
+      
+      3. **Analyse de la Cote IMDB et des Votes**
+         - Utiliser un scatter plot pour explorer la relation entre la cote IMDB des films et le nombre de votes reçus, potentiellement en colorant les points par genre de film pour détecter des patterns spécifiques.
+      
+      4. **Analyse des Personnages**
+         - Répartition des personnages par sexe et par position dans le générique pour identifier les dynamiques de représentation de genre dans les films.
+         - Étudier la corrélation entre le sexe des personnages et leur importance dans le film (position dans le générique).
+      
+      5. **Exploration des Dialogues**
+         - Analyser la fréquence et la distribution des dialogues par film et par personnage pour identifier les personnages clés et leur centralité dans la narration.
+         - Exécuter une analyse de sentiment sur les répliques pour comprendre les dynamiques émotionnelles des dialogues.
+      
+   ### Visualisations des Données Textuelles
+   
+      1. **Cartographie des Dialogues**
+         - Créer des graphes de réseau pour visualiser les interactions entre personnages dans les films, en illustrant la fréquence et la profondeur des dialogues.
+         - Utiliser des cartes de chaleur pour montrer la densité des échanges entre différents personnages principaux.
+      
+      2. **Chronologie des Échanges Emotionnels**
+         - Tracer des graphiques de série temporelle montrant l'évolution des sentiments au cours des conversations pour visualiser comment les émotions fluctuent à travers un dialogue.
+      
+      3. **Modélisation des Flux Emotionnels**
+         - Utiliser des modèles basés sur les équations de Navier-Stokes pour simuler les flux émotionnels entre les personnages, en représentant graphiquement la dynamique et l'intensité                de ces échanges.
+         - Explorer les différences de flux émotionnel en fonction des caractéristiques du film ou des attributs des personnages.
+      
 
+   Ces analyses et visualisations pourraient offrir des insights précieux sur la structure narrative et les dynamiques émotionnelles des dialogues cinématographiques, enrichissant ainsi les recherches dans le domaine des humanités numériques et de l'analyse du texte.
 
 7. **Analyse et interprétation (TENTATIVE)** :
       - Évaluer les modèles émergents de l'analyse, tels que la présence de points de tournant émotionnels, la distribution des émotions entre les personnages principaux et secondaires, et les variations d'intensité émotionnelle par rapport aux événements clés de l'intrigue.
