@@ -16,12 +16,14 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
 
    contient des informations sur chaque titre de film
    champs :
+  
       * movieID,
       * titre du film,
       * année du film,
       * cote IMDB,
       * non. votes IMDB,
       * genres au format ['genre1', 'genre2',É, 'genreN']
+  
 * _movie_characters_metadata.txt_
 
    contient des informations sur chaque personnage de film
