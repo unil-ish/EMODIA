@@ -9,3 +9,14 @@ fournir une visualisation des points suivants :
 -graphiques de séries temporelles pour montrer l'évolution des sentiments
 -simuler les flux émotionnels entre les personnages, en représentant la dynamique et l'intensité des échanges
 -
+
+
+Classes candidates: 
+- films: id, date de sortie, cote IMDB, nombres de vote IMDB, genre
+- personnages: id, idfilm, nom, sexe, position dans le générique 
+- émotions: id,  
+- répliques: id, idpersonnage, idfilm, (nom du personnage), contenu de la réplique
+- dialogue: id, idpersonnage1, idpersonnage2, idfilm, *répliques
+
+questions: 
+fichier movie_conversations.txt: découpage des dialogues ? 
