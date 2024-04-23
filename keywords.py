@@ -1,4 +1,8 @@
 def get_keywords():
+    """
+    Returns a list of all keywords available in the EMODIA database
+    :return:
+    """
     negative_words = [
         "abhorrent", "abrasive", "abrupt", "absurd", "abusive", "accidental", 
         "accusatory", "acerbic", "adverse", "aggressive", "alarmist", "alienating", 
@@ -67,4 +71,8 @@ def get_keywords():
         "top", "tranquil", "trusting", "truthful", "ultimate", "unbiased",
         "uncommon", "understanding", "unequaled", "unflappable", "unique"]
     
-    return keywords_example = positive_words + negative_words
+
+
+    keywords_example = positive_words + negative_words
+
+    return keywords_example
