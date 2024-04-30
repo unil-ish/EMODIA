@@ -10,3 +10,6 @@ class Movie:
         self.votes = votes
         self.genres = []
 
+
+movie_df = pd.read_csv('movie_titles_metadata.tsv', sep='\t')
+print(movie_df)
