@@ -11,5 +11,5 @@ class Movie:
         self.genres = []
 
 
-movie_df = pd.read_csv('movie_titles_metadata.tsv', sep='\t')
+movie_df = pd.read_csv('movie_dialog/movie_titles_metadata.tsv', sep='\t')
 print(movie_df)
