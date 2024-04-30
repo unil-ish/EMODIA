@@ -9,6 +9,13 @@
  
 3. **Exécution**
   * Distribution des rôles.
+    * Classes
+      * Character -> Sophie
+      * Conversation -> Virgile
+      * Movie -> Sophie
+      * Line -> Virgile
+      * Code review -> Lorelei
+    * Graphes
   * Planification de qui, quoi, quand. Via plan de projet Github?
   * Writing the code 🧑‍💻
   * To be determined!
