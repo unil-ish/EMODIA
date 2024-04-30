@@ -18,5 +18,3 @@
 - répliques: id, idpersonnage, idfilm, (nom du personnage), contenu de la réplique
 - dialogue: id, idpersonnage1, idpersonnage2, idfilm, *répliques
 
-questions: 
-fichier movie_conversations.txt: découpage des dialogues ? 
