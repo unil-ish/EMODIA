@@ -16,6 +16,21 @@
       * Line -> Virgile
       * Code review -> Lorelei
     * Graphes
+      * Distribution des genres de film
+        * Histogramme
+      * Analyse de la cote IMDB et des votes
+        * .color
+        * Scatterplot
+      * Analyse temporelle des films
+        * Histogramme
+      * Analyse des personnages
+        * Position dans le générique en fonction du genre
+        * Double histogramme
+      * Exploration du dialogue
+        * Analyse de fréquence et distribution des dialogues par film et personnage pour identifier les personnages clés dans la narration.
+        * Pour simplifier pour commencer: histogramme
+      * Visualisation des dialogues
+        * À redéfinir et distribuer quand on y arrive au vu de la taille de l'étape.
   * Planification de qui, quoi, quand. Via plan de projet Github?
   * Writing the code 🧑‍💻
   * To be determined!
