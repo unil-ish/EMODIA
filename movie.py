@@ -11,16 +11,19 @@ class Movie:
         #self.genres = [] ?
         self.genres = genres
 
-    def get_genres(self):
-        genres = []
+    def genres(self):
+        genres_list = []
         with open('movie_dialog/movie_titles_metadata.tsv', 'r', encoding='utf-8') as file:
             for line in file:
                 parts = line.strip().split('\t')
                 if len(parts) >= 6:
+                    #genres are in the 6th column
                     genres_str = parts[5]
+                    #take away individual [], all genres go into one []
                     genres_str = genres_str.strip('[]')
-                    genres.extend(genres_str.split(','))
-        return genres
+                    for genre in genres_str.split(','):
+                        genres_list.append(genre)
+        return genres_list
 
     def release_year(self):
         pass
@@ -37,4 +40,4 @@ movie_df = pd.read_csv('movie_dialog/movie_titles_metadata.tsv', sep='\t')
 print(movie_df)
 
 movie = Movie('m0', '10 things i hate about you', 1999, 6.90, 62847, [])
-print(Movie.get_genres('movie_dialog/movie_titles_metadata.tsv'))
+print(Movie.genres('movie_dialog/movie_titles_metadata.tsv'))
