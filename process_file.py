@@ -12,6 +12,14 @@ class ProcessFile:
 
     ATTENTION: You have to map your data columns to the columns' names: 'title', 'speaker', 'speech' before using this class.
 
+    Before using this class, you have to install the following packages:
+    - spacy
+    - pandas
+    - tqdm
+
+    You also have to download the English model for spaCy:
+    python -m spacy download en_core_web_sm
+
     """
 
     def __init__(self, df, senticnet_path):
@@ -101,7 +109,3 @@ class ProcessFile:
         results.to_csv('results/speeches_processed.csv', index=False)
         return results
 
-
-# Example usage:
-#
-# processed_df = process_speeches(df, 'data/senticnet.tsv')

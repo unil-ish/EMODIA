@@ -87,8 +87,22 @@ class SpeechAnalysis:
 
         return all_s
 
+
+
+
+#ATTENTION: You have to map your_df columns to the columns' names: 'title', 'speaker', 'speech' before using this class.
+
+
 # Example use
+# from process_file import ProcessFile
+# from sentiment_dynamics import SentimentDynamics
+# from analysis_navier_stocker import SpeechAnalysis
+#
+#processed_df = ProcessFile(your_df,"data/senticnet.tsv").process_speeches()
+
 #keywords = positive_words + negative_words
 #sentiment_dynamics = SentimentDynamics(keywords)
+
 #speech_analysis = SpeechAnalysis(processed_df, sentiment_dynamics)
+
 #all_s = speech_analysis.calculate_navier_stocker()
