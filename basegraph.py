@@ -44,14 +44,14 @@ class BaseGraph(ABC):
         plt.ylabel(self.ylabel)
         plt.show()
     
-    def create_histogram(self):
+    def create_histogram(self, data, column):
         sns.histplot(data=data[column])
         plt.title(self.title)
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.show()
         
-    def create_heatmap(self):
+    def create_heatmap(self, data, x , y, value):
         pivot_table = data.pivot_table(values = values, index = y, columns = x)
         sns.heatmap(data=pivot_table, cmap="coolwarm")
         plt.title(self.title)
