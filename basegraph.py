@@ -65,13 +65,13 @@ class BaseGraph(ABC):
 #graph = BaseGraph(title='Title', xlabel='X', ylabel='Y')
 
 #charger les données des DataFrame créé dans les autres classes: 
-#exemple_pd = pd.read_csv('exemple.pd')
+#data_exemple = exemple_df()
 
 # Création d'un scatterplot en utilisant la méthode create_graph: il faut modifier le nom du df
-#graph.create_graph(data=exemple_pd, graph_type='scatter', x='ID', y='Score')
+#graph.create_graph(data=data_exemple, graph_type='scatter', x='ID', y='Score')
 
 # Création d'un histogramme en utilisant la méthode create_graph: il faut modifier le nom du df
-#graph.create_graph(data=exemple_pd, graph_type='histogram', column='Score')
+#graph.create_graph(data=data_exemple, graph_type='histogram', column='Score')
 
 # Création d'une carte de chaleur en utilisant la méthode create_graph: il faut modifier le nom du df
-#graph.create_graph(data=exemple_pd, graph_type='heatmap', x='ID', y='Titre', values='Score')
+#graph.create_graph(data=data_exemple, graph_type='heatmap', x='ID', y='Titre', values='Score')
