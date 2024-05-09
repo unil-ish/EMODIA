@@ -14,7 +14,7 @@ class BaseGraph(ABC):
         self.xlabel = "x-axis label goes here"
         self.ylabel = "y-axis label goes here"
  
-    #@abstractmethod       
+         
     #def xy_values(self, data):
         #pass
     
@@ -26,6 +26,7 @@ class BaseGraph(ABC):
     #def show(self, data):
         #pass
     
+    @abstractmethod
     def create_graph(self, data, graph_type, **kwargs):
         if graph_type == 'scatter':
             self.create_scatterplot(data, **kwargs)
