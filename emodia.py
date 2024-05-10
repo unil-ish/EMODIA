@@ -68,7 +68,7 @@ class Program:
 
     NAME = 'EMODIA'
     VERSION: int = 0.1
-    MODULES_DIR = 'modules'
+    MODULES_DIR = Path('modules')
     AUTHORS = {
         # Dictionary containing authors: institution.
         'Lorelei C.': 'Université de Lausanne.',
@@ -136,18 +136,48 @@ class Program:
             f'{Ansi.HEADER}Initializing {Program.NAME} version {Program.VERSION}.{Ansi.ENDC}'
         )
         # That's where we check for the necessary modules etc.
-        cls.import_modules()
+        cls.check_modules()
 
     @classmethod
-    def import_modules(cls):
-        """Imports modules."""
-        print(f'    1. Looking for modules in \'{Ansi.PATH}/{cls.MODULES_DIR}{Ansi.ENDC}\'...')
-        try:
-            Path(cls.MODULES_DIR).exists()
-            print(f'       {Ansi.SCSS}Directory found{Ansi.ENDC}.')
-        except:
-            print(f'       {Ansi.WARN}ERROR: Directory not found.')
-        print(f'    2. Importing modules...')
+    def path_error(cls, directory):
+        """Returns path error with directory name."""
+        return (
+            f'       {Ansi.FAIL}ERROR: \'{Ansi.PATH}/{directory}{Ansi.FAIL}\' '
+        )
+
+    @classmethod
+    def check_modules(cls):
+        """Looks for modules."""
+        module_dir = cls.MODULES_DIR
+        prompt = (
+            f'\n       Enter modules directory to try again:'
+            f'\n      >'
+        )
+        print(f'    1. Looking for modules in \'{Ansi.PATH}/{module_dir}{Ansi.ENDC}\'...')
+        while True:
+            try:
+                if not module_dir.exists():
+                    raise FileExistsError('directory not found')
+                print(f'       {Ansi.SCSS}Directory found{Ansi.ENDC}.')
+                break
+            except:
+                error_type = 'directory not found'
+                print(f'{cls.path_error(module_dir)} {error_type}{Ansi.ENDC}.')
+                module_dir = Path(input(prompt))
+                print()
+        while True:
+            try:
+                if not len(list(module_dir.glob('*'))) > 0:
+                    raise Exception("Directory empty.")
+                break
+            except:
+                error_type = 'directory is empty'
+                print(f'{cls.path_error(module_dir)} {error_type}{Ansi.ENDC}.')
+                module_dir = Path(input(prompt))
+                print()
+
+        print(f'       {Ansi.SCSS}{len(list(module_dir.glob('*')))} module(s) found{Ansi.ENDC}.\n')
+
 
 
 
