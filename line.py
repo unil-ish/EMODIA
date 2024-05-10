@@ -1,32 +1,79 @@
 # code de la classe line
+import pandas
 class Line:
     # initialisation dans le même ordre que les données dans movie_line.tsv
-    def __init__(self, line_id, movie_id, character_id, line_content):
-        self.line_id = line_id
-        self.movie_id = movie_id
+    def __init__(self, id, movie_id, character_id, line_content):
+        self.id = id
         self.character_id = character_id
+        self.movie_id = movie_id
         self.line_content = line_content
 
-        # self.all_line_id = []
-        # self.all_movie_id = []
-        # self.all_character_id = []
-        # self.all_character_name = []
-        # self.all_line_content = []
+        self.all_lines_id = []
+        self.all_characters_id = []
+        self.all_movies_id = []
+        self.all_lines_content = []
 
-    def get_movie_id(self,line_id):
-        return self.movie_id
+    # les getter qui prennent un line_id en input, pour retourner la valeur cherchée correspondante
+    def get_character_id(self,id):
+        merged_list = dict(zip(self.all_lines_id, self.all_characters_id))
+        return merged_list[id]
 
-    def get_character_id(self,line_id):
-        return self.character_id
+    def get_movie_id(self,id):
+        merged_list = dict(zip(self.all_lines_id, self.all_movies_id))
+        return merged_list[id]
 
-    def get_character_name(self,line_id):
-        return self.character_name
+    def get_line_content(self,id):
+        merged_list = dict(zip(self.all_lines_id, self.all_lines_content))
+        return merged_list[id]
 
-    def get_line_content(self,line_id):
-        return self.line_content
+    # on crée des @property pour pouvoir accéder aux attributs
+    @property
+    def _all_lines_id(self):
+        return self.all_lines_id
 
-    # @classmethod
-    # def get(cls):
+    @property
+    def _all_characters_id(self):
+        return self.all_characters_id
+
+    @property
+    def _all_movies_id(self):
+        return self.all_movies_id
+
+    @property
+    def _all_lines_content(self):
+        return self.all_characters_id
+
+    # les classmethod pour accéder à des listes d'éléments voulus, demande une liste de id line
+    # le _all dans le nom ne veut pas dire que la methode retourne tout, mais c'est pour dire qu'on en prend une liste
+    @classmethod
+    def get_all_characters_id(cls,id_list):
+        merged_list = dict(zip(Line._all_lines_id, Line._all_characters_id))
+        list_characters_id = []
+        for ids in id_list:
+            list_characters_id.append(merged_list[ids])
+        return list_characters_id
+
+    @classmethod
+    def get_all_movies_id(cls,id_list):
+        merged_list = dict(zip(Line._all_lines_id, Line._all_movies_id))
+        list_movie_id = []
+        for ids in id_list:
+            list_movie_id.append(merged_list[ids])
+        return list_movie_id
+
+    @classmethod
+    def get_all_contents_id(cls,id_list):
+        merged_list = dict(zip(Line._all_lines_id, Line._all_lines_content))
+        list_content = []
+        for ids in id_list:
+            list_content.append(merged_list[ids])
+        return list_content
+
+    # la création du dataframe qui demande une liste d'id de conversation et une autre liste
+    @classmethod
+    def create_dataframe(cls,list_ids,attribute_list):
+        df = pandas.DataFrame(dict(zip(list_ids,attribute_list)))
+        return df
 
 ################### TOUT CECI DISPARAITRA AU FINAL #######################
 # le chemin vers movie_lines.tsv

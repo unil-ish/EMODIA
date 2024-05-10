@@ -1,4 +1,5 @@
 # code de la classe conversation
+import pandas
 import pandas as pd
 
 
@@ -49,6 +50,7 @@ class Conversation:
 
 
     # les classmethod pour accéder à des listes d'éléments voulus, demande une liste de id conversation
+    # le _all ne veut pas dire que la methode retourne tout, mais c'est pour dire qu'on en prend une liste
     @classmethod
     def get_all_characters(cls,id_list):
         merged_list = dict(zip(Conversation._all_conversations_id, Conversation._all_characters_id))
@@ -73,6 +75,11 @@ class Conversation:
             list_all_lines.append(merged_list[ids])
         return list_all_lines
 
+    # la création du dataframe qui demande une liste d'id de conversation et une autre liste
+    @classmethod
+    def create_dataframe(cls,list_ids,attribute_list):
+        df = pandas.DataFrame(dict(zip(list_ids,attribute_list)))
+        return df
 
 ################### TOUT CECI DISPARAITRA AU FINAL #######################
 # le chemin vers movie_conversations.tsv
