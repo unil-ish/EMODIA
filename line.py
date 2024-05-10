@@ -1,14 +1,34 @@
 # code de la classe line
 class Line:
     # initialisation dans le même ordre que les données dans movie_line.tsv
-    def __init__(self, line_id, movie_id, character_id, character_name, line_content):
+    def __init__(self, line_id, movie_id, character_id, line_content):
         self.line_id = line_id
         self.movie_id = movie_id
         self.character_id = character_id
-        self.character_name = character_name
         self.line_content = line_content
 
+        # self.all_line_id = []
+        # self.all_movie_id = []
+        # self.all_character_id = []
+        # self.all_character_name = []
+        # self.all_line_content = []
 
+    def get_movie_id(self,line_id):
+        return self.movie_id
+
+    def get_character_id(self,line_id):
+        return self.character_id
+
+    def get_character_name(self,line_id):
+        return self.character_name
+
+    def get_line_content(self,line_id):
+        return self.line_content
+
+    # @classmethod
+    # def get(cls):
+
+################### TOUT CECI DISPARAITRA AU FINAL #######################
 # le chemin vers movie_lines.tsv
 # tous les guillemets("") de movie_lines.tsv ont été supprimés
 tsv_file_path = 'movie_dialog/movie_lines.tsv'
