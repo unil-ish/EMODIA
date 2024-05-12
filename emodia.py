@@ -17,10 +17,12 @@ Le programme permet d'effectuer les tâches suivantes:
 import sys
 import os
 from pathlib import Path
+import logging
 import glob
 import time
 import random
 import re
+import json
 
 
 class Ansi:
@@ -58,14 +60,25 @@ class Ansi:
 
     # Custom styles go here.
     HEADER = '\033[1m░   '
-    LOGO_LINE = '\033[48;5;216m \033[48;0m   '
+    LOGO_LINE = '\033[48;5;216m \033[48;0m   \033[1m\033[38;5;216m'
     PATH = '\033[94m'
     SCSS = '\033[92m\033[1m'
+    NL = '\n'
 
 
 class Program:
-    """Class handling the general program startup and functions."""
+    """Class handling the general program startup."""
+    # Starting a logger with the file name without extension.
+    logger = logging.getLogger(__name__)
+    logging.basicConfig(
+        filename=f'{os.path.splitext(__file__)[0]}.log',
+        encoding='utf-8',
+        filemode='w',
+        level=logging.DEBUG,
+        format='%(asctime)s | %(levelname)-8s | %(message)s',
+    )
 
+    # PROGRAM INFO
     NAME = 'EMODIA'
     VERSION: int = 0.1
     MODULES_DIR = Path('modules')
@@ -87,12 +100,13 @@ class Program:
     PUBLICATION_YEAR: int = 2024
 
     CREDITS = (
-        f'    This program was created by:\n'  # Alphabetical list of authors
-        f'{'\n'.join(sorted(f'        {key + ',':18} {value}' for key, value in AUTHORS.items()))}\n'
+        # Sorts dicts alphabetically, using """ and chr(10) instead of \n for compatibility with Python < 3.12
+        f'    This program was created by:\n'
+        f"""{chr(10).join(sorted(f'        {key + ",":18} {value}' for key, value in AUTHORS.items()))}\n"""
         f'\n    Based on research by:\n'
-        f'{'\n'.join(sorted(f'        {key + ',':18} {value}' for key, value in RESEARCH_AUTHORS.items()))}\n'
+        f"""{chr(10).join(sorted(f'        {key + ",":18} {value}' for key, value in RESEARCH_AUTHORS.items()))}\n"""
         f'\n    Under the supervision of:\n'
-        f'{'\n'.join(sorted(f'        {key + ',':18} {value}' for key, value in SUPERVISORS.items()))}\n'
+        f"""{chr(10).join(sorted(f'        {key + ",":18} {value}' for key, value in SUPERVISORS.items()))}\n"""
     )
 
     LOGO = (
@@ -105,22 +119,59 @@ class Program:
         '888        888   "   888 Y88b. .d88P 888  .d88P  888    d8888888888 ',
         '8888888888 888       888  "Y88888P"  8888888P" 8888888 d88P     888 '
     )
-    FORMATTED_LOGO = f'\n{'\n'.join(f'{Ansi.LOGO_LINE}{line}' for line in LOGO)}\n'
+    FORMATTED_LOGO = f'\n{chr(10).join(f"{Ansi.LOGO_LINE}{line}" for line in LOGO)}\n'
 
     def __init__(self):
         """Saves startup time for further calculations and debugging."""
+        logging.info('Instancing Program.')
         self.start_time = time.time()
+        logging.info(f'Starting time: {self.start_time}')
+        self.authors = "authors"
         self.welcome_message()
         self.init_program()
+        print(self.authors)
 
     @property
     def get_time(self):
         """Returns EPOCH time of program start. """
         return self.start_time
 
+    @property
+    def authors(self):
+        return self._authors
+
+    @authors.setter
+    def authors(self, value):
+        self._authors = {}
+        raw_authors = self.get_resources(value, "json")
+        for key in raw_authors.keys():
+            self._authors.update(
+                {
+                    key:
+                    self.sort_dict(
+                        raw_authors[key],
+                        "name"
+                    )
+                }
+            )
+
+    @classmethod
+    def sort_dict(cls, to_sort: dict, key: str):
+        return sorted(to_sort, key=lambda d: d[key])
+
+    @classmethod
+    def get_resources(cls, resource, data_type):
+        with open(Path(f'resources/{resource}.{data_type}'), 'r') as file:
+            if data_type == 'json':
+                data = json.load(file)
+            else:
+                data = file
+            return data
+
     @classmethod
     def welcome_message(cls):
         """Displays logo, welcome message and credits."""
+        logging.info('Displaying logo and welcome message.')
         print(
             f'{Ansi.BOLD}\033[38;5;208m{Program.FORMATTED_LOGO}\033[0;00m'
         )
@@ -132,6 +183,7 @@ class Program:
     @classmethod
     def init_program(cls):
         """Handles program initialization and user feedback."""
+        logging.info('init_program called: Initializing program.')
         print(
             f'{Ansi.HEADER}Initializing {Program.NAME} version {Program.VERSION}.{Ansi.ENDC}'
         )
@@ -148,12 +200,13 @@ class Program:
     @classmethod
     def check_modules(cls):
         """Looks for modules."""
+        logging.info('Checking for modules...')
         module_dir = cls.MODULES_DIR
         prompt = (
             f'\n       Enter modules directory to try again:'
             f'\n      >'
         )
-        print(f'    1. Looking for modules in \'{Ansi.PATH}/{module_dir}{Ansi.ENDC}\'...')
+        print(f'    1.  Looking for modules in \'{Ansi.PATH}/{module_dir}{Ansi.ENDC}\'...')
         while True:
             try:
                 if not module_dir.exists():
@@ -176,9 +229,11 @@ class Program:
                 module_dir = Path(input(prompt))
                 print()
 
-        print(f'       {Ansi.SCSS}{len(list(module_dir.glob('*')))} module(s) found{Ansi.ENDC}.\n')
+        print(f'       {Ansi.SCSS}{len(list(module_dir.glob("*")))} module(s) found{Ansi.ENDC}.\n')
 
 
+class ModulesHandler:
+    """Handles modules."""
 
 
 def main():

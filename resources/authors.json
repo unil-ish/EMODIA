@@ -1,0 +1,41 @@
+{
+  "authors":
+          [
+            {
+              "name": "Lorelei",
+              "surname": "Chevroulet",
+              "institution": "Université de Lausanne"
+            },
+            {
+              "name": "CLorelei",
+              "surname": "Chevroulet",
+              "institution": "Université de Lausanne"
+            },
+            {
+              "name": "BLorelei",
+              "surname": "Chevroulet",
+              "institution": "Université de Lausanne"
+            }
+          ],
+  "research_authors":
+          [
+            {
+              "name": "Davide",
+              "surname": "Picca",
+              "institution": "Université de Lausanne"
+            }
+          ],
+  "supervision":
+          [
+            {
+              "name": "Davide",
+              "surname": "Picca",
+              "institution": "Université de Lausanne"
+            },
+            {
+              "name": "Yohan",
+              "surname": "Cuda",
+              "institution": "Université de Lausanne"
+            }
+          ]
+}
