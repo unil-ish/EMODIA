@@ -106,7 +106,7 @@ class Program:
 
         self.welcome_message(self.formatted_logo, self.formatted_authors)
 
-        self.LOGGER.info(f'{Ansi.TAB}Calling init_program() for.')
+        self.LOGGER.info(f'{Ansi.TAB}Calling start_program().')
         self.start_program()
 
     @property
@@ -198,7 +198,7 @@ class Program:
             f'{Ansi.BOLD}\033[38;5;208m{formatted_logo}\033[0;00m'
         )
         print(
-            f'{Ansi.HEADER}Welcome to {Program.NAME}.{Ansi.ENDC}'
+            f'{Ansi.HEADER}Welcome to {Program.NAME} version {Program.VERSION}.{Ansi.ENDC}'
         )
         print(
             f'{Ansi.TAB}This program was created by:\n'
@@ -214,10 +214,15 @@ class Program:
         """Handles program startup and user feedback."""
         cls.LOGGER.info('start_program called: Setting up program.')
         print(
-            f'{Ansi.HEADER}Starting {Program.NAME} version {Program.VERSION}.{Ansi.ENDC}'
+            f'{Ansi.HEADER}Starting {Program.NAME}... {Ansi.ENDC}'
         )
         # That's where we check for the necessary modules etc.
-        cls.check_modules()
+        modules_handler = ModulesHandler()
+        modules_handler.check_modules()
+
+
+class ModulesHandler():
+    """Handles modules."""
 
     @classmethod
     def path_error(cls, directory):
@@ -229,8 +234,8 @@ class Program:
     @classmethod
     def check_modules(cls):
         """Looks for modules."""
-        cls.LOGGER.info('Checking for modules...')
-        module_dir = cls.MODULES_DIR
+        Program.LOGGER.info('Checking for modules...')
+        module_dir = Program.MODULES_DIR
         prompt = (
             f'\n{Ansi.TAB * 2}Enter modules directory to try again:'
             f'\n{Ansi.TAB}  >'
@@ -259,10 +264,6 @@ class Program:
                 print()
 
         print(f'{Ansi.TAB * 2}{Ansi.SCSS}{len(list(module_dir.glob("*")))} module(s) found{Ansi.ENDC}.\n')
-
-
-class ModulesHandler:
-    """Handles modules."""
 
 
 def main():
