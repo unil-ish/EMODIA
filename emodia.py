@@ -82,32 +82,7 @@ class Program:
     NAME = 'EMODIA'
     VERSION: int = 0.1
     MODULES_DIR = Path('modules')
-    AUTHORS = {
-        # Dictionary containing authors: institution.
-        'Lorelei C.': 'Université de Lausanne.',
-        'A A': 'Université de Lausanne.'
-    }
-
-    RESEARCH_AUTHORS = {
-        'Davide Picca': 'Université de Lausanne.'
-    }
-
-    SUPERVISORS = {
-        'Davide Picca': 'Université de Lausanne.',
-        'Johan Cuda': 'Université de Lausanne.'
-    }
-
     PUBLICATION_YEAR: int = 2024
-
-    CREDITS = (
-        # Sorts dicts alphabetically, using """ and chr(10) instead of \n for compatibility with Python < 3.12
-        f'    This program was created by:\n'
-        f"""{chr(10).join(sorted(f'        {key + ",":18} {value}' for key, value in AUTHORS.items()))}\n"""
-        f'\n    Based on research by:\n'
-        f"""{chr(10).join(sorted(f'        {key + ",":18} {value}' for key, value in RESEARCH_AUTHORS.items()))}\n"""
-        f'\n    Under the supervision of:\n'
-        f"""{chr(10).join(sorted(f'        {key + ",":18} {value}' for key, value in SUPERVISORS.items()))}\n"""
-    )
 
     LOGO = (
         '8888888888 888b     d888  .d88888b.  8888888b. 8888888        d8888 ',
@@ -127,9 +102,10 @@ class Program:
         self.start_time = time.time()
         logging.info(f'Starting time: {self.start_time}')
         self.authors = "authors"
-        self.welcome_message()
+        self.formatted_authors = self.authors
+        self.welcome_message(self.formatted_authors)
         self.init_program()
-        print(self.authors)
+        print("test")
 
     @property
     def get_time(self):
@@ -155,6 +131,21 @@ class Program:
                 }
             )
 
+    @property
+    def formatted_authors(self):
+        return self._formatted_authors
+
+    @formatted_authors.setter
+    def formatted_authors(self, authors):
+        self._formatted_authors = []
+        for type_key in authors:
+            self._formatted_authors.append(
+                chr(10).join(
+                    f'        {key["name"] + " " + key["surname"] + ",":24} {key["institution"]}'
+                    for key in authors[type_key]
+            )
+        )
+
     @classmethod
     def sort_dict(cls, to_sort: dict, key: str):
         return sorted(to_sort, key=lambda d: d[key])
@@ -169,7 +160,7 @@ class Program:
             return data
 
     @classmethod
-    def welcome_message(cls):
+    def welcome_message(cls, formatted_authors):
         """Displays logo, welcome message and credits."""
         logging.info('Displaying logo and welcome message.')
         print(
@@ -178,7 +169,14 @@ class Program:
         print(
             f'{Ansi.HEADER}Welcome to {Program.NAME}.{Ansi.ENDC}'
         )
-        print(Program.CREDITS)
+        print(
+            f'    This program was created by:\n'
+            f'{formatted_authors[0]}{2 * chr(10)}' 
+            f'    Based on research by:\n'
+            f'{formatted_authors[1]}{2 * chr(10)}'
+            f'    Under the supervision of:\n'
+            f'{formatted_authors[2]}{2 * chr(10)}'
+        )
 
     @classmethod
     def init_program(cls):
