@@ -68,15 +68,6 @@ class Ansi:
 
 class Program:
     """Class handling the general program startup."""
-    # Starting a logger with the file name without extension.
-    logger = logging.getLogger(__name__)
-    logging.basicConfig(
-        filename=f'{os.path.splitext(__file__)[0]}.log',
-        encoding='utf-8',
-        filemode='w',
-        level=logging.DEBUG,
-        format='%(asctime)s | %(levelname)-8s | %(message)s',
-    )
 
     # PROGRAM INFO
     NAME = 'EMODIA'
@@ -84,28 +75,21 @@ class Program:
     MODULES_DIR = Path('modules')
     PUBLICATION_YEAR: int = 2024
 
-    LOGO = (
-        '8888888888 888b     d888  .d88888b.  8888888b. 8888888        d8888 ',
-        '888        8888b   d8888 d88P" "Y88b 888  "Y88b  888         d88888 ',
-        '888        88888b.d88888 888     888 888    888  888        d88P888 ',
-        '8888888    888Y88888P888 888     888 888    888  888       d88P 888 ',
-        '888        888 Y888P 888 888     888 888    888  888      d88P  888 ',
-        '888        888  Y8P  888 888     888 888    888  888     d88P   888 ',
-        '888        888   "   888 Y88b. .d88P 888  .d88P  888    d8888888888 ',
-        '8888888888 888       888  "Y88888P"  8888888P" 8888888 d88P     888 '
-    )
-    FORMATTED_LOGO = f'\n{chr(10).join(f"{Ansi.LOGO_LINE}{line}" for line in LOGO)}\n'
-
     def __init__(self):
         """Saves startup time for further calculations and debugging."""
+        self.start_logger()
         logging.info('Instancing Program.')
+
         self.start_time = time.time()
         logging.info(f'Starting time: {self.start_time}')
+
         self.authors = "authors"
         self.formatted_authors = self.authors
-        self.welcome_message(self.formatted_authors)
+        self._formatted_logo = "logo"
+        self.formatted_logo = self._formatted_logo
+
+        self.welcome_message(self.formatted_logo, self.formatted_authors)
         self.init_program()
-        print("test")
 
     @property
     def get_time(self):
@@ -141,9 +125,30 @@ class Program:
         for type_key in authors:
             self._formatted_authors.append(
                 chr(10).join(
-                    f'        {key["name"] + " " + key["surname"] + ",":24} {key["institution"]}'
+                    f'        {key["name"] + " " + key["surname"]:22}  {key["institution"]}'
                     for key in authors[type_key]
             )
+        )
+
+    @property
+    def formatted_logo(self):
+        return self._formatted_logo
+
+    @formatted_logo.setter
+    def formatted_logo(self, value):
+        logo = self.get_resources(value, "txt")
+        self._formatted_logo = f'\n{chr(10).join(f"{Ansi.LOGO_LINE}{line}" for line in logo.splitlines())}\n'
+
+    @classmethod
+    def start_logger(cls):
+        # Starting a logger with the file name without extension.
+        logger = logging.getLogger(cls.__name__)
+        logging.basicConfig(
+            filename=f'{os.path.splitext(__file__)[0]}.log',
+            encoding='utf-8',
+            filemode='w',
+            level=logging.DEBUG,
+            format='%(asctime)s | %(levelname)-8s | %(message)s',
         )
 
     @classmethod
@@ -156,15 +161,15 @@ class Program:
             if data_type == 'json':
                 data = json.load(file)
             else:
-                data = file
+                data = file.read()
             return data
 
     @classmethod
-    def welcome_message(cls, formatted_authors):
+    def welcome_message(cls, formatted_logo, formatted_authors):
         """Displays logo, welcome message and credits."""
         logging.info('Displaying logo and welcome message.')
         print(
-            f'{Ansi.BOLD}\033[38;5;208m{Program.FORMATTED_LOGO}\033[0;00m'
+            f'{Ansi.BOLD}\033[38;5;208m{formatted_logo}\033[0;00m'
         )
         print(
             f'{Ansi.HEADER}Welcome to {Program.NAME}.{Ansi.ENDC}'
