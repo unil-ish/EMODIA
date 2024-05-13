@@ -7,13 +7,18 @@
               "institution": "Université de Lausanne"
             },
             {
-              "name": "CLorelei",
-              "surname": "Chevroulet",
+              "name": "Virgile",
+              "surname": "Albasani",
               "institution": "Université de Lausanne"
             },
             {
-              "name": "BLorelei",
-              "surname": "Chevroulet",
+              "name": "Erica",
+              "surname": "Berazategui",
+              "institution": "Université de Lausanne"
+            },
+            {
+              "name":  "Sophie",
+              "surname": "Ward",
               "institution": "Université de Lausanne"
             }
           ],
@@ -33,7 +38,7 @@
               "institution": "Université de Lausanne"
             },
             {
-              "name": "Yohan",
+              "name": "Johan",
               "surname": "Cuda",
               "institution": "Université de Lausanne"
             }
