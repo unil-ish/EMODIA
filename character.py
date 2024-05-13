@@ -43,5 +43,6 @@ class Character:
     def get_all_characters(self):
         return self.get_all_characters
 
-character_df = pd.read_csv('movie_dialog/movie_characters_metadata.tsv', sep=',') #why works with ',' and not '\t' ?
+
+character_df = pd.read_csv('movie_dialog/movie_characters_metadata.tsv', sep=',') # why works with ',' and not '\t' ?
 print(character_df)
