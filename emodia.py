@@ -20,17 +20,22 @@ from pathlib import Path
 import logging
 import glob
 import time
+import math
 import random
 import re
 import json
+import inspect
+import importlib.util
 
 # PROGRAM INFO
 NAME = 'EMODIA'
 VERSION: float = 0.1
-MODULES_DIR = Path('moduless')
+MODULES_DIR = Path('modules')
 RESOURCES_DIR = Path('resources')
 PUBLICATION_YEAR: int = 2024
+WAIT_BETWEEN_HEADERS: float = 1
 LOGGER = []
+MODULES = []
 
 
 class Ansi:
@@ -67,7 +72,7 @@ class Ansi:
     BG_BR_CYA = '\033[106m'
 
     # Custom styles go here.
-    HEADER = '\033[1m░   '  # Default header formatting
+    HEADER = f'\033[1m░   '  # Default header formatting
     LOGO_LINE = '\033[48;5;216m \033[48;0m   \033[1m\033[38;5;216m'  # Formatting for logo
     PATH = '\033[94m'  # File and directory path formatting
     SCSS = '\033[92m\033[1m'  # Success formatting
@@ -76,14 +81,19 @@ class Ansi:
 
 
 class CustomLogger(logging.Logger):
-    """Override the makeRecord method to allow for optional Type arg in logs."""
+    """Override the makeRecord method to allow for optional Type arg in logs.
+    The following methods can be used:
+    * .info(str, **extra={"Type":str})
+    * .warning(str, **extra={"Type":str})
+    * .error(str, **extra={"Type":str})
+    """
 
     def __init__(self, name: str):
         # Starting a logger with the file name without extension.
         super().__init__(name)
         self.propagate = False
         formatter = logging.Formatter(  # Custom formatting
-            fmt='%(asctime)-19s | %(levelname)-8s | %(message)-50s | %(Type)s ',
+            fmt='%(asctime)-19s | %(levelname)-7s | %(message)-50s | %(Type)s ',
             datefmt="%Y-%m-%d %H:%M:%S"
         )
         handler = logging.FileHandler(  # Tells logger to use a file named after the program.
@@ -123,26 +133,27 @@ class StartProgram(ABCProgram):
         self.logger.info('Starting Program.', extra={"Type": "✅"})
 
         # Prints welcome message.
-        welcome = WelcomeMessage()
-        welcome.welcome_message(welcome)
+        welcome = ProgramInfo()
+        welcome.say_welcome()
 
         self.logger.info(f'Calling start_program().')
         self.start_program()
 
-    @classmethod
-    def start_program(cls):
+    def start_program(self):
         """Handles program startup and user feedback."""
-        LOGGER.info('start_program called: Setting up program.')
+        self.logger.info('start_program called: Setting up program.')
         print(
             f'{Ansi.HEADER}Starting {NAME}... {Ansi.ENDC}'
         )
         # That's where we check for the necessary modules etc.
         modules_handler = ModulesHandler()
-        modules_handler.check_modules(modules_handler)
+        modules_handler.modules_checker()
+        modules_handler.modules_importer()
 
 
-class WelcomeMessage(ABCProgram):
+class ProgramInfo(ABCProgram):
     """Handles welcome message."""
+
     def __init__(self):
         super().__init__()
 
@@ -156,17 +167,23 @@ class WelcomeMessage(ABCProgram):
         self.formatted_logo = self._formatted_logo
         self.logger.info(f'{Ansi.TAB * 2}Gathered logo ASCII art.')
 
-    @classmethod
-    def welcome_message(cls, self):
-        """Displays logo, welcome message and credits."""
+        self._formatted_welcome = str
+        self.formatted_welcome = self._formatted_welcome
+
+    def say_welcome(self):
         self.logger.info(f'{Ansi.TAB}Displaying logo and welcome message.')
-        print(
-            f'{Ansi.BOLD}\033[38;5;208m{self.formatted_logo}\033[0;00m'
-        )
-        print(
-            f'{Ansi.HEADER}Welcome to {NAME} version {VERSION}.{Ansi.ENDC}'
-        )
-        print(
+        print(self.formatted_welcome)
+
+    @property
+    def formatted_welcome(self):
+        return self._formatted_welcome
+
+    @formatted_welcome.setter
+    def formatted_welcome(self, value):
+        self.logger.info(f'{Ansi.TAB}Preparing logo and welcome message.')
+        self._formatted_welcome = (
+            f'{Ansi.BOLD}\033[38;5;208m{self.formatted_logo}\033[0;00m\n'
+            f'{Ansi.HEADER}Welcome to {NAME} version {VERSION}.{Ansi.ENDC}\n'
             f'{Ansi.TAB}This program was created by:\n'
             f'{self.formatted_authors[0]}{2 * chr(10)}'
             f'{Ansi.TAB}Based on research by:\n'
@@ -234,33 +251,58 @@ class WelcomeMessage(ABCProgram):
 
 class ModulesHandler(ABCProgram):
     """Handles modules."""
+
     def __init__(self):
         super().__init__()
+        self.modules_dict = []
         self.module_dir = MODULES_DIR
         self.prompt = (
             f'\n{Ansi.TAB * 2}Enter modules directory to try again:'
             f'\n{Ansi.TAB}   >'
         )
+        self.module_list = []
 
-    @classmethod
-    def path_error(cls, directory):
-        """Returns path error with directory name."""
-        return (
-            f'{Ansi.TAB * 2}{Ansi.FAIL}ERROR: \'{Ansi.PATH}/{directory}{Ansi.FAIL}\' '
-        )
-
-    @classmethod
-    def check_modules(cls, self):
+    def modules_checker(self):
         """Looks for modules."""
-        self.logger.info('Starting check_modules()')
-
+        self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')
         self.logger.info(f'{Ansi.TAB}Looking for modules in {self.module_dir}.')
 
         print(f'{Ansi.TAB}1.  Looking for modules in \'{Ansi.PATH}/{self.module_dir}{Ansi.ENDC}\'...')
         self.lookfor_directory()
         self.lookfor_modules()
 
-        print(f'{Ansi.TAB * 2}{Ansi.SCSS}{len(list(self.module_dir.glob("*")))} module(s) found{Ansi.ENDC}.\n')
+    def modules_importer(self):
+        """Import modules."""
+        self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')
+        self.logger.info(f'{Ansi.TAB}Preparing to import modules from {self.module_dir}.')
+
+        print(f'{Ansi.TAB}2.  Importing modules from \'{Ansi.PATH}/{self.module_dir}{Ansi.ENDC}\'...')
+
+        for module in self.module_list:
+            self.modules_dict.append(
+                {
+                    'module': module,
+                    'name': module.name,
+                    'path': module,
+                    'import': 'False',
+                    'tested': 'False',
+                    'f_name': f'{Ansi.DIM}{module.name}{Ansi.ENDC}',
+                    'f_import': f'{Ansi.DIM}False{Ansi.ENDC}',
+                    'f_tested': f'{Ansi.DIM}False{Ansi.ENDC}',
+                }
+            )
+        self.import_ui()
+
+        for module in self.modules_dict:
+            self.import_module(module)
+            self.import_ui()
+        print(f'{Ansi.DOWN * (len(self.modules_dict) + 1)}')
+
+    def path_error(self):
+        """Returns path error with directory name."""
+        return (
+            f'{Ansi.TAB * 2}{Ansi.FAIL}ERROR: \'{Ansi.PATH}/{self.module_dir}{Ansi.FAIL}\' '
+        )
 
     def lookfor_directory(self):
         while True:
@@ -272,24 +314,61 @@ class ModulesHandler(ABCProgram):
                 break
             except:
                 error_type = 'directory not found'
-                self.logger.info(f'{Ansi.TAB * 2}Error: Directory not found.', extra={"Type": "❗"})
-                print(f'{self.path_error(self.module_dir)} {error_type}{Ansi.ENDC}.')
+                self.logger.error(f'{Ansi.TAB * 2}Error: Directory not found.', extra={"Type": "❗"})
+                print(f'{self.path_error()} {error_type}{Ansi.ENDC}.')
                 self.module_dir = Path(input(self.prompt))
                 print()
 
     def lookfor_modules(self):
         while True:
             try:
-                if not len(list(self.module_dir.glob('*'))) > 0:
-                    self.logger.info(f'{Ansi.TAB * 2}Error: Directory empty.', extra={"Type": "❗"})
+                self.module_list = list(self.module_dir.glob('*.py'))
+                if not len(self.module_list) > 0:
+                    self.logger.error(f'{Ansi.TAB * 2}Error: Directory empty.', extra={"Type": "❗"})
                     raise Exception("Directory empty.")
-                self.logger.info(f'{Ansi.TAB * 2}Modules found.')
+                self.logger.info(f'{Ansi.TAB * 2}{len(self.module_list)} module(s) found.')
+                print(f'{Ansi.TAB * 2}{Ansi.SCSS}{len(self.module_list)} module(s) found{Ansi.ENDC}.\n')
                 break
             except:
                 error_type = 'directory is empty'
-                print(f'{cls.path_error(self.module_dir)} {error_type}{Ansi.ENDC}.')
+                print(f'{self.path_error()} {error_type}{Ansi.ENDC}.')
                 self.module_dir = Path(input(self.prompt))
                 print()
+
+    def import_ui(self):
+        print(f'{Ansi.TAB * 3}{"module name":32} {"imported?":10} {"tested?":10}')
+        for module in self.modules_dict:
+            print(
+                f'{Ansi.CLINE}{Ansi.TAB * 3}'
+                f"{module['f_name']:40} {module['f_import']:18} {module['f_tested']:10}"
+                f'{Ansi.ENDC}'
+            )
+        print(f'{Ansi.UP * (len(self.modules_dict) + 2)}')
+
+    def import_module(self, module):
+        """This uses some dirty workarounds to load modules dynamically.
+        1. Gets the name without file extension. hello_world.py -> hello_world
+        2. Imports the module as 'mod'.
+        3. Executes the module.
+        4. Links 'mod' with a global var named after the 'name' variable.
+        5. Marks the module as correctly imported :)"""
+        try:
+            name = module["name"].split('.', 1)[0]
+            spec = importlib.util.spec_from_file_location("module.name", os.path.realpath(module["path"]))
+            mod = importlib.util.module_from_spec(spec)
+            sys.modules["module.name"] = mod
+            spec.loader.exec_module(mod)
+            globals()['%s' % name] = mod
+            module["import"] = "True"
+            module['f_name'] = f'{Ansi.ENDC}{module["name"]}{Ansi.ENDC}'
+            module['f_import'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'
+        except:
+            pass
+
+
+        #module['f_tested'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'
+
+
 
 def main():
     """Main function. Initializes program."""
