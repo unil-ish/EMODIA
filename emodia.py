@@ -182,7 +182,7 @@ class MainProgram(ABCProgram):
         self.command_loop()
 
     def command_loop(self):
-        print('Hi! We\'re all good, what would you like to do now?')
+        print(f'{Ansi.TAB}Done.')
 
 
 class ProgramInfo(ABCProgram):
