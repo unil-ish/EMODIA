@@ -27,44 +27,56 @@ import json
 import inspect
 import importlib.util
 
+# Note that any module imported through the program's module importer function will behave as if
+# added through the standard 'import module' formula.
+
 # PROGRAM INFO
 NAME = 'EMODIA'
 VERSION: float = 0.1
-MODULES_DIR = Path('modules')
-RESOURCES_DIR = Path('resources')
+MODULES_DIR = Path('modules')  # Directory where each 'module'.py is stored.
+RESOURCES_DIR = Path('resources')  # Directory for resources such as authors, logo, etc.
 PUBLICATION_YEAR: int = 2024
-WAIT_BETWEEN_HEADERS: float = 1
-LOGGER = []
-MODULES = []
+LOGGER = []  # That's where we will store an instance of the custom logger for use by any function
 
 
 class Ansi:
-    CLINE = '\033[2K'
-    ENDC = '\033[0m'
+    """This class is used for formatting purposes.
+    * It uses ANSI escape codes that have an impact on formatting when output to a console or terminal.
+    * These codes can be entered in any string, typically by using a fstring such as:
+        f'{Ansi.TAB}{Ansi.BR_GRE}This message will be printed in green!{Ansi.ENDC}'
+    * It also implements an Ansi.TAB variable to ensure indents are consistent throughout the program."""
+    CLINE = '\033[2K'  # Clears line
+    ENDC = '\033[0m'  # Remove any existing formatting beyond this point.
 
+    # These codes move the cursor.
     RIGHT = '\033[C'
     UP = '\033[F'
     DOWN = '\033[E'
 
+    # Emphasis effects.
     BOLD = '\033[1m'
     DIM = '\033[2m'
     UNDERLINE = '\033[4m'
 
+    # Vibes for the error messages.
     FAIL = '\033[91m'
     WARN = '\033[93m'
 
+    # Bright text colors
     BR_GRE = '\033[92m'
     BR_RED = '\033[93m'
     BR_BLU = '\033[94m'
     BR_MAG = '\033[95m'
     BR_CYA = '\033[96m'
 
+    # Background colors
     BG_GRE = '\033[42m'
     BG_RED = '\033[41m'
     BG_BLU = '\033[44m'
     BG_MAG = '\033[45m'
     BG_CYA = '\033[46m'
 
+    # Bright background colors
     BG_BR_GRE = '\033[102m'
     BG_BR_RED = '\033[101m'
     BG_BR_BLU = '\033[104m'
@@ -76,12 +88,14 @@ class Ansi:
     LOGO_LINE = '\033[48;5;216m \033[48;0m   \033[1m\033[38;5;216m'  # Formatting for logo
     PATH = '\033[94m'  # File and directory path formatting
     SCSS = '\033[92m\033[1m'  # Success formatting
-    NL = '\n'
+    NL = '\n'  # Inserts newline. Identical to using chr(10).
     TAB = '    '  # Indent level. Default: 4 spaces.
 
 
 class CustomLogger(logging.Logger):
-    """Override the makeRecord method to allow for optional Type arg in logs.
+    """A custom logger class.
+    Overrides the makeRecord method to allow for optional Type arg in logs.
+    In our case, we use it to add emojis at the end of log messages for easier human parsing.
     The following methods can be used:
     * .info(str, **extra={"Type":str})
     * .warning(str, **extra={"Type":str})
@@ -89,32 +103,42 @@ class CustomLogger(logging.Logger):
     """
 
     def __init__(self, name: str):
-        # Starting a logger with the file name without extension.
-        super().__init__(name)
-        self.propagate = False
-        formatter = logging.Formatter(  # Custom formatting
-            fmt='%(asctime)-19s | %(levelname)-7s | %(message)-50s | %(Type)s ',
-            datefmt="%Y-%m-%d %H:%M:%S"
+        """Initializes a custom logger as child of default python logger class.
+        Has a custom log message format with additional 'Type' field.
+        The logs are saved in a single file, named after the program's name."""
+        super().__init__(name)  # Inherit from default python logger class
+        self.propagate = False  # See Python logging docs
+
+        formatter = logging.Formatter(  # Saves a custom format in a logging.Formatter scheme
+            fmt='%(asctime)-19s | %(levelname)-7s | %(message)-50s | %(Type)s ',  # Note the extra 'Type' field.
+            datefmt="%Y-%m-%d %H:%M:%S"  # Date format, removes the milliseconds that are usually added
         )
-        handler = logging.FileHandler(  # Tells logger to use a file named after the program.
-            filename=f'{os.path.splitext(__file__)[0]}.log',
-            mode='w',
+        handler = logging.FileHandler(  # Saves a custom handler in a logging.FileHandler scheme.
+            filename=f'{os.path.splitext(__file__)[0]}.log',  # Names the log file after the program's name.
+            mode='w',  # Overwrite log file if it exists, then appends logs messages to it.
             encoding='utf-8'
         )
-        handler.setLevel("INFO")
-        handler.setFormatter(formatter)
-        self.addHandler(handler)
+        handler.setLevel("INFO")  # Tells our logger to look for any message of severity higher or equal to INFO.
+        handler.setFormatter(formatter)  # Sets the logger's format to our custom format.
+
+        self.addHandler(handler)  # Tells the logger to use our custom handler as output handler -> outputs to file.
 
         self.info('Custom logger initialized. Hi!', extra={"Type": '📝'})
 
     def makeRecord(self, *args, **kwargs):
+        """Overrides the logger's makeRecord method to make extra arguments optional.
+        makeRecord is called whenever we do logger.info(), warn(), or any other logger message function.
+        This extra argument must be added as extra{"Type": string}. See log message at the end of __init__
+        for an example."""
         rv = super(CustomLogger, self).makeRecord(*args, **kwargs)
         rv.__dict__["Type"] = rv.__dict__.get("Type", "  ")
         return rv
 
 
 class ABCProgram:
-    """Parent class for all modules."""
+    """Parent class for all modules. Allows them to share a single, custom logger and makes them print
+    a log message with their name when they are initialized.
+    For more info on logger, see the CustomLogger class."""
 
     def __init__(self):
         # Ensure children share the logger.
@@ -147,12 +171,18 @@ class StartProgram(ABCProgram):
         )
         # That's where we check for the necessary modules etc.
         modules_handler = ModulesHandler()
+        # Looks for modules in the MODULES_DIR directory. Allows user to pick another dir if dir is empty.
         modules_handler.modules_checker()
+        # Tries to import all the modules within the directory, with confirmation of import status.
         modules_handler.modules_importer()
 
 
 class ProgramInfo(ABCProgram):
-    """Handles welcome message."""
+    """Handles welcome message.
+    * Stores some variables within ProgramInfo for easy access if any modules ends up needing them. It's nicer
+        to only do the file opening and content formatting once and be able to recall it at will instead of redoing
+        it every time someone may want to see the credits (which is hopefully often :)).
+    """
 
     def __init__(self):
         super().__init__()
@@ -365,9 +395,7 @@ class ModulesHandler(ABCProgram):
         except:
             pass
 
-
-        #module['f_tested'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'
-
+        # module['f_tested'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'
 
 
 def main():
@@ -375,6 +403,7 @@ def main():
     global LOGGER
     LOGGER = CustomLogger("logger")
     program = StartProgram()
+    print()
 
 
 if __name__ == '__main__':

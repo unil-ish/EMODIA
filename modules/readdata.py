@@ -1,7 +1,8 @@
 import zipfile
 
 
-def readdata(path, **kwargs):
+def readdata(path, logger, tab, **kwargs):
+    logger.info(f'{tab * 3}this is a logger test :)')
     if '.zip' in path.name:
         if not kwargs["zip_name"]:
             print('Please select a zip file.')
@@ -11,7 +12,6 @@ def readdata(path, **kwargs):
         print('that\'s a zip!')
         try:
             test = zipfile.ZipFile(path, 'r')
-            return_data = []
             print(test.namelist())
             #for filename in test.namelist():
             #    with zipfile.ZipFile(path) as my_zip:
