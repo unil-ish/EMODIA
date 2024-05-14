@@ -8,6 +8,13 @@ class Character:
         self.gender = gender
         self.credits_position = credits_position
 
+        # do we not have to put them in __init__() ?
+        # self.get_all_id = [] --> but can we do this if there is no method ?
+        self.get_all_name = []
+        self.get_all_movie_id = []
+        self.get_all_gender = []
+        self.get_all_credits_position = []
+
     def get_name(self):
         name_list = []
         merged_list = dict(zip([id], name_list))  # id = character id
