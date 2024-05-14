@@ -182,25 +182,32 @@ class ProgramInfo(ABCProgram):
     * Stores some variables within ProgramInfo for easy access if any modules ends up needing them. It's nicer
         to only do the file opening and content formatting once and be able to recall it at will instead of redoing
         it every time someone may want to see the credits (which is hopefully often :)).
+    * Gathers the data from files located in RESOURCES_DIR, extracts it and formats it.
+    * Instances have the following properties:
+        - authors: list of dicts containing author data.
+        - formatted_authors: formatted author data, ready for printing.
+        - formatted_logo: formatted logo, ready for printing.
+        - formatted_welcome: formatted welcome message with logo and authors, ready for printing.
     """
 
     def __init__(self):
-        super().__init__()
+        super().__init__()  # Getting inheritance.
 
         self.logger.info(f'{Ansi.TAB}Gathering author information...', extra={"Type": "🚚"})
-        self.authors = "authors"
-        self.formatted_authors = self.authors
+        self.authors = "authors"  # str is the name of the json file holding author data.
+        self.formatted_authors = self.authors  # provides the contents of the files to the formatter
         self.logger.info(f'{Ansi.TAB * 2}Gathered author information.')
 
         self.logger.info(f'{Ansi.TAB}Gathering logo ASCII art...', extra={"Type": "🚚"})
-        self._formatted_logo = "logo"
-        self.formatted_logo = self._formatted_logo
+        self._formatted_logo = "logo"  # str is the name of the file holding logo data.
+        self.formatted_logo = self._formatted_logo  # provides the contents of the files to the formatter
         self.logger.info(f'{Ansi.TAB * 2}Gathered logo ASCII art.')
 
-        self._formatted_welcome = str
-        self.formatted_welcome = self._formatted_welcome
+        self._formatted_welcome = str  # placeholder for formatted_welcome setter
+        self.formatted_welcome = self._formatted_welcome  # actually sets the value
 
     def say_welcome(self):
+        """Function that prints out the formatted welcome message while making a log entry."""
         self.logger.info(f'{Ansi.TAB}Displaying logo and welcome message.')
         print(self.formatted_welcome)
 
@@ -210,6 +217,7 @@ class ProgramInfo(ABCProgram):
 
     @formatted_welcome.setter
     def formatted_welcome(self, value):
+        """Prepares a formatted welcome message. 'value' is a placeholder."""
         self.logger.info(f'{Ansi.TAB}Preparing logo and welcome message.')
         self._formatted_welcome = (
             f'{Ansi.BOLD}\033[38;5;208m{self.formatted_logo}\033[0;00m\n'
@@ -228,15 +236,19 @@ class ProgramInfo(ABCProgram):
 
     @authors.setter
     def authors(self, value):
+        """Gets the raw data from the file at 'value'.
+            However, this data isn't sorted. As dictionaries can't be sorted, we create a new dictionary and fill it
+            with data returned by the sort.dict() function, using the "name" key as key to be sorted alphabetically.
+            sort.dict() takes care of the sorting."""
         self._authors = {}
-        raw_authors = self.get_resources(value, "json")
-        for key in raw_authors.keys():
-            self._authors.update(
+        raw_authors: dict = self.get_resources(value, "json")  # Gets the raw json content.
+        for key in raw_authors.keys():  # Each key being an entry like "authors", "supervisors", etc.
+            self._authors.update(  # Add to dictionary
                 {
                     key:
-                        self.sort_dict(
-                            raw_authors[key],
-                            "name"
+                        self.sort_dict(  # Returns a sorted dict
+                            raw_authors[key],  # Uses the key from raw_authors as key for the new dict.
+                            "name"  # And sort using the "name" key from raw_authors.
                         )
                 }
             )
@@ -247,12 +259,13 @@ class ProgramInfo(ABCProgram):
 
     @formatted_authors.setter
     def formatted_authors(self, authors):
+        """Formats authors data to be used in the welcome message."""
         self._formatted_authors = []
-        for type_key in authors:
+        for type_key in authors:  # type_key being something like "authors", "supervisors", etc.
             self._formatted_authors.append(
                 chr(10).join(
                     f'{Ansi.TAB * 2}{key["name"] + " " + key["surname"]:22}  {key["institution"]}'
-                    for key in authors[type_key]
+                    for key in authors[type_key]  # Iterates through each dict within authors.
                 )
             )
 
@@ -262,18 +275,22 @@ class ProgramInfo(ABCProgram):
 
     @formatted_logo.setter
     def formatted_logo(self, value):
+        """Formats the logo by getting the resource from LOGO_DIR, then wrapping each line with formatting."""
         logo = self.get_resources(value, "txt")
         self._formatted_logo = f'\n{chr(10).join(f"{Ansi.LOGO_LINE}{line}" for line in logo.splitlines())}\n'
 
     @classmethod
     def sort_dict(cls, to_sort: dict, key: str):
+        """Short function to sort dicts.
+        As dicts can't be sorted, we create a list of dictionaries sorted by the 'key' key."""
         return sorted(to_sort, key=lambda d: d[key])
 
     @classmethod
     def get_resources(cls, resource, data_type):
+        """Returns data from a specified resouce within the RESOURCES_DIR. Handles both json and txt."""
         with open(Path(f'{RESOURCES_DIR}/{resource}.{data_type}'), 'r') as file:
             if data_type == 'json':
-                data = json.load(file)
+                data = json.load(file)  # Using json loader for json files.
             else:
                 data = file.read()
             return data
@@ -335,7 +352,8 @@ class ModulesHandler(ABCProgram):
         )
 
     def lookfor_directory(self):
-        while True:
+        """Looks for the modules directory, with logs and user prompt if directory issue."""
+        while True:  # Try until suitable directory is found.
             try:
                 if not self.module_dir.exists():
                     raise FileExistsError('directory not found')
@@ -350,30 +368,32 @@ class ModulesHandler(ABCProgram):
                 print()
 
     def lookfor_modules(self):
-        while True:
+        """Looks for module within the modules directory, with logs and user prompt if content issue."""
+        while True:  # Try until modules are found.
             try:
-                self.module_list = list(self.module_dir.glob('*.py'))
-                if not len(self.module_list) > 0:
+                self.module_list = list(self.module_dir.glob('*.py'))  # Can we get a list of modules in the directory?
+                if not len(self.module_list) > 0:  # If not, raise exception and log it.
                     self.logger.error(f'{Ansi.TAB * 2}Error: Directory empty.', extra={"Type": "❗"})
                     raise Exception("Directory empty.")
                 self.logger.info(f'{Ansi.TAB * 2}{len(self.module_list)} module(s) found.')
                 print(f'{Ansi.TAB * 2}{Ansi.SCSS}{len(self.module_list)} module(s) found{Ansi.ENDC}.\n')
-                break
-            except:
+                break  # If we've got our modules, we can break out and go back.
+            except:  # If there's an exception, warn the user and ask them for another directory.
                 error_type = 'directory is empty'
                 print(f'{self.path_error()} {error_type}{Ansi.ENDC}.')
                 self.module_dir = Path(input(self.prompt))
                 print()
 
     def import_ui(self):
-        print(f'{Ansi.TAB * 3}{"module name":32} {"imported?":10} {"tested?":10}')
+        """Prints a fancy report for modules, and updates it whenever called by writing over old lines."""
+        print(f'{Ansi.TAB * 3}{"module name":32} {"imported?":10} {"tested?":10}')  # Prints headers.
         for module in self.modules_dict:
             print(
-                f'{Ansi.CLINE}{Ansi.TAB * 3}'
+                f'{Ansi.CLINE}{Ansi.TAB * 3}'  # Important to CLINE, otherwise text may overlap on update.
                 f"{module['f_name']:40} {module['f_import']:18} {module['f_tested']:10}"
                 f'{Ansi.ENDC}'
             )
-        print(f'{Ansi.UP * (len(self.modules_dict) + 2)}')
+        print(f'{Ansi.UP * (len(self.modules_dict) + 2)}')  # Moves cursor up with ANSI codes to prepare refresh.
 
     def import_module(self, module):
         """This uses some dirty workarounds to load modules dynamically.
@@ -383,15 +403,15 @@ class ModulesHandler(ABCProgram):
         4. Links 'mod' with a global var named after the 'name' variable.
         5. Marks the module as correctly imported :)"""
         try:
-            name = module["name"].split('.', 1)[0]
+            name = module["name"].split('.', 1)[0]  # Removes file extension from file name.
             spec = importlib.util.spec_from_file_location("module.name", os.path.realpath(module["path"]))
-            mod = importlib.util.module_from_spec(spec)
-            sys.modules["module.name"] = mod
-            spec.loader.exec_module(mod)
-            globals()['%s' % name] = mod
-            module["import"] = "True"
-            module['f_name'] = f'{Ansi.ENDC}{module["name"]}{Ansi.ENDC}'
-            module['f_import'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'
+            mod = importlib.util.module_from_spec(spec)  # Import mod using the 'spec' spec. See importlib.
+            sys.modules["module.name"] = mod  # Add module reference to the list of modules.
+            spec.loader.exec_module(mod)  # Executes module to finish import
+            globals()['%s' % name] = mod  # Makes the variable global to allow normal module bhavior.
+            module["import"] = "True"  # Updates module dict to confirm import.
+            module['f_name'] = f'{Ansi.ENDC}{module["name"]}{Ansi.ENDC}'  # Updates module dict with formatted name.
+            module['f_import'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'  # Updates module dict with formatted import status.
         except:
             pass
 
