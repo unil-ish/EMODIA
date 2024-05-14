@@ -2,7 +2,7 @@ import logging
 import numpy as np
 import pandas as pd
 from scipy.integrate import odeint
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 class SentimentDynamics:
     def __init__(self, keywords):

@@ -41,7 +41,7 @@ class Line:
 
     @property
     def _all_lines_content(self):
-        return self.all_characters_id
+        return self.all_lines_content
 
     # les classmethod pour accéder à des listes d'éléments voulus, demande une liste de id line
     # le _all dans le nom ne veut pas dire que la methode retourne tout, mais c'est pour dire qu'on en prend une liste
@@ -71,8 +71,8 @@ class Line:
 
     # la création du dataframe qui demande une liste d'id de conversation et une autre liste
     @classmethod
-    def create_dataframe(cls,list_ids,attribute_list):
-        df = pandas.DataFrame(dict(zip(list_ids,attribute_list)))
+    def create_dataframe(cls,list_ids,attribute_list,another_attribute_list):
+        df = pandas.DataFrame(dict(zip(list_ids,attribute_list,another_attribute_list)))
         return df
 
 ################### TOUT CECI DISPARAITRA AU FINAL #######################
@@ -82,6 +82,9 @@ tsv_file_path = 'movie_dialog/movie_lines.tsv'
 
 # On crée une liste pour stocker les Line, utile seulement pour l'affichage actuellement
 line_objects = []
+list_line_id =[]
+list_char_id =[]
+list_content = []
 
 # Ouvre le tsv ligne par ligne en encodage utf8 comme movie_lines.tsv, un peu lent mais fonctionne
 with open(tsv_file_path, 'r', encoding="utf8") as tsvfile:
@@ -91,18 +94,42 @@ with open(tsv_file_path, 'r', encoding="utf8") as tsvfile:
         # Sépare les entrées grâce à la tabulation "\t"
         parts = line.strip().split('\t')
 
+
+
         # Crée un objet Line et lui attribue les données splitées
         # la première ligne serait : L1045	u0	m0	BIANCA	They do not!
         # S'il y a un problème, toute la ligne de données devient "?",
         # par exemple, il manque le line_content à certains endroits, mais c'est un montant négligeable
         try:
-            line_obj = Line(parts[0], parts[2], parts[1], parts[3], parts[4])
+            line_obj = Line(parts[0], parts[2], parts[1], parts[4])
         except:
-            line_obj = Line("?", "?","?","?","?")
+            line_obj = Line("?", "?","?","?")
+            list_line_id.append(parts[0])
+            list_char_id.append(parts[1])
+            list_content.append("")
 
         # on ajoute la ligne à la liste de lignes
-        line_objects.append(line_obj)
+        ine_objeclts.append(line_obj)
 
 # line_objects contient toutes les instances de Line, pour tester si ça fonctionne
 # for line_obj in line_objects:
-#     print(line_obj.line_id, line_obj.character_id, line_obj.movie_id, line_obj.character_name, line_obj.line_content)
+#     print(line_obj.id, line_obj.character_id, line_obj.movie_id, line_obj.line_content)
+
+
+
+from process_file import ProcessFile
+from analysis_navier_stocker import SentimentDynamics
+from analysis_navier_stocker import SpeechAnalysis
+from keywords import get_keywords
+
+df = pandas.DataFrame({'title': list_line_id, 'speaker': list_char_id, 'speech': list_content})
+print (df)
+
+processed_df = ProcessFile(df,"data/senticnet.tsv").process_speeches()
+
+keywords = get_keywords()
+sentiment_dynamics = SentimentDynamics(keywords)
+
+speech_analysis = SpeechAnalysis(processed_df, sentiment_dynamics)
+
+all_s = speech_analysis.calculate_navier_stocker()
