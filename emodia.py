@@ -17,15 +17,10 @@ Le programme permet d'effectuer les tâches suivantes:
 import sys
 import os
 from pathlib import Path
-import logging
-import glob
-import time
-import math
-import random
-import re
+import logging  # For custom logs.
 import json
-import inspect
-import importlib.util
+import inspect  # To get function names in logs.
+import importlib.util  # To import modules.
 
 # Note that any module imported through the program's module importer function will behave as if
 # added through the standard 'import module' formula.
@@ -35,8 +30,10 @@ NAME = 'EMODIA'
 VERSION: float = 0.1
 MODULES_DIR = Path('modules')  # Directory where each 'module'.py is stored.
 RESOURCES_DIR = Path('resources')  # Directory for resources such as authors, logo, etc.
-PUBLICATION_YEAR: int = 2024
-LOGGER = object  # That's where we will store an instance of the custom logger for use by any function
+
+# We use a global to store the custom logger.
+# There can only be one object per log file, and we want every log in a single file -> a single, shared logger object.
+LOGGER = object  # Any function can call this logger through the global.
 
 
 class Ansi:
@@ -44,7 +41,7 @@ class Ansi:
     * It uses ANSI escape codes that have an impact on formatting when output to a console or terminal.
     * These codes can be entered in any string, typically by using a fstring such as:
         f'{Ansi.TAB}{Ansi.BR_GRE}This message will be printed in green!{Ansi.ENDC}'
-    * It also implements an Ansi.TAB variable to ensure indents are consistent throughout the program."""
+    * It also implements an {Ansi.TAB} variable to ensure indents are consistent throughout the program."""
     CLINE = '\033[2K'  # Clears line
     ENDC = '\033[0m'  # Remove any existing formatting beyond this point.
 
@@ -94,7 +91,7 @@ class Ansi:
 
 class CustomLogger(logging.Logger):
     """A custom logger class.
-    Overrides the makeRecord method to allow for optional Type arg in logs.
+    Overrides the makeRecord function to allow for optional Type arg in logs.
     In our case, we use it to add emojis at the end of log messages for easier human parsing.
     The following methods can be used:
     * .info(str, **extra={"Type":str})
@@ -118,6 +115,7 @@ class CustomLogger(logging.Logger):
             mode='w',  # Overwrite log file if it exists, then appends logs messages to it.
             encoding='utf-8'
         )
+
         handler.setLevel("INFO")  # Tells our logger to look for any message of severity higher or equal to INFO.
         handler.setFormatter(formatter)  # Sets the logger's format to our custom format.
 
@@ -148,11 +146,14 @@ class ABCProgram:
         self.logger.info(f"Initializing {self.__class__.__name__}", extra={"Type": "🏗️"})
 
 
-class StartProgram(ABCProgram):
-    """Class handling the general program startup."""
+class MainProgram(ABCProgram):
+    """The main program, as a class.
+        * Handles startup messages
+        * Manages and imports modules
+        * Gets user input as to what to do next."""
 
     def __init__(self):
-        """Program initializer: setup logs and variables, then welcomes user and imports modules."""
+        """Program initializer: setup logs and variables, then welcomes user."""
         super().__init__()
         self.logger.info('Starting Program.', extra={"Type": "✅"})
 
@@ -164,7 +165,9 @@ class StartProgram(ABCProgram):
         self.start_program()
 
     def start_program(self):
-        """Handles program startup and user feedback."""
+        """Starts main program:
+        * Gets the modules
+        * Once done, calls the function handling user commands."""
         self.logger.info('start_program called: Setting up program.')
         print(
             f'{Ansi.HEADER}Starting {NAME}... {Ansi.ENDC}'
@@ -175,6 +178,11 @@ class StartProgram(ABCProgram):
         modules_handler.modules_checker()
         # Tries to import all the modules within the directory, with confirmation of import status.
         modules_handler.modules_importer()
+
+        self.command_loop()
+
+    def command_loop(self):
+        print('Hi! We\'re all good, what would you like to do now?')
 
 
 class ProgramInfo(ABCProgram):
@@ -203,9 +211,6 @@ class ProgramInfo(ABCProgram):
         self.formatted_logo = self._formatted_logo  # provides the contents of the files to the formatter
         self.logger.info(f'{Ansi.TAB * 2}Gathered logo ASCII art.')
 
-        self._formatted_welcome = str  # placeholder for formatted_welcome setter
-        self.formatted_welcome = self._formatted_welcome  # actually sets the value
-
     def say_welcome(self):
         """Function that prints out the formatted welcome message while making a log entry."""
         self.logger.info(f'{Ansi.TAB}Displaying logo and welcome message.')
@@ -213,13 +218,9 @@ class ProgramInfo(ABCProgram):
 
     @property
     def formatted_welcome(self):
-        return self._formatted_welcome
-
-    @formatted_welcome.setter
-    def formatted_welcome(self, value):
         """Prepares a formatted welcome message. 'value' is a placeholder."""
         self.logger.info(f'{Ansi.TAB}Preparing logo and welcome message.')
-        self._formatted_welcome = (
+        return (
             f'{Ansi.BOLD}\033[38;5;208m{self.formatted_logo}\033[0;00m\n'
             f'{Ansi.HEADER}Welcome to {NAME} version {VERSION}.{Ansi.ENDC}\n'
             f'{Ansi.TAB}This program was created by:\n'
@@ -337,10 +338,8 @@ class ModulesHandler(ABCProgram):
                     'name': module.name,  # Its name with file extension.
                     'path': module,  # Module's import path.
                     'import': 'False',  # Has the module been imported? At this point, not yet.
-                    'tested': 'False',  # And has it been tested? Neither.
                     'f_name': f'{Ansi.DIM}{module.name}{Ansi.ENDC}',  # Print-friendly name, dimmed for now.
-                    'f_import': f'{Ansi.DIM}False{Ansi.ENDC}',  # Print-friendly status, dimmed as well.
-                    'f_tested': f'{Ansi.DIM}False{Ansi.ENDC}',  # Idem.
+                    'f_import': f'{Ansi.DIM} ✗ {Ansi.ENDC}',  # Print-friendly status, dimmed as well.
                 }
             )
             self.logger.info(f'{Ansi.TAB * 3}Module obtained.', extra={"Type": "📦"})
@@ -350,7 +349,6 @@ class ModulesHandler(ABCProgram):
         for module in self.modules_dict:  # And now import the modules, updating the ui with each one.
             self.logger.info(f'{Ansi.TAB * 2}Importing {module["name"]}.')
             self.import_module(module)  # We're passing the full dict entry to the importer so it can update it.
-            self.logger.info(f'{Ansi.TAB * 3}Imported {module["name"]}.', extra={"Type": "🧩"})
             self.import_ui()
         print(f'{Ansi.DOWN * (len(self.modules_dict) + 1)}')  # Moving the cursor down when done.
 
@@ -396,11 +394,11 @@ class ModulesHandler(ABCProgram):
 
     def import_ui(self):
         """Prints a fancy report for modules, and updates it whenever called by writing over old lines."""
-        print(f'{Ansi.TAB * 3}{"module name":32} {"imported?":10} {"tested?":10}')  # Prints headers.
+        print(f'{Ansi.TAB * 3}{"module name":32} {"imported?":10}')  # Prints headers.
         for module in self.modules_dict:
             print(
                 f'{Ansi.CLINE}{Ansi.TAB * 3}'  # Important to CLINE, otherwise text may overlap on update.
-                f"{module['f_name']:40} {module['f_import']:18} {module['f_tested']:10}"
+                f"{module['f_name']:40} {module['f_import']:18}"
                 f'{Ansi.ENDC}'
             )
         print(f'{Ansi.UP * (len(self.modules_dict) + 2)}')  # Moves cursor up with ANSI codes to prepare refresh.
@@ -423,17 +421,16 @@ class ModulesHandler(ABCProgram):
             module["import"] = "True"  # Updates module dict to confirm import.
             module['f_name'] = f'{Ansi.ENDC}{module["name"]}{Ansi.ENDC}'  # Updates module dict with formatted name.
             module['f_import'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'  # Updates module dict with formatted import status.
+            LOGGER.info(f'{Ansi.TAB * 3}Imported {module["name"]}.', extra={"Type": "🧩"})
         except:
-            pass
-
-        # module['f_tested'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'
+            LOGGER.error(f'{Ansi.TAB * 3}Import failed.', extra={"Type": "❗"})
 
 
 def main():
     """Main function. Initializes program."""
     global LOGGER  # We need the logger to be shared.
     LOGGER = CustomLogger("logger")
-    program = StartProgram()
+    program = MainProgram()
     print()
 
 
