@@ -109,7 +109,7 @@ with open(tsv_file_path, 'r', encoding="utf8") as tsvfile:
             list_content.append("")
 
         # on ajoute la ligne à la liste de lignes
-        ine_objeclts.append(line_obj)
+        line_objects.append(line_obj)
 
 # line_objects contient toutes les instances de Line, pour tester si ça fonctionne
 # for line_obj in line_objects:
