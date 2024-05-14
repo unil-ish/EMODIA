@@ -325,11 +325,12 @@ class ModulesHandler(ABCProgram):
     def modules_importer(self):
         """Import modules."""
         self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')  # The {code} returns: function name.
-        self.logger.info(f'{Ansi.TAB}Preparing to import modules from {self.module_dir}.')
+        self.logger.info(f'{Ansi.TAB}Importing from dir: {self.module_dir}.')
 
         print(f'{Ansi.TAB}2.  Importing modules from \'{Ansi.PATH}/{self.module_dir}{Ansi.ENDC}\'...')
 
         for module in self.module_list:  # Using the list of modules to create a list of 1 dict = 1 module.
+            self.logger.info(f'{Ansi.TAB * 2}Getting {module.name}')
             self.modules_dict.append(
                 {
                     'module': module,  # Module's full name.
@@ -342,10 +343,14 @@ class ModulesHandler(ABCProgram):
                     'f_tested': f'{Ansi.DIM}False{Ansi.ENDC}',  # Idem.
                 }
             )
+            self.logger.info(f'{Ansi.TAB * 3}Module obtained.', extra={"Type": "📦"})
         self.import_ui()  # Gets a first UI up with the before-import variables.
 
+        self.logger.info(f'{Ansi.TAB}All modules registered. Ready to import.')
         for module in self.modules_dict:  # And now import the modules, updating the ui with each one.
+            self.logger.info(f'{Ansi.TAB * 2}Importing {module["name"]}.')
             self.import_module(module)  # We're passing the full dict entry to the importer so it can update it.
+            self.logger.info(f'{Ansi.TAB * 3}Imported {module["name"]}.', extra={"Type": "🧩"})
             self.import_ui()
         print(f'{Ansi.DOWN * (len(self.modules_dict) + 1)}')  # Moving the cursor down when done.
 
@@ -426,7 +431,7 @@ class ModulesHandler(ABCProgram):
 
 def main():
     """Main function. Initializes program."""
-    global LOGGER
+    global LOGGER  # We need the logger to be shared.
     LOGGER = CustomLogger("logger")
     program = StartProgram()
     print()
