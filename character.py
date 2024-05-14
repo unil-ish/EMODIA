@@ -1,5 +1,7 @@
-#code de sophie pour la classe Characters
+# code pour la classe Characters
 import pandas as pd
+
+
 class Character:
     def __init__(self, id, name, movie_id, gender, credits_position):
         self.id = id

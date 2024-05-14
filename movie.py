@@ -1,4 +1,4 @@
-#code de sophie pour la classe Movie
+# code pour la classe Movie
 import pandas as pd
 
 
