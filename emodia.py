@@ -36,7 +36,7 @@ VERSION: float = 0.1
 MODULES_DIR = Path('modules')  # Directory where each 'module'.py is stored.
 RESOURCES_DIR = Path('resources')  # Directory for resources such as authors, logo, etc.
 PUBLICATION_YEAR: int = 2024
-LOGGER = []  # That's where we will store an instance of the custom logger for use by any function
+LOGGER = object  # That's where we will store an instance of the custom logger for use by any function
 
 
 class Ansi:
@@ -287,63 +287,67 @@ class ProgramInfo(ABCProgram):
 
     @classmethod
     def get_resources(cls, resource, data_type):
-        """Returns data from a specified resouce within the RESOURCES_DIR. Handles both json and txt."""
+        """Returns data from a specified resource within the RESOURCES_DIR. Handles both json and txt."""
         with open(Path(f'{RESOURCES_DIR}/{resource}.{data_type}'), 'r') as file:
             if data_type == 'json':
                 data = json.load(file)  # Using json loader for json files.
             else:
-                data = file.read()
+                data = file.read()  # Using normal file loader for text files.
             return data
 
 
 class ModulesHandler(ABCProgram):
-    """Handles modules."""
+    """Handles modules:
+        * modules_checker provides text feedback to the user while looking first for the dir, then the modules
+        * lookfor_directory() checks if the MODULES_DIR exists and provides options to fix an erroneous path.
+        * lookfor_modules() looks for modules within the dir, providing options to fix an erroneous path."""
 
     def __init__(self):
-        super().__init__()
-        self.modules_dict = []
+        super().__init__()  # Get the inheritance.
+        self.module_list = []  # Simple list of modules used by the look functions.
+        self.modules_dict = []  # Will become our list of modules as dicts for import.
         self.module_dir = MODULES_DIR
-        self.prompt = (
+        self.prompt = (  # Prompt used by our functions if there's a path error.
             f'\n{Ansi.TAB * 2}Enter modules directory to try again:'
-            f'\n{Ansi.TAB}   >'
+            f'\n{Ansi.TAB}   >'  # Here's where the user will be able to type
         )
-        self.module_list = []
 
     def modules_checker(self):
-        """Looks for modules."""
-        self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')
+        """Looks for modules within a directory, first checking if the dir is valid then the modules.
+        We're not putting that in the __init__ because it's doing a lot, and we don't want it accidentally called."""
+        self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')  # The {code} returns: function name.
         self.logger.info(f'{Ansi.TAB}Looking for modules in {self.module_dir}.')
 
         print(f'{Ansi.TAB}1.  Looking for modules in \'{Ansi.PATH}/{self.module_dir}{Ansi.ENDC}\'...')
-        self.lookfor_directory()
-        self.lookfor_modules()
+        self.lookfor_directory()  # Delegates the directory checking to a dedicated function.
+        self.lookfor_modules()  # Same for the modules listing.
 
     def modules_importer(self):
         """Import modules."""
-        self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')
+        self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')  # The {code} returns: function name.
         self.logger.info(f'{Ansi.TAB}Preparing to import modules from {self.module_dir}.')
 
         print(f'{Ansi.TAB}2.  Importing modules from \'{Ansi.PATH}/{self.module_dir}{Ansi.ENDC}\'...')
 
-        for module in self.module_list:
+        for module in self.module_list:  # Using the list of modules to create a list of 1 dict = 1 module.
             self.modules_dict.append(
                 {
-                    'module': module,
-                    'name': module.name,
-                    'path': module,
-                    'import': 'False',
-                    'tested': 'False',
-                    'f_name': f'{Ansi.DIM}{module.name}{Ansi.ENDC}',
-                    'f_import': f'{Ansi.DIM}False{Ansi.ENDC}',
-                    'f_tested': f'{Ansi.DIM}False{Ansi.ENDC}',
+                    'module': module,  # Module's full name.
+                    'name': module.name,  # Its name with file extension.
+                    'path': module,  # Module's import path.
+                    'import': 'False',  # Has the module been imported? At this point, not yet.
+                    'tested': 'False',  # And has it been tested? Neither.
+                    'f_name': f'{Ansi.DIM}{module.name}{Ansi.ENDC}',  # Print-friendly name, dimmed for now.
+                    'f_import': f'{Ansi.DIM}False{Ansi.ENDC}',  # Print-friendly status, dimmed as well.
+                    'f_tested': f'{Ansi.DIM}False{Ansi.ENDC}',  # Idem.
                 }
             )
-        self.import_ui()
+        self.import_ui()  # Gets a first UI up with the before-import variables.
 
-        for module in self.modules_dict:
-            self.import_module(module)
+        for module in self.modules_dict:  # And now import the modules, updating the ui with each one.
+            self.import_module(module)  # We're passing the full dict entry to the importer so it can update it.
             self.import_ui()
-        print(f'{Ansi.DOWN * (len(self.modules_dict) + 1)}')
+        print(f'{Ansi.DOWN * (len(self.modules_dict) + 1)}')  # Moving the cursor down when done.
 
     def path_error(self):
         """Returns path error with directory name."""
@@ -352,19 +356,20 @@ class ModulesHandler(ABCProgram):
         )
 
     def lookfor_directory(self):
-        """Looks for the modules directory, with logs and user prompt if directory issue."""
+        """Looks for the modules directory, with logs and user prompt if directory issue.
+        TODO: Shares a lot of code with lookfor_modules(), may want to refactor these functions."""
         while True:  # Try until suitable directory is found.
             try:
-                if not self.module_dir.exists():
-                    raise FileExistsError('directory not found')
+                if not self.module_dir.exists():  # Does it exist?
+                    raise FileExistsError('directory not found')  # Raise error if not.
                 self.logger.info(f'{Ansi.TAB * 2}Directory found.')
                 print(f'{Ansi.TAB * 2}{Ansi.SCSS}Directory found{Ansi.ENDC}.')
-                break
-            except:
+                break  # Breaks out of the loop once suitable directory is found so we can move to the next step.
+            except:  # If there's anything wrong with the directory, warn the user and ask for new directory.
                 error_type = 'directory not found'
                 self.logger.error(f'{Ansi.TAB * 2}Error: Directory not found.', extra={"Type": "❗"})
                 print(f'{self.path_error()} {error_type}{Ansi.ENDC}.')
-                self.module_dir = Path(input(self.prompt))
+                self.module_dir = Path(input(self.prompt))  # Update module_dir based on user input.
                 print()
 
     def lookfor_modules(self):
@@ -372,7 +377,7 @@ class ModulesHandler(ABCProgram):
         while True:  # Try until modules are found.
             try:
                 self.module_list = list(self.module_dir.glob('*.py'))  # Can we get a list of modules in the directory?
-                if not len(self.module_list) > 0:  # If not, raise exception and log it.
+                if not len(self.module_list) > 0:  # If the list is empty, raise exception and log it.
                     self.logger.error(f'{Ansi.TAB * 2}Error: Directory empty.', extra={"Type": "❗"})
                     raise Exception("Directory empty.")
                 self.logger.info(f'{Ansi.TAB * 2}{len(self.module_list)} module(s) found.')
@@ -381,7 +386,7 @@ class ModulesHandler(ABCProgram):
             except:  # If there's an exception, warn the user and ask them for another directory.
                 error_type = 'directory is empty'
                 print(f'{self.path_error()} {error_type}{Ansi.ENDC}.')
-                self.module_dir = Path(input(self.prompt))
+                self.module_dir = Path(input(self.prompt))  # Update module_dir based on user input.
                 print()
 
     def import_ui(self):
@@ -395,7 +400,8 @@ class ModulesHandler(ABCProgram):
             )
         print(f'{Ansi.UP * (len(self.modules_dict) + 2)}')  # Moves cursor up with ANSI codes to prepare refresh.
 
-    def import_module(self, module):
+    @staticmethod
+    def import_module(module):
         """This uses some dirty workarounds to load modules dynamically.
         1. Gets the name without file extension. hello_world.py -> hello_world
         2. Imports the module as 'mod'.
@@ -408,7 +414,7 @@ class ModulesHandler(ABCProgram):
             mod = importlib.util.module_from_spec(spec)  # Import mod using the 'spec' spec. See importlib.
             sys.modules["module.name"] = mod  # Add module reference to the list of modules.
             spec.loader.exec_module(mod)  # Executes module to finish import
-            globals()['%s' % name] = mod  # Makes the variable global to allow normal module bhavior.
+            globals()['%s' % name] = mod  # Makes the variable global to allow normal module behavior.
             module["import"] = "True"  # Updates module dict to confirm import.
             module['f_name'] = f'{Ansi.ENDC}{module["name"]}{Ansi.ENDC}'  # Updates module dict with formatted name.
             module['f_import'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'  # Updates module dict with formatted import status.
