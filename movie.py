@@ -74,26 +74,73 @@ class Movie:
         merged_list = dict(zip(self.get_all_id, self.get_all_genres))
         return merged_list[id]
 
-    # all properties, methode doesnt do an action, can access attributes
+    # all properties, method doesn't do an action, can access attributes
+    # gives a list of all titles, all release years, etc.
     @property
-    def get_all_title(self):
+    def _all_id(self):
+        return self.all_id
+
+    @property
+    def _all_title(self):
         return self.get_all_title
 
     @property
-    def get_all_release_year(self):
+    def _all_release_year(self):
         return self.get_all_release_year
 
     @property
-    def get_all_rating(self):
+    def _all_rating(self):
         return self.get_all_rating
 
     @property
-    def get_all_votes(self):
+    def _all_votes(self):
         return self.get_all_votes
 
     @property
-    def get_all_genres(self):
+    def _all_genres(self):
         return self.get_all_genres
+
+    @classmethod
+    def get_all_title(cls, id_list):
+        merged_list = dict(zip(Movie._all_id, Movie._all_title))
+        # pourquoi pas all_title = [] comme plus haut ?
+        list_title = []
+        for ids in id_list:
+            list_title.append(merged_list[ids])
+        return list_title
+
+    @classmethod
+    def get_all_release_year(cls, id_list):
+        merged_list = dict(zip(Movie._all_id, Movie._all_release_year))
+        list_release_year = []
+        for ids in id_list:
+            list_release_year.append(merged_list[ids])
+        return list_release_year
+
+    @classmethod
+    def get_all_rating(cls, id_list):
+        merged_list = dict(zip(Movie._all_id, Movie._all_rating))
+        list_rating = []
+        for ids in id_list:
+            list_rating.append(merged_list[ids])
+        return list_rating
+
+    @classmethod
+    def get_all_votes(cls, id_list):
+        merged_list = dict(zip(Movie._all_id, Movie._all_votes))
+        list_votes = []
+        for ids in id_list:
+            list_votes.append(merged_list[ids])
+        return list_votes
+
+    @classmethod
+    def get_all_genre(cls, id_list):
+        merged_list = dict(zip(Movie._all_id, Movie._all_genres))
+        list_genres = []
+        for ids in id_list:
+            list_genres.append(merged_list[ids])
+        return list_genres
+
 
 
 movie_df = pd.read_csv('movie_dialog/movie_titles_metadata.tsv', sep='\t')
