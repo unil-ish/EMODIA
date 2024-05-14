@@ -14,6 +14,11 @@ class Movie:
         self.genres = genres
 
         self.all_id = [] # get all movie id, inside class or outside?
+        self.all_title = []
+        self.get_all_release_year = []
+        self.get_all_rating = []
+        self.get_all_votes = []
+        self.get_all_genres = []
 
     def get_title(self):
         title_list = []
