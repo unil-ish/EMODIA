@@ -20,56 +20,59 @@ class Movie:
         self.get_all_votes = []
         self.get_all_genres = []
 
-    def get_title(self):
-        title_list = []
-        merged_list = dict(zip([id], title_list)) #id = movie id
-        return merged_list
+    def get_title(self, id):
+        # title_list = []
+        # merged_list = dict(zip([id], title_list)) #id = movie id
+        # return merged_list
 
-    def get_release_year(self):
-        release_list = []
-        merged_list = dict(zip([id], release_list))
-        return merged_list
+        # create a dict by zipping two lists together
+        merged_list = dict(zip(self.get_all_id, self.get_all_title))
+        return merged_list[id]
+
+    def get_release_year(self, id):
+        merged_list = dict(zip(self.get_all_id, self.get_all_release_year))
+        return merged_list[id]
 
     def get_rating(self):
-        rating_list = []
-        merged_list = dict(zip([id], rating_list))
-        return merged_list
+        # return self.rating --> *
+        merged_list = dict(zip(self.get_all_id, self.get_all_rating))
+        return merged_list[id]
 
     def get_votes(self):
-        votes_list = []
-        with open('movie_dialog/movie_titles_metadata.tsv', 'r', encoding='utf-8') as file:
-            for line in file:
-                parts = line.strip().split('\t')
-                if len(parts) >= 6:
-                    #genres are in the 6th column
-                    votes_str = parts[4]
-                    #take away individual [], all votes go into one []
-                    votes_str = votes_str.strip('[]')
-                    for vote in votes_str.split(','):
-                        votes_list.append(vote)
-        return votes_list
+        # votes_list = []
+        # with open('movie_dialog/movie_titles_metadata.tsv', 'r', encoding='utf-8') as file:
+        #    for line in file:
+        #        parts = line.strip().split('\t')
+        #        if len(parts) >= 6:
+        #            #genres are in the 6th column
+        #            votes_str = parts[4]
+        #            #take away individual [], all votes go into one []
+        #            votes_str = votes_str.strip('[]')
+        #            for vote in votes_str.split(','):
+        #                votes_list.append(vote)
+        # return votes_list
 
-        merged_list = dict(zip([id], votes_list))
-        return merged_list
+        merged_list = dict(zip(self.get_all_id, self.get_all_votes))
+        return merged_list[id]
 
     def get_genres(self):
-        genres_list = []
-        #we don't use then?
-        with open('movie_dialog/movie_titles_metadata.tsv', 'r', encoding='utf-8') as file:
-            for line in file:
-                parts = line.strip().split('\t')
-                if len(parts) >= 6:
+        # genres_list = []
+        # we don't use then?
+        # with open('movie_dialog/movie_titles_metadata.tsv', 'r', encoding='utf-8') as file:
+        #    for line in file:
+        #        parts = line.strip().split('\t')
+        #        if len(parts) >= 6:
                     #genres are in the 6th column
-                    genres_str = parts[5]
-                    #take away individual [], all genres go into one []
-                    genres_str = genres_str.strip('[]')
-                    for genre in genres_str.split(','):
-                        genres_list.append(genre)
-        return genres_list
+        #            genres_str = parts[5]
+        #            #take away individual [], all genres go into one []
+        #            genres_str = genres_str.strip('[]')
+        #            for genre in genres_str.split(','):
+        #                genres_list.append(genre)
+        #return genres_list
         #or put movie_id in () method ?
         #pour faire une liste de dictionnaires?
-        merged_list = dict(zip([id], genres_list))
-        return merged_list
+        merged_list = dict(zip(self.get_all_id, self.get_all_genres))
+        return merged_list[id]
 
     # all properties, methode doesnt do an action, can access attributes
     @property
