@@ -24,10 +24,12 @@ class Character:
         movie_id_list = []
         merged_list = dict(zip([id], movie_id_list))
         return merged_list
+
     def get_gender(self):
         gender_list = []
         merged_list = dict(zip([id], gender_list))
         return merged_list
+
     def get_credits_position(self):
         credits_list = []
         merged_list = dict(zip([id], credits_list))
@@ -37,15 +39,19 @@ class Character:
     @property
     def get_all_names(self):
         return self.get_all_names
+
     @property
     def get_all_movie_id(self):
         return self.get_all_movie_id
+
     @property
     def get_all_gender(self):
         return self.get_all_gender
+
     @property
     def get_all_credits_position(self):
         return self.get_all_credits_position
+
     @property
     def get_all_characters(self):
         return self.get_all_characters

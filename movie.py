@@ -1,5 +1,7 @@
 #code de sophie pour la classe Movie
 import pandas as pd
+
+
 class Movie:
     def __init__(self, id, title, release_year, rating, votes, genres):
         # id function: id()
@@ -17,14 +19,17 @@ class Movie:
         title_list = []
         merged_list = dict(zip([id], title_list)) #id = movie id
         return merged_list
+
     def get_release_year(self):
         release_list = []
         merged_list = dict(zip([id], release_list))
         return merged_list
+
     def get_rating(self):
         rating_list = []
         merged_list = dict(zip([id], rating_list))
         return merged_list
+
     def get_votes(self):
         votes_list = []
         with open('movie_dialog/movie_titles_metadata.tsv', 'r', encoding='utf-8') as file:
@@ -41,6 +46,7 @@ class Movie:
 
         merged_list = dict(zip([id], votes_list))
         return merged_list
+
     def get_genres(self):
         genres_list = []
         #we don't use then?
@@ -60,19 +66,23 @@ class Movie:
         merged_list = dict(zip([id], genres_list))
         return merged_list
 
-    #all properties, methode doesnt do an action, can access attributes
+    # all properties, methode doesnt do an action, can access attributes
     @property
     def get_all_title(self):
         return self.get_all_title
+
     @property
     def get_all_release_year(self):
         return self.get_all_release_year
+
     @property
     def get_all_rating(self):
         return self.get_all_rating
+
     @property
     def get_all_votes(self):
         return self.get_all_votes
+
     @property
     def get_all_genres(self):
         return self.get_all_genres
