@@ -100,7 +100,7 @@ class Movie:
 # print(Movie.get_all_release_year())
 # print(Movie.get_all_rating())
 # print(Movie.get_all_votes())
-# print(Movie.get_all_genres())
+#print(Movie.get_all_genres())
 
 test_df = pd.DataFrame(list(zip(Movie.get_all_title(), Movie.get_all_release_year(), Movie.get_all_rating(),
                                 Movie.get_all_votes(), Movie.get_all_genres())),
