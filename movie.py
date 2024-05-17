@@ -1,4 +1,5 @@
 import pandas as pd
+# property method / class method
 
 
 class Movie:
@@ -25,6 +26,7 @@ class Movie:
     def get_genres(self):
         return self.genres
 
+    # added a method but not sure - just to be able to see the results for now
     @classmethod
     def read_tsv(cls, file_path):
         """Read the TSV file and return its contents as a list."""
@@ -42,8 +44,7 @@ class Movie:
         list_all_title = []
         for parts in data:
             title_str = parts[1]
-            title_str = title_str.strip('[]')
-            for title in title_str.split(','):
+            for title in title_str.split(','): # check if I need this
                 list_all_title.append(title)
         return list_all_title
 
@@ -53,7 +54,6 @@ class Movie:
         list_all_release_year = []
         for parts in data:
             release_year_str = parts[2]
-            release_year_str = release_year_str.strip('[]')
             for release_year in release_year_str.split(','):
                 list_all_release_year.append(release_year)
         return list_all_release_year
@@ -64,7 +64,6 @@ class Movie:
         list_all_rating = []
         for parts in data:
             rating_str = parts[3]
-            rating_str = rating_str.strip('[]')
             for rating in rating_str.split(','):
                 list_all_rating.append(rating)
         return list_all_rating
@@ -75,7 +74,6 @@ class Movie:
         list_all_votes = []
         for parts in data:
             votes_str = parts[4]
-            votes_str = votes_str.strip('[]')
             for votes in votes_str.split(','):
                 list_all_votes.append(votes)
         return list_all_votes
@@ -100,9 +98,14 @@ class Movie:
 # print(Movie.get_all_release_year())
 # print(Movie.get_all_rating())
 # print(Movie.get_all_votes())
-#print(Movie.get_all_genres())
+# print(Movie.get_all_genres())
+all_titles = Movie.get_all_title()
+all_release_years = Movie.get_all_release_year()
+all_ratings = Movie.get_all_rating()
+all_votes = Movie.get_all_votes()
+all_genres = Movie.get_all_genres()
 
-test_df = pd.DataFrame(list(zip(Movie.get_all_title(), Movie.get_all_release_year(), Movie.get_all_rating(),
-                                Movie.get_all_votes(), Movie.get_all_genres())),
+test_df = pd.DataFrame(list(zip(all_titles, all_release_years, all_ratings,
+                                all_votes, all_genres)),
                        columns=['Title', 'Release year', 'Rating', 'Votes', 'Genres'])
 print(test_df)
