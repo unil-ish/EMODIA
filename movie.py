@@ -30,8 +30,8 @@ class Movie:
     @classmethod
     def read_tsv(cls, file_path):
         """Read the TSV file and return its contents as a list."""
-        data = []
-        with open('movie_dialog/movie_titles_metadata.tsv', 'r', encoding='utf-8') as file:
+        data = [] # holds all the information of the file
+        with open(file_path, 'r', encoding='utf-8') as file:
             for line in file:
                 parts = line.strip().split('\t')
                 if len(parts) >= 6:  # the file has at least 6 fields
@@ -40,7 +40,7 @@ class Movie:
 
     @classmethod
     def get_all_title(cls):
-        data = cls.read_tsv('movie_dialog/movie_titles_metadata.tsv')
+        data = cls.read_tsv(file_path)
         list_all_title = []
         for parts in data:
             title_str = parts[1]
@@ -50,7 +50,7 @@ class Movie:
 
     @classmethod
     def get_all_release_year(cls):
-        data = cls.read_tsv('movie_dialog/movie_titles_metadata.tsv')
+        data = cls.read_tsv(file_path)
         list_all_release_year = []
         for parts in data:
             release_year_str = parts[2]
@@ -60,7 +60,7 @@ class Movie:
 
     @classmethod
     def get_all_rating(cls):
-        data = cls.read_tsv('movie_dialog/movie_titles_metadata.tsv')
+        data = cls.read_tsv(file_path)
         list_all_rating = []
         for parts in data:
             rating_str = parts[3]
@@ -70,7 +70,7 @@ class Movie:
 
     @classmethod
     def get_all_votes(cls):
-        data = cls.read_tsv('movie_dialog/movie_titles_metadata.tsv')
+        data = cls.read_tsv(file_path)
         list_all_votes = []
         for parts in data:
             votes_str = parts[4]
@@ -80,7 +80,7 @@ class Movie:
 
     @classmethod
     def get_all_genres(cls):
-        data = cls.read_tsv('movie_dialog/movie_titles_metadata.tsv')
+        data = cls.read_tsv(file_path)
         list_all_genres = []
         for parts in data:
             genres_str = parts[5]
@@ -92,6 +92,10 @@ class Movie:
 
 # with open('movie_dialog/movie_titles_metadata.tsv', 'r', encoding='utf-8') as file:
 #    print(Movie.get_all_title())
+
+file_path = 'movie_dialog/movie_titles_metadata.tsv'
+# Ensure data is read into memory
+Movie.read_tsv(file_path)
 
 # check it works
 # print(Movie.get_all_title())
@@ -107,5 +111,5 @@ all_genres = Movie.get_all_genres()
 
 test_df = pd.DataFrame(list(zip(all_titles, all_release_years, all_ratings,
                                 all_votes, all_genres)),
-                       columns=['Title', 'Release year', 'Rating', 'Votes', 'Genres'])
+                       columns=['Title:', 'Release year:', 'Rating:', 'Votes:', 'Genres:'])
 print(test_df)
