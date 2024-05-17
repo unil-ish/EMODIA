@@ -31,6 +31,9 @@ VERSION: float = 0.1
 MODULES_DIR = Path('modules')  # Directory where each 'module'.py is stored.
 RESOURCES_DIR = Path('resources')  # Directory for resources such as authors, logo, etc.
 
+# Utilities
+MODULE_IMPORT = bool  # Whether modules have been imported or not, as they must be imported only once.
+
 # We use a global to store the custom logger.
 # There can only be one object per log file, and we want every log in a single file -> a single, shared logger object.
 LOGGER = object  # Any function can call this logger through the global.
@@ -156,6 +159,7 @@ class MainProgram(ABCProgram):
         """Program initializer: setup logs and variables, then welcomes user."""
         super().__init__()
         self.logger.info('Starting Program.', extra={"Type": "✅"})
+        self.modules_handler = None
 
         # Prints welcome message.
         welcome = ProgramInfo()
@@ -173,11 +177,11 @@ class MainProgram(ABCProgram):
             f'{Ansi.HEADER}Starting {NAME}... {Ansi.ENDC}'
         )
         # That's where we check for the necessary modules etc.
-        modules_handler = ModulesHandler()
+        self.modules_handler = ModulesHandler()
         # Looks for modules in the MODULES_DIR directory. Allows user to pick another dir if dir is empty.
-        modules_handler.modules_checker()
+        self.modules_handler.modules_checker()
         # Tries to import all the modules within the directory, with confirmation of import status.
-        modules_handler.modules_importer()
+        self.modules_handler.modules_importer()
 
         self.command_loop()
 
@@ -325,10 +329,17 @@ class ModulesHandler(ABCProgram):
 
     def modules_importer(self):
         """Import modules."""
+        global MODULE_IMPORT
         self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')  # The {code} returns: function name.
+        self.modules_dict = []
         self.logger.info(f'{Ansi.TAB}Importing from dir: {self.module_dir}.')
-
         print(f'{Ansi.TAB}2.  Importing modules from \'{Ansi.PATH}/{self.module_dir}{Ansi.ENDC}\'...')
+
+        if MODULE_IMPORT:  # We're checking if modules have already been imported. If yes, skip.
+            self.logger.info(f'{Ansi.TAB * 2}Modules already imported. Skipping')
+            print(f'{Ansi.TAB * 2}Modules already imported. Skipping.')
+            return
+        MODULE_IMPORT = True  # Else, mark that we're importing them and not to import again.
 
         for module in self.module_list:  # Using the list of modules to create a list of 1 dict = 1 module.
             self.logger.info(f'{Ansi.TAB * 2}Getting {module.name}')
@@ -373,7 +384,7 @@ class ModulesHandler(ABCProgram):
                 self.logger.error(f'{Ansi.TAB * 2}Error: Directory not found.', extra={"Type": "❗"})
                 print(f'{self.path_error()} {error_type}{Ansi.ENDC}.')
                 self.module_dir = Path(input(self.prompt))  # Update module_dir based on user input.
-                print()
+                print()  # To ensure correct display, we need a line break.
 
     def lookfor_modules(self):
         """Looks for module within the modules directory, with logs and user prompt if content issue."""
@@ -386,6 +397,7 @@ class ModulesHandler(ABCProgram):
                 self.logger.info(f'{Ansi.TAB * 2}{len(self.module_list)} module(s) found.')
                 print(f'{Ansi.TAB * 2}{Ansi.SCSS}{len(self.module_list)} module(s) found{Ansi.ENDC}.\n')
                 break  # If we've got our modules, we can break out and go back.
+
             except:  # If there's an exception, warn the user and ask them for another directory.
                 error_type = 'directory is empty'
                 print(f'{self.path_error()} {error_type}{Ansi.ENDC}.')
@@ -422,6 +434,7 @@ class ModulesHandler(ABCProgram):
             module['f_name'] = f'{Ansi.ENDC}{module["name"]}{Ansi.ENDC}'  # Updates module dict with formatted name.
             module['f_import'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'  # Updates module dict with formatted import status.
             LOGGER.info(f'{Ansi.TAB * 3}Imported {module["name"]}.', extra={"Type": "🧩"})
+
         except:
             LOGGER.error(f'{Ansi.TAB * 3}Import failed.', extra={"Type": "❗"})
 
@@ -430,6 +443,8 @@ def main():
     """Main function. Initializes program."""
     global LOGGER  # We need the logger to be shared.
     LOGGER = CustomLogger("logger")
+    global MODULE_IMPORT  # Same for module import status.
+    MODULE_IMPORT = False
     program = MainProgram()
     print()
 
