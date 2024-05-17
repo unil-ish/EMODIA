@@ -75,11 +75,13 @@ class Character:
 file_path = 'movie_dialog/movie_characters_metadata.tsv'
 Character.read_tsv(file_path)
 
+# testing that it prints correctly
 print(Character.get_all_name())
 print(Character.get_all_movie_id())
 print(Character.get_all_gender())
 print(Character.get_all_credits_position())
 
+# put them into variables to be able to call them easily in the DataFrame
 all_names = Character.get_all_name()
 all_movie_ids = Character.get_all_movie_id()
 all_genders = Character.get_all_gender()

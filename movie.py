@@ -103,6 +103,7 @@ Movie.read_tsv(file_path)
 # print(Movie.get_all_rating())
 # print(Movie.get_all_votes())
 # print(Movie.get_all_genres())
+
 all_titles = Movie.get_all_title()
 all_release_years = Movie.get_all_release_year()
 all_ratings = Movie.get_all_rating()
