@@ -68,9 +68,9 @@ class Movie:
         #            genres_str = genres_str.strip('[]')
         #            for genre in genres_str.split(','):
         #                genres_list.append(genre)
-        #return genres_list
-        #or put movie_id in () method ?
-        #pour faire une liste de dictionnaires?
+        # return genres_list
+        # or put movie_id in () method ?
+        # pour faire une liste de dictionnaires?
         merged_list = dict(zip(self.get_all_id, self.get_all_genres))
         return merged_list[id]
 
@@ -104,48 +104,53 @@ class Movie:
     def get_all_title(cls, id_list):
         merged_list = dict(zip(Movie._all_id, Movie._all_title))
         # pourquoi pas all_title = [] comme plus haut ?
-        list_title = []
+        list_all_title = []
         for ids in id_list:
-            list_title.append(merged_list[ids])
-        return list_title
+            list_all_title.append(merged_list[ids])
+        return list_all_title
 
     @classmethod
     def get_all_release_year(cls, id_list):
         merged_list = dict(zip(Movie._all_id, Movie._all_release_year))
-        list_release_year = []
+        list_all_release_year = []
         for ids in id_list:
-            list_release_year.append(merged_list[ids])
-        return list_release_year
+            list_all_release_year.append(merged_list[ids])
+        return list_all_release_year
 
     @classmethod
     def get_all_rating(cls, id_list):
         merged_list = dict(zip(Movie._all_id, Movie._all_rating))
-        list_rating = []
+        list_all_rating = []
         for ids in id_list:
-            list_rating.append(merged_list[ids])
-        return list_rating
+            list_all_rating.append(merged_list[ids])
+        return list_all_rating
 
     @classmethod
     def get_all_votes(cls, id_list):
         merged_list = dict(zip(Movie._all_id, Movie._all_votes))
-        list_votes = []
+        list_all_votes = []
         for ids in id_list:
-            list_votes.append(merged_list[ids])
-        return list_votes
+            list_all_votes.append(merged_list[ids])
+        return list_all_votes
 
     @classmethod
-    def get_all_genre(cls, id_list):
+    def get_all_genres(cls, id_list):
         merged_list = dict(zip(Movie._all_id, Movie._all_genres))
-        list_genres = []
+        list_all_genres = []
         for ids in id_list:
-            list_genres.append(merged_list[ids])
-        return list_genres
+            list_all_genres.append(merged_list[ids])
+        return list_all_genres
 
 
+# movie_df = pd.read_csv('movie_dialog/movie_titles_metadata.tsv', sep='\t')
+# print(movie_df)
 
-movie_df = pd.read_csv('movie_dialog/movie_titles_metadata.tsv', sep='\t')
-print(movie_df)
+# movie = Movie('m0', '10 things i hate about you', 1999, 6.90, 62847, [])
+# print(Movie.get_genres('movie_dialog/movie_titles_metadata.tsv'))
+# print(Movie.get_votes('movie_dialog/movie_titles_metadata.tsv'))
 
-movie = Movie('m0', '10 things i hate about you', 1999, 6.90, 62847, [])
-print(Movie.get_genres('movie_dialog/movie_titles_metadata.tsv'))
-print(Movie.get_votes('movie_dialog/movie_titles_metadata.tsv'))
+tsv_file_path = 'movie_dialog/movie_titles_metadata.tsv'
+# title, speaker, speech : process_file.py
+movie_objects = []
+list_id = []
+list_
