@@ -9,6 +9,8 @@ class Character:
         self.gender = gender
         self.credits_position = credits_position
 
+        self.all_characters_id = []
+
     def get_name(self):
         return self.name
 
