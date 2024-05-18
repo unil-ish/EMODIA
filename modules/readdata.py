@@ -6,8 +6,10 @@ from pathlib import Path
 
 
 def read_data(path, **kwargs):
-    """Needs a path or Path(), logging.Logger, left-padding as string in tab, and an optional file name to get within the zip.
-    Returns contents of Path() / file within zipped Path() as string. """
+    """Needs a path or Path(), logging.Logger, left-padding as string in tab, and an optional file name
+    to get within the zip.
+    Returns contents of Path() / file within zipped Path() as string.
+    """
 
     if not isinstance(path, Path):  # If not Path(), make it so.
         path = Path(path)
@@ -21,39 +23,34 @@ def read_data(path, **kwargs):
         tab = kwargs["tab"]  # Tab provided, let's use it.
     else:
         tab = '    '  # Tab not provided, setting sane default.
+    error = f'{tab * 2}ERROR: '
 
-    logger_handler(logger, f'{tab * 3}this is a logger test :)')
-    if '.zip' in path.name:
-        if not kwargs["zip_name"]:
+    logger_handler(logger, f'{tab * 3}Accessing {path.name}...')  # Logging using logger_handler
+    if '.zip' in path.name:  # Is it a zip?
+        if not kwargs["zip_name"]:  # If we're not told what to get inside the zip, error.
             print('Please select a zip file.')
             return
-        zip_name = kwargs['zip_name']
-        print(f'desired file in zip: {zip_name}')
-        print('that\'s a zip!')
+        zip_name = kwargs['zip_name']  # Else, get what was asked
+        print(f'{tab * 2}Accessing {zip_name}..')
         try:
-            test = zipfile.ZipFile(path, 'r')
-            print(test.namelist())
-            with zipfile.ZipFile(path, 'r') as my_zip:
+            with zipfile.ZipFile(path, 'r') as my_zip:  # Using ZipFile to access file contents.
                 with my_zip.open(zip_name) as data:
                     return_data = data.read()
-
             return return_data
         except:
-            print('unzip error')
-    try:
-        with path.open('r') as file:
-            data = file.read()
-            return data
-    except:
-        error = f'{tab * 2}ERROR: '
-        if path.is_file():
-            print(f'{error}File exists but read error.')
-        elif path.is_dir():
-            print(f'{error}Directory exists. Please input file and not dir.')
-        elif path.exists():
-            print(f'{error}Path exists, but unexpected error.')
-        elif not path.exists():
+            print(f'{error}Unzip error.')
+            logger_handler(logger, f'{tab * 2}Error unzipping {path.name}')
+
+    else:
+        try:
+            with path.open('r') as file:  # Basic file access.
+                data = file.read()
+                return data
+        except FileNotFoundError or NotADirectoryError:
+            logger_handler(logger, f'{tab * 2}Error accessing {path.name}')
             print(f'{error}Path does not exist.')
+        except PermissionError:
+            print(f'{error}File exists but permission error.')
 
 
 def logger_handler(logger, msg):

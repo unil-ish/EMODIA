@@ -4,133 +4,126 @@ L'objectif principal de ce projet est d'explorer et de quantifier la manière do
  Navier-Stokes. Le modèle vise à offrir une nouvelle lentille à travers laquelle examiner les dynamiques émotionnelles
  entre les personnages, permettant une compréhension plus profonde des stratégies narratives et des relations
  interpersonnelles au sein des films.
-
-Le programme permet d'effectuer les tâches suivantes:
-
-* 1
-* 2
-* 3
-* 4
-* 5
 """
-
-import sys
-import os
-from pathlib import Path
-import logging  # For custom logs.
-import json
-import inspect  # To get function names in logs.
 import importlib.util  # To import modules.
+import os
+import sys
+from pathlib import Path
+
+import inspect  # To get function names in logs.
+import json
+import logging  # For custom logs.
 
 # Note that any module imported through the program's module importer function will behave as if
 # added through the standard 'import module' formula.
 
 # PROGRAM INFO
 NAME = 'EMODIA'
-VERSION: float = 0.1
-MODULES_DIR = Path('modules')  # Directory where each 'module'.py is stored.
-RESOURCES_DIR = Path('resources')  # Directory for resources such as authors, logo, etc.
+MODULES_DIR = Path('modules')
+RESOURCES_DIR = Path('resources')
 
 # Utilities
 MODULE_IMPORT = bool  # Whether modules have been imported or not, as they must be imported only once.
+TAB = '    '  # Defines text indent.
 
 # We use a global to store the custom logger.
 # There can only be one object per log file, and we want every log in a single file -> a single, shared logger object.
-LOGGER = object  # Any function can call this logger through the global.
+LOGGER = object
 
 
-class Ansi:
-    """This class is used for formatting purposes.
-    * It uses ANSI escape codes that have an impact on formatting when output to a console or terminal.
-    * These codes can be entered in any string, typically by using a fstring such as:
-        f'{Ansi.TAB}{Ansi.BR_GRE}This message will be printed in green!{Ansi.ENDC}'
-    * It also implements an {Ansi.TAB} variable to ensure indents are consistent throughout the program."""
-    CLINE = '\033[2K'  # Clears line
-    ENDC = '\033[0m'  # Remove any existing formatting beyond this point.
+class Utils:
+    """Utilities."""
 
-    # These codes move the cursor.
-    RIGHT = '\033[C'
-    UP = '\033[F'
-    DOWN = '\033[E'
+    @staticmethod
+    def get_resource(name, data_type):
+        """Opens 'name'.'data_type' with either default read() or json.load(), returns contents."""
+        with open(Path(f'{RESOURCES_DIR}/{name}.{data_type}'), 'r') as file:
+            if data_type == 'json':
+                return json.load(file)
+            else:
+                return file.read()
 
-    # Emphasis effects.
-    BOLD = '\033[1m'
-    DIM = '\033[2m'
-    UNDERLINE = '\033[4m'
+    @staticmethod
+    def sort_dict(to_sort: dict, key: str):
+        """Short function to sort dicts.
+        As dicts can't be sorted, we create a list of dictionaries sorted by the 'key' key."""
+        return sorted(to_sort, key=lambda d: d[key])
 
-    # Vibes for the error messages.
-    FAIL = '\033[91m'
-    WARN = '\033[93m'
 
-    # Bright text colors
-    BR_GRE = '\033[92m'
-    BR_RED = '\033[93m'
-    BR_BLU = '\033[94m'
-    BR_MAG = '\033[95m'
-    BR_CYA = '\033[96m'
+class Message:
+    """Stores messages imported from messages.json."""
+    styles = dict
+    messages = dict
 
-    # Background colors
-    BG_GRE = '\033[42m'
-    BG_RED = '\033[41m'
-    BG_BLU = '\033[44m'
-    BG_MAG = '\033[45m'
-    BG_CYA = '\033[46m'
+    @classmethod
+    def set_msg_dict(cls):
+        """Grabs messages from messages.json and stores them in messages dict."""
+        cls.messages = {}
+        cls.messages = Utils.get_resource('messages', 'json')
 
-    # Bright background colors
-    BG_BR_GRE = '\033[102m'
-    BG_BR_RED = '\033[101m'
-    BG_BR_BLU = '\033[104m'
-    BG_BR_MAG = '\033[105m'
-    BG_BR_CYA = '\033[106m'
+    @classmethod
+    def set_styles_dict(cls):
+        """Grabs styles from styles.json and stores them in styles dict after adding ANSI escape code in front."""
+        cls.styles = None
+        cls.styles = Utils.get_resource('styles', 'json')
 
-    # Custom styles go here.
-    HEADER = f'\033[1m░   '  # Default header formatting
-    LOGO_LINE = '\033[48;5;216m \033[48;0m   \033[1m\033[38;5;216m'  # Formatting for logo
-    PATH = '\033[94m'  # File and directory path formatting
-    SCSS = '\033[92m\033[1m'  # Success formatting
-    NL = '\n'  # Inserts newline. Identical to using chr(10).
-    TAB = '    '  # Indent level. Default: 4 spaces.
+        for key in cls.styles:
+            cls.styles[key] = '\033[' + cls.styles[key]  # That's our ANSI escape code.
+        cls.styles.update({'tab': TAB})
+
+    @classmethod
+    def get_msg(cls, msg_key):
+        """Returns contents of message at msg_key within the messages dict."""
+        return str(cls.messages[msg_key])
+
+    @staticmethod
+    def say(msg_key, **kwargs):
+        """Takes in a message key and **kwargs, prints message at msg_key with vars replaced by **kwargs."""
+        style_and_kwargs: dict = {**Message.styles, **kwargs}  # Fuses styles and kwargs for .format()
+        print(Message.get_msg(msg_key).format(**style_and_kwargs))
 
 
 class CustomLogger(logging.Logger):
     """A custom logger class.
     Overrides the makeRecord function to allow for optional Type arg in logs.
     In our case, we use it to add emojis at the end of log messages for easier human parsing.
-    The following methods can be used:
-    * .info(str, **extra={"Type":str})
-    * .warning(str, **extra={"Type":str})
-    * .error(str, **extra={"Type":str})
+    The following methods can be used, with 'extra' being optional:
+    * .info(str, extra={"Type":str})
+    * .warning(str, extra={"Type":str})
+    * .error(str, extra={"Type":str})
     """
 
     def __init__(self, name: str):
         """Initializes a custom logger as child of default python logger class.
         Has a custom log message format with additional 'Type' field.
         The logs are saved in a single file, named after the program's name."""
-        super().__init__(name)  # Inherit from default python logger class
-        self.propagate = False  # See Python logging docs
+        super().__init__(name)
+        self.propagate = False
 
-        formatter = logging.Formatter(  # Saves a custom format in a logging.Formatter scheme
-            fmt='%(asctime)-19s | %(levelname)-7s | %(message)-50s | %(Type)s ',  # Note the extra 'Type' field.
-            datefmt="%Y-%m-%d %H:%M:%S"  # Date format, removes the milliseconds that are usually added
+        # Using a custom format to have (1) an extra 'Type' field and (2) not have milliseconds.
+        formatter = logging.Formatter(
+            fmt='%(asctime)-19s | %(levelname)-7s | %(message)-50s | %(Type)s ',
+            datefmt="%Y-%m-%d %H:%M:%S"
         )
-        handler = logging.FileHandler(  # Saves a custom handler in a logging.FileHandler scheme.
-            filename=f'{os.path.splitext(__file__)[0]}.log',  # Names the log file after the program's name.
-            mode='w',  # Overwrite log file if it exists, then appends logs messages to it.
-            encoding='utf-8'
+        # Names the log file after the program's name.
+        handler = logging.FileHandler(
+            filename=f'{os.path.splitext(__file__)[0]}.log', mode='w', encoding='utf-8'
         )
 
-        handler.setLevel("INFO")  # Tells our logger to look for any message of severity higher or equal to INFO.
-        handler.setFormatter(formatter)  # Sets the logger's format to our custom format.
+        # Tells our logger to look for any message of severity higher or equal to INFO.
+        handler.setLevel("INFO")
+        handler.setFormatter(formatter)
 
-        self.addHandler(handler)  # Tells the logger to use our custom handler as output handler -> outputs to file.
+        # Tells the logger to use our custom handler as output handler -> outputs to file.
+        self.addHandler(handler)
 
         self.info('Custom logger initialized. Hi!', extra={"Type": '📝'})
 
     def makeRecord(self, *args, **kwargs):
         """Overrides the logger's makeRecord method to make extra arguments optional.
         makeRecord is called whenever we do logger.info(), warn(), or any other logger message function.
-        This extra argument must be added as extra{"Type": string}. See log message at the end of __init__
-        for an example."""
+        This extra argument must be added as extra={"Type": string}.
+        """
         rv = super(CustomLogger, self).makeRecord(*args, **kwargs)
         rv.__dict__["Type"] = rv.__dict__.get("Type", "  ")
         return rv
@@ -139,281 +132,172 @@ class CustomLogger(logging.Logger):
 class ABCProgram:
     """Parent class for all modules. Allows them to share a single, custom logger and makes them print
     a log message with their name when they are initialized.
-    For more info on logger, see the CustomLogger class."""
+    """
 
     def __init__(self):
         # Ensure children share the logger.
         self.logger = LOGGER
 
         # Logs any initialized child.
-        self.logger.info(f"Initializing {self.__class__.__name__}", extra={"Type": "🏗️"})
+        name = self.__class__.__name__
+        self.logger.info(f"Initializing {name}", extra={"Type": "🏗️"})
 
 
 class MainProgram(ABCProgram):
     """The main program, as a class.
         * Handles startup messages
         * Manages and imports modules
-        * Gets user input as to what to do next."""
-
-    def __init__(self):
-        """Program initializer: setup logs and variables, then welcomes user."""
-        super().__init__()
-        self.logger.info('Starting Program.', extra={"Type": "✅"})
-        self.modules_handler = None
-
-        # Prints welcome message.
-        welcome = ProgramInfo()
-        welcome.say_welcome()
-
-        self.logger.info(f'Calling start_program().')
-        self.start_program()
-
-    def start_program(self):
-        """Starts main program:
-        * Gets the modules
-        * Once done, calls the function handling user commands."""
-        self.logger.info('start_program called: Setting up program.')
-        print(
-            f'{Ansi.HEADER}Starting {NAME}... {Ansi.ENDC}'
-        )
-        # That's where we check for the necessary modules etc.
-        self.modules_handler = ModulesHandler()
-        # Looks for modules in the MODULES_DIR directory. Allows user to pick another dir if dir is empty.
-        self.modules_handler.modules_checker()
-        # Tries to import all the modules within the directory, with confirmation of import status.
-        self.modules_handler.modules_importer()
-
-        self.command_loop()
-
-    def command_loop(self):
-        print(f'{Ansi.TAB}Done.')
-
-
-class ProgramInfo(ABCProgram):
-    """Handles welcome message.
-    * Stores some variables within ProgramInfo for easy access if any modules ends up needing them. It's nicer
-        to only do the file opening and content formatting once and be able to recall it at will instead of redoing
-        it every time someone may want to see the credits (which is hopefully often :)).
-    * Gathers the data from files located in RESOURCES_DIR, extracts it and formats it.
-    * Instances have the following properties:
-        - authors: list of dicts containing author data.
-        - formatted_authors: formatted author data, ready for printing.
-        - formatted_logo: formatted logo, ready for printing.
-        - formatted_welcome: formatted welcome message with logo and authors, ready for printing.
+        * Gets user input as to what to do next.
     """
 
     def __init__(self):
-        super().__init__()  # Getting inheritance.
+        super().__init__()
+        self.modules_handler = None
 
-        self.logger.info(f'{Ansi.TAB}Gathering author information...', extra={"Type": "🚚"})
-        self.authors = "authors"  # str is the name of the json file holding author data.
-        self.formatted_authors = self.authors  # provides the contents of the files to the formatter
-        self.logger.info(f'{Ansi.TAB * 2}Gathered author information.')
+    def start_program(self):
+        # Setting up message handler.
+        Message.set_msg_dict()
+        Message.set_styles_dict()
+        welcome = ProgramInfo()
 
-        self.logger.info(f'{Ansi.TAB}Gathering logo ASCII art...', extra={"Type": "🚚"})
-        self._formatted_logo = "logo"  # str is the name of the file holding logo data.
-        self.formatted_logo = self._formatted_logo  # provides the contents of the files to the formatter
-        self.logger.info(f'{Ansi.TAB * 2}Gathered logo ASCII art.')
+        welcome.print_logo()
 
-    def say_welcome(self):
-        """Function that prints out the formatted welcome message while making a log entry."""
-        self.logger.info(f'{Ansi.TAB}Displaying logo and welcome message.')
-        print(self.formatted_welcome)
+        # Looking for, then importing modules.
+        self.modules_handler = ModulesHandler()
+        self.modules_handler.look_for_modules()
+        self.modules_handler.modules_importer()
 
-    @property
-    def formatted_welcome(self):
-        """Prepares a formatted welcome message. 'value' is a placeholder."""
-        self.logger.info(f'{Ansi.TAB}Preparing logo and welcome message.')
-        return (
-            f'{Ansi.BOLD}\033[38;5;208m{self.formatted_logo}\033[0;00m\n'
-            f'{Ansi.HEADER}Welcome to {NAME} version {VERSION}.{Ansi.ENDC}\n'
-            f'{Ansi.TAB}This program was created by:\n'
-            f'{self.formatted_authors[0]}{2 * chr(10)}'
-            f'{Ansi.TAB}Based on research by:\n'
-            f'{self.formatted_authors[1]}{2 * chr(10)}'
-            f'{Ansi.TAB}Under the supervision of:\n'
-            f'{self.formatted_authors[2]}{2 * chr(10)}'
-        )
 
-    @property
-    def authors(self):
-        return self._authors
+class ProgramInfo(ABCProgram):
+    """Gets logo and author information from resources, formats and displays them."""
 
-    @authors.setter
-    def authors(self, value):
-        """Gets the raw data from the file at 'value'.
-            However, this data isn't sorted. As dictionaries can't be sorted, we create a new dictionary and fill it
-            with data returned by the sort.dict() function, using the "name" key as key to be sorted alphabetically.
-            sort.dict() takes care of the sorting."""
-        self._authors = {}
-        raw_authors: dict = self.get_resources(value, "json")  # Gets the raw json content.
-        for key in raw_authors.keys():  # Each key being an entry like "authors", "supervisors", etc.
-            self._authors.update(  # Add to dictionary
+    def __init__(self):
+        super().__init__()
+        self.logo = Utils.get_resource('logo', 'txt')
+        self.authors: dict = Utils.get_resource('authors', 'json')
+
+    def print_logo(self):
+        """Print logo."""
+        for line in self.logo.splitlines():
+            Message.say('logo', text=line)
+        print()
+
+    def print_authors(self):
+        """Gets authors, sorts them under each category then formats and prints them."""
+        for key in self.authors.keys():  # Each key being an entry like "authors", "supervisors", etc.
+            self.authors.update(
                 {
-                    key:
-                        self.sort_dict(  # Returns a sorted dict
-                            raw_authors[key],  # Uses the key from raw_authors as key for the new dict.
-                            "name"  # And sort using the "name" key from raw_authors.
-                        )
+                    # Sorts authors by name under a 'key' category.
+                    key: Utils.sort_dict(self.authors[key], "name")
                 }
             )
 
-    @property
-    def formatted_authors(self):
-        return self._formatted_authors
-
-    @formatted_authors.setter
-    def formatted_authors(self, authors):
-        """Formats authors data to be used in the welcome message."""
-        self._formatted_authors = []
-        for type_key in authors:  # type_key being something like "authors", "supervisors", etc.
-            self._formatted_authors.append(
-                chr(10).join(
-                    f'{Ansi.TAB * 2}{key["name"] + " " + key["surname"]:22}  {key["institution"]}'
-                    for key in authors[type_key]  # Iterates through each dict within authors.
-                )
-            )
-
-    @property
-    def formatted_logo(self):
-        return self._formatted_logo
-
-    @formatted_logo.setter
-    def formatted_logo(self, value):
-        """Formats the logo by getting the resource from LOGO_DIR, then wrapping each line with formatting."""
-        logo = self.get_resources(value, "txt")
-        self._formatted_logo = f'\n{chr(10).join(f"{Ansi.LOGO_LINE}{line}" for line in logo.splitlines())}\n'
-
-    @classmethod
-    def sort_dict(cls, to_sort: dict, key: str):
-        """Short function to sort dicts.
-        As dicts can't be sorted, we create a list of dictionaries sorted by the 'key' key."""
-        return sorted(to_sort, key=lambda d: d[key])
-
-    @classmethod
-    def get_resources(cls, resource, data_type):
-        """Returns data from a specified resource within the RESOURCES_DIR. Handles both json and txt."""
-        with open(Path(f'{RESOURCES_DIR}/{resource}.{data_type}'), 'r') as file:
-            if data_type == 'json':
-                data = json.load(file)  # Using json loader for json files.
-            else:
-                data = file.read()  # Using normal file loader for text files.
-            return data
+        # Print out all that formatted data.
+        for category in self.authors.keys():
+            Message.say(category)
+            for person in self.authors[category]:
+                Message.say('person_list', fullname=person["name"] + ' ' + person["surname"],
+                            institution=person["institution"])
+            print()
 
 
 class ModulesHandler(ABCProgram):
-    """Handles modules:
-        * modules_checker provides text feedback to the user while looking first for the dir, then the modules
-        * lookfor_directory() checks if the MODULES_DIR exists and provides options to fix an erroneous path.
-        * lookfor_modules() looks for modules within the dir, providing options to fix an erroneous path."""
+    """Finds and imports modules."""
 
     def __init__(self):
-        super().__init__()  # Get the inheritance.
+        super().__init__()
         self.module_list = []  # Simple list of modules used by the look functions.
         self.modules_dict = []  # Will become our list of modules as dicts for import.
         self.module_dir = MODULES_DIR
-        self.prompt = (  # Prompt used by our functions if there's a path error.
-            f'\n{Ansi.TAB * 2}Enter modules directory to try again:'
-            f'\n{Ansi.TAB}   >'  # Here's where the user will be able to type
+
+        # Prompt used by our functions if there's a path error.
+        self.prompt = (
+            f'\n{TAB * 2}Enter modules directory to try again:'
+            f'\n{TAB}   >'
         )
 
-    def modules_checker(self):
+    def look_for_modules(self):
         """Looks for modules within a directory, first checking if the dir is valid then the modules.
-        We're not putting that in the __init__ because it's doing a lot, and we don't want it accidentally called."""
+        We're not putting that in the __init__ because it's doing a lot, and we don't want it accidentally called.
+        """
         self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')  # The {code} returns: function name.
-        self.logger.info(f'{Ansi.TAB}Looking for modules in {self.module_dir}.')
+        self.logger.info(f'{TAB}Looking for modules in {self.module_dir}.')
+        Message.say('1', name=NAME)
+        Message.say('looking_for_modules', path=self.module_dir)
 
-        print(f'{Ansi.TAB}1.  Looking for modules in \'{Ansi.PATH}/{self.module_dir}{Ansi.ENDC}\'...')
-        self.lookfor_directory()  # Delegates the directory checking to a dedicated function.
-        self.lookfor_modules()  # Same for the modules listing.
+        while True:
+            try:
+                if self.module_dir.exists() and self.module_dir.is_dir():
+                    Message.say('directory_found')
+                else:
+                    self.logger.error(f'{TAB * 2}Error: Directory not found.', extra={"Type": "❗"})
+                    Message.say('directory_not_found')
+                    raise NotADirectoryError
+
+                self.module_list = list(self.module_dir.glob('*.py'))
+                module_number = len(self.module_list)
+                if module_number > 0:
+                    self.logger.info(f'{TAB}{module_number} module(s) found.')
+                    Message.say('modules_found', number=module_number)
+                    print()
+                    break
+                else:
+                    self.logger.error(f'{TAB * 2}Error: Directory empty.', extra={"Type": "❗"})
+                    Message.say('modules_not_found')
+                    raise FileNotFoundError
+
+            except NotADirectoryError or FileNotFoundError:
+                self.module_dir = Path(input(self.prompt))
 
     def modules_importer(self):
         """Import modules."""
         global MODULE_IMPORT
+
         self.logger.info(f'Starting {inspect.currentframe().f_code.co_name}')  # The {code} returns: function name.
-        self.modules_dict = []
-        self.logger.info(f'{Ansi.TAB}Importing from dir: {self.module_dir}.')
-        print(f'{Ansi.TAB}2.  Importing modules from \'{Ansi.PATH}/{self.module_dir}{Ansi.ENDC}\'...')
+        self.logger.info(f'{TAB}Importing from dir: {self.module_dir}.')
+        Message.say('importing_modules', path=self.module_dir)
 
-        if MODULE_IMPORT:  # We're checking if modules have already been imported. If yes, skip.
-            self.logger.info(f'{Ansi.TAB * 2}Modules already imported. Skipping')
-            print(f'{Ansi.TAB * 2}Modules already imported. Skipping.')
+        # We're checking if modules have already been imported. If yes, skip.
+        if MODULE_IMPORT:
+            self.logger.info(f'{TAB * 2}Modules already imported. Skipping')
+            print(f'{TAB * 2}Modules already imported. Skipping.')
             return
-        MODULE_IMPORT = True  # Else, mark that we're importing them and not to import again.
+        # Else, mark that we're importing them and not to import again.
+        MODULE_IMPORT = True
 
-        for module in self.module_list:  # Using the list of modules to create a list of 1 dict = 1 module.
-            self.logger.info(f'{Ansi.TAB * 2}Getting {module.name}')
+        # Using the list of modules to create a list of 1 dict = 1 module.
+        for module in self.module_list:
+            self.logger.info(f'{TAB * 2}Getting {module.name}')
             self.modules_dict.append(
                 {
                     'module': module,  # Module's full name.
                     'name': module.name,  # Its name with file extension.
                     'path': module,  # Module's import path.
-                    'import': 'False',  # Has the module been imported? At this point, not yet.
-                    'f_name': f'{Ansi.DIM}{module.name}{Ansi.ENDC}',  # Print-friendly name, dimmed for now.
-                    'f_import': f'{Ansi.DIM} ✗ {Ansi.ENDC}',  # Print-friendly status, dimmed as well.
+                    'f_name': f'{module.name}',  # Print-friendly name.
+                    'f_import': f'✗',  # Print-friendly status.
                 }
             )
-            self.logger.info(f'{Ansi.TAB * 3}Module obtained.', extra={"Type": "📦"})
-        self.import_ui()  # Gets a first UI up with the before-import variables.
+            self.logger.info(f'{TAB * 3}Module obtained.', extra={"Type": "📦"})
 
-        self.logger.info(f'{Ansi.TAB}All modules registered. Ready to import.')
-        for module in self.modules_dict:  # And now import the modules, updating the ui with each one.
-            self.logger.info(f'{Ansi.TAB * 2}Importing {module["name"]}.')
-            self.import_module(module)  # We're passing the full dict entry to the importer so it can update it.
-            self.import_ui()
-        print(f'{Ansi.DOWN * (len(self.modules_dict) + 1)}')  # Moving the cursor down when done.
+        # Gets a first UI up with the before-import variables.
+        self.module_import_ui()
 
-    def path_error(self):
-        """Returns path error with directory name."""
-        return (
-            f'{Ansi.TAB * 2}{Ansi.FAIL}ERROR: \'{Ansi.PATH}/{self.module_dir}{Ansi.FAIL}\' '
-        )
-
-    def lookfor_directory(self):
-        """Looks for the modules directory, with logs and user prompt if directory issue.
-        TODO: Shares a lot of code with lookfor_modules(), may want to refactor these functions."""
-        while True:  # Try until suitable directory is found.
-            try:
-                if not self.module_dir.exists():  # Does it exist?
-                    raise FileExistsError('directory not found')  # Raise error if not.
-                self.logger.info(f'{Ansi.TAB * 2}Directory found.')
-                print(f'{Ansi.TAB * 2}{Ansi.SCSS}Directory found{Ansi.ENDC}.')
-                break  # Breaks out of the loop once suitable directory is found so we can move to the next step.
-            except:  # If there's anything wrong with the directory, warn the user and ask for new directory.
-                error_type = 'directory not found'
-                self.logger.error(f'{Ansi.TAB * 2}Error: Directory not found.', extra={"Type": "❗"})
-                print(f'{self.path_error()} {error_type}{Ansi.ENDC}.')
-                self.module_dir = Path(input(self.prompt))  # Update module_dir based on user input.
-                print()  # To ensure correct display, we need a line break.
-
-    def lookfor_modules(self):
-        """Looks for module within the modules directory, with logs and user prompt if content issue."""
-        while True:  # Try until modules are found.
-            try:
-                self.module_list = list(self.module_dir.glob('*.py'))  # Can we get a list of modules in the directory?
-                if not len(self.module_list) > 0:  # If the list is empty, raise exception and log it.
-                    self.logger.error(f'{Ansi.TAB * 2}Error: Directory empty.', extra={"Type": "❗"})
-                    raise Exception("Directory empty.")
-                self.logger.info(f'{Ansi.TAB * 2}{len(self.module_list)} module(s) found.')
-                print(f'{Ansi.TAB * 2}{Ansi.SCSS}{len(self.module_list)} module(s) found{Ansi.ENDC}.\n')
-                break  # If we've got our modules, we can break out and go back.
-
-            except:  # If there's an exception, warn the user and ask them for another directory.
-                error_type = 'directory is empty'
-                print(f'{self.path_error()} {error_type}{Ansi.ENDC}.')
-                self.module_dir = Path(input(self.prompt))  # Update module_dir based on user input.
-                print()
-
-    def import_ui(self):
-        """Prints a fancy report for modules, and updates it whenever called by writing over old lines."""
-        print(f'{Ansi.TAB * 3}{"module name":32} {"imported?":10}')  # Prints headers.
+        self.logger.info(f'{TAB}All modules registered. Ready to import.')
         for module in self.modules_dict:
-            print(
-                f'{Ansi.CLINE}{Ansi.TAB * 3}'  # Important to CLINE, otherwise text may overlap on update.
-                f"{module['f_name']:40} {module['f_import']:18}"
-                f'{Ansi.ENDC}'
-            )
-        print(f'{Ansi.UP * (len(self.modules_dict) + 2)}')  # Moves cursor up with ANSI codes to prepare refresh.
+            self.logger.info(f'{TAB * 2}Importing {module["name"]}.')
+            # We're passing the full dict entry to the importer so it can update it.
+            self.import_module(module)
+            self.module_import_ui()
+        # Moving the cursor down when done.
+        print(f'{(len(self.modules_dict) + 1) * str(Message.styles["cursor_down"])}')
+
+    def module_import_ui(self):
+        """Prints a fancy report for modules, and updates it whenever called by writing over old lines."""
+        for module in self.modules_dict:
+            Message.say('module_ui', import_status=module['f_import'], module_name=module['f_name'])
+
+        # Moves cursor up with ANSI codes to prepare refresh.
+        print(f'{(len(self.modules_dict) + 1) * str(Message.styles["cursor_up"])}')
 
     @staticmethod
     def import_module(module):
@@ -424,29 +308,41 @@ class ModulesHandler(ABCProgram):
         4. Links 'mod' with a global var named after the 'name' variable.
         5. Marks the module as correctly imported :)"""
         try:
-            name = module["name"].split('.', 1)[0]  # Removes file extension from file name.
-            spec = importlib.util.spec_from_file_location("module.name", os.path.realpath(module["path"]))
-            mod = importlib.util.module_from_spec(spec)  # Import mod using the 'spec' spec. See importlib.
-            sys.modules["module.name"] = mod  # Add module reference to the list of modules.
-            spec.loader.exec_module(mod)  # Executes module to finish import
-            globals()['%s' % name] = mod  # Makes the variable global to allow normal module behavior.
-            module["import"] = "True"  # Updates module dict to confirm import.
-            module['f_name'] = f'{Ansi.ENDC}{module["name"]}{Ansi.ENDC}'  # Updates module dict with formatted name.
-            module['f_import'] = f'{Ansi.ENDC} ✓ {Ansi.ENDC}'  # Updates module dict with formatted import status.
-            LOGGER.info(f'{Ansi.TAB * 3}Imported {module["name"]}.', extra={"Type": "🧩"})
+            # Removes file extension from file name.
+            name = module["name"].split('.', 1)[0]
 
-        except:
-            LOGGER.error(f'{Ansi.TAB * 3}Import failed.', extra={"Type": "❗"})
+            # Import mod using the 'spec' spec. See importlib.
+            spec = importlib.util.spec_from_file_location("module.name", os.path.realpath(module["path"]))
+            mod = importlib.util.module_from_spec(spec)
+
+            # Add module reference to the list of modules.
+            sys.modules["module.name"] = mod
+
+            # Executes module to finish import.
+            spec.loader.exec_module(mod)
+
+            # Makes the variable global to allow normal module behavior.
+            globals()['%s' % name] = mod
+            # Updates module dict with formatted name.
+            module['f_name'] = f'{module["name"]}'
+            # Updates module dict with formatted import status.
+            module['f_import'] = f'✓'
+
+            LOGGER.info(f'{TAB * 3}Imported {module["name"]}.', extra={"Type": "🧩"})
+
+        except ModuleNotFoundError:
+            LOGGER.error(f'{TAB * 3}Import failed.', extra={"Type": "❗"})
 
 
 def main():
     """Main function. Initializes program."""
-    global LOGGER  # We need the logger to be shared.
-    LOGGER = CustomLogger("logger")
-    global MODULE_IMPORT  # Same for module import status.
-    MODULE_IMPORT = False
+    global LOGGER, MODULE_IMPORT  # We need the logger and module import status to be shared.
+    LOGGER = CustomLogger("logger")  # Here's our shared, custom logger.
+    MODULE_IMPORT = False  # No modules imported yet. Yet >:)
+
+    LOGGER.info('Starting Program.', extra={"Type": "✅"})
     program = MainProgram()
-    print()
+    program.start_program()
 
 
 if __name__ == '__main__':

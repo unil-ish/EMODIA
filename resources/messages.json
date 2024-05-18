@@ -1,0 +1,17 @@
+{
+  "header": "{bold}░   {text}",
+  "logo": "{logo_block} {end_style}{logo_text} {text}{end_style}",
+  "welcome": "{header}Welcome to {name}.{end_style}",
+  "authors": "{tab}This program was created by:",
+  "research_authors": "{tab}Following research by:",
+  "supervision": "{tab}Under the supervision of:",
+  "person_list": "{tab}{tab}{fullname:22}  {institution}",
+
+  "1": "{header}Starting {name}: Setting up modules.{end_style}",
+  "looking_for_modules": "{tab}1.  Looking for modules in '{bright_blue}/{path}{end_style}'.",
+  "directory_found": "{tab}{tab}{success}{end_style} Directory found.",
+  "directory_not_found": "{tab}{tab}{error}{end_style}: Directory not found.",
+  "modules_found": "{tab}{tab}{success}{end_style} {number} module(s) found.",
+  "importing_modules": "{tab}2.  Importing modules from '{bright_blue}/{path}{end_style}'.",
+  "module_ui": "{tab}{tab}{import_status} {module_name}"
+}
