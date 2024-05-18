@@ -7,11 +7,22 @@
   "supervision": "{tab}Under the supervision of:",
   "person_list": "{tab}{tab}{fullname:22}  {institution}",
 
-  "1": "{header}Starting {name}: Setting up modules.{end_style}",
-  "looking_for_modules": "{tab}1.  Looking for modules in '{bright_blue}/{path}{end_style}'.",
   "directory_found": "{tab}{tab}{success}{end_style} Directory found.",
   "directory_not_found": "{tab}{tab}{error}{end_style}: Directory not found.",
+
+  "1": "{header}Starting {name}: Setting up modules.{end_style}",
+  "looking_for_modules": "{tab}1.  Looking for modules in '{bright_blue}/{path}{end_style}'.",
+  "log_looking_for_modules": "{tab}Looking for modules in /{path}.",
+  "log_directory_empty": "{tab}{tab}ERROR: Directory empty.",
+  "log_module_import_list_updated": "{tab}{tab}/{module}.",
+  "log_module_registered": "{tab}Modules registered, ready to import.",
   "modules_found": "{tab}{tab}{success}{end_style} {number} module(s) found.",
+  "log_modules_found": "{tab}{number} modules found.",
   "importing_modules": "{tab}2.  Importing modules from '{bright_blue}/{path}{end_style}'.",
+  "log_importing_modules": "{tab}Importing from '/{path}':",
+  "log_module_already_imported": "{tab}{tab}Modules already imported. Skipping.",
+  "log_import_module": "{tab}{tab}Importing {name}..",
+  "log_module_imported": "{tab}{tab}·imported.",
+  "log_module_error": "{tab}{tab}ERROR: Failed to import module.",
   "module_ui": "{tab}{tab}{import_status} {module_name}"
 }
