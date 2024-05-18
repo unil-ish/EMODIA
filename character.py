@@ -20,7 +20,7 @@ class Character:
     def get_gender(self):
         return self.gender
 
-    def get_credits_position(self):
+    def get_credits_position(self): # (self, character_id)
         return self.credits_position
 
     # commentaire
@@ -35,7 +35,7 @@ class Character:
         return data
 
     @classmethod
-    def get_all_name(cls,):
+    def get_all_name(cls):
         # mettre en commentaire
         data = cls.read_tsv(file_path)
         list_all_name = []
@@ -67,7 +67,7 @@ class Character:
 
     @classmethod
     def get_all_credits_position(cls):
-        data = cls.read_tsv(file_path)
+        data = cls.read_tsv(file_path) # lorelei fichier read
         list_all_credits_position = []
         for parts in data:
             credits_position_str = parts[5]
