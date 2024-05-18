@@ -23,6 +23,7 @@ class Character:
     def get_credits_position(self):
         return self.credits_position
 
+    # commentaire
     @classmethod
     def read_tsv(cls, file_path):
         data = []
@@ -34,7 +35,8 @@ class Character:
         return data
 
     @classmethod
-    def get_all_name(cls):
+    def get_all_name(cls,):
+        # mettre en commentaire
         data = cls.read_tsv(file_path)
         list_all_name = []
         for parts in data:
