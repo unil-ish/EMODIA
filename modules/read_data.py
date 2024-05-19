@@ -4,6 +4,8 @@ It returns the contents of the file as string."""
 import zipfile
 from pathlib import Path
 
+def hello_world():
+    print('Hello World!')
 
 def read_data(path, **kwargs):
     """Needs a path or Path(), logging.Logger, left-padding as string in tab, and an optional file name
@@ -11,18 +13,12 @@ def read_data(path, **kwargs):
     Returns contents of Path() / file within zipped Path() as string.
     """
 
-    if not isinstance(path, Path):  # If not Path(), make it so.
-        path = Path(path)
+    path = isinstance(path, Path) or Path(path)  # If not Path(), make it so.
 
     # Setting defaults if not provided when calling read_data()
-    if "logger" in kwargs:
-        logger = kwargs["logger"]  # Logger provided, we'll use it.
-    else:
-        logger = None  # We'll handle that in logger_handler().
-    if "tab" in kwargs:
-        tab = kwargs["tab"]  # Tab provided, let's use it.
-    else:
-        tab = '    '  # Tab not provided, setting sane default.
+    tab = kwargs.get('tab') or '    '
+    logger = kwargs.get('logger') or None
+
     error = f'{tab * 2}ERROR: '
 
     logger_handler(logger, f'{tab * 3}Accessing {path.name}...')  # Logging using logger_handler

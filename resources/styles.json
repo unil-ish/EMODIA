@@ -34,6 +34,7 @@
   "logo_block": "48;5;216m",
   "logo_text": "38;5;216m",
   "header": "1m░   ",
+  "command": "0m»   ",
   "error": "91m✗ Error",
   "success": "92m✓"
 }
