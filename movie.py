@@ -11,6 +11,9 @@ class Movie:
         self.votes = votes
         self.genres = genres
 
+    def get_movie_id(self):
+        return self.movie_id
+
     def get_title(self):
         return self.title
 
@@ -47,9 +50,9 @@ class Movie:
     @classmethod
     def get_all_title(cls):
         data = cls.read_tsv(file_path)
-        titles = [] # changer du schéma UML pour être plus lisible
+        titles = [] # changé du schéma UML pour être plus lisible
         for parts in data:
-            title_str = parts[1]
+            title_str = parts[1] # column numbers
             for title in title_str.split(','): # check if I need this
                 titles.append(title)
         return titles
