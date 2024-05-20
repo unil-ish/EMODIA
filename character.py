@@ -2,14 +2,13 @@ import pandas as pd
 
 
 class Character:
+    # all_characters_id = []
     def __init__(self, character_id, name, movie_id, gender, credits_position):
         self.character_id = character_id
         self.name = name
         self.movie_id = movie_id
         self.gender = gender
         self.credits_position = credits_position
-
-        self.all_characters_id = []
 
     def get_name(self):
         return self.name
