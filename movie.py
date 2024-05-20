@@ -27,10 +27,10 @@ class Movie:
         return self.genres
 
     # property
-    @property
+    """@property
     def _all_titles_id(self):
         return [(movie.id,movie.title) for movie in Movie.movies] # return list of tuples containing 'id' and 'title'
-        # for all movies
+        # for all movies"""
 
     # added a method but not sure - just to be able to see the results for now
     @classmethod
@@ -46,54 +46,54 @@ class Movie:
 
     @classmethod
     def get_all_title(cls):
-        """data = cls.read_tsv(file_path)
-        list_all_title = []
+        data = cls.read_tsv(file_path)
+        titles = [] # changer du schéma UML pour être plus lisible
         for parts in data:
             title_str = parts[1]
             for title in title_str.split(','): # check if I need this
-                list_all_title.append(title)
-        return list_all_title"""
+                titles.append(title)
+        return titles
 
     @classmethod
     def get_all_release_year(cls):
         data = cls.read_tsv(file_path)
-        list_all_release_year = []
+        release_years = []
         for parts in data:
             release_year_str = parts[2]
             for release_year in release_year_str.split(','):
-                list_all_release_year.append(release_year)
-        return list_all_release_year
+                release_years.append(release_year)
+        return release_years
 
     @classmethod
     def get_all_rating(cls):
         data = cls.read_tsv(file_path)
-        list_all_rating = []
+        ratings = []
         for parts in data:
             rating_str = parts[3]
             for rating in rating_str.split(','):
-                list_all_rating.append(rating)
-        return list_all_rating
+                ratings.append(rating)
+        return ratings
 
     @classmethod
     def get_all_votes(cls):
         data = cls.read_tsv(file_path)
-        list_all_votes = []
+        votes = []
         for parts in data:
             votes_str = parts[4]
-            for votes in votes_str.split(','):
-                list_all_votes.append(votes)
-        return list_all_votes
+            for vote in votes_str.split(','):
+                votes.append(vote)
+        return votes
 
     @classmethod
     def get_all_genres(cls):
         data = cls.read_tsv(file_path)
-        list_all_genres = []
+        genres = []
         for parts in data:
             genres_str = parts[5]
             genres_str = genres_str.strip('[]')
-            for genres in genres_str.split(','):
-                list_all_genres.append(genres)
-        return list_all_genres
+            for genre in genres_str.split(','):
+                genres.append(genre)
+        return genres
 
 
 # with open('movie_dialog/movie_titles_metadata.tsv', 'r', encoding='utf-8') as file:
@@ -118,5 +118,5 @@ all_genres = Movie.get_all_genres()
 
 test_df = pd.DataFrame(list(zip(all_titles, all_release_years, all_ratings,
                                 all_votes, all_genres)),
-                       columns=['Title:', 'Release year:', 'Rating:', 'Votes:', 'Genres:'])
+                       columns=['Title:', 'Release year:', 'Rating:', 'Vote:', 'Genre:'])
 print(test_df)
