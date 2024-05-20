@@ -67,7 +67,7 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
 **Le projet doit être entièrement construit selon une architecture de programmation orientée objet.**
 
 1. **Sélection des films et collecte des dialogues** :
-   - Pour la sélection des données et la préparation du projet EMODIA ("ÉMotions et DIalogues Analyse"), nous utiliserons le ["Cornell Movie-Dialog Corpus"](./movie_dialog.zip). Ce corpus         comprend un ensemble diversifié de dialogues extraits de scénarios de films, couvrant un large éventail de genres et offrant une riche variété de dynamiques émotionnelles. Cette              ressource nous permettra d'accéder directement à des transcriptions de dialogues de qualité, facilitant l'analyse des interactions et des évolutions émotionnelles entre les personnages        sans nécessiter une collecte de données supplémentaire.
+   - Pour la sélection des données et la préparation du projet EMODIA ("ÉMotions et DIalogues Analyse"), nous utiliserons le ["Cornell Movie-Dialog Corpus"](movie_dialog.zip). Ce corpus         comprend un ensemble diversifié de dialogues extraits de scénarios de films, couvrant un large éventail de genres et offrant une riche variété de dynamiques émotionnelles. Cette              ressource nous permettra d'accéder directement à des transcriptions de dialogues de qualité, facilitant l'analyse des interactions et des évolutions émotionnelles entre les personnages        sans nécessiter une collecte de données supplémentaire.
 
 
 2. **Extraction et Préparation des Dialogues**
@@ -87,7 +87,7 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
    - **Analyse selon les Genres et les Caractéristiques des Personnages** : L'incorporation de ces métadonnées offrira l'opportunité d'examiner les variations des flux émotionnels en fonction du genre cinématographique et des rôles des personnages au sein du récit, fournissant ainsi une compréhension plus nuancée des stratégies narratives employées.
 
 5. **Application du modèle de Navier-Stokes** :
-   - Utiliser les équations de Navier-Stokes pour modéliser les dynamiques émotionnelles des dialogues à l'aide de ce [fichier](./analysis_navier_stocker.py), traitant les émotions comme des "flux" qui peuvent varier en intensité et direction au fil du temps et entre les personnages.
+   - Utiliser les équations de Navier-Stokes pour modéliser les dynamiques émotionnelles des dialogues à l'aide de ce [fichier](../analysis_navier_stocker.py), traitant les émotions comme des "flux" qui peuvent varier en intensité et direction au fil du temps et entre les personnages.
    - Analyser les séquences de dialogue pour identifier comment les émotions "coulent" entre les personnages et comment ce flux évolue au cours de la narration.
    - Pour se faire une idée de l'approche vous pouvez faire référence à cet [article](./MathNLP24__Fluid_Dynamics_Inspired_Emotional_Analysis_in_Shakespearean_Tragedies__A_Novel_Computational_Linguistics_Methodology%20(5).pdf)
      
