@@ -26,6 +26,12 @@ class Movie:
     def get_genres(self):
         return self.genres
 
+    # property
+    @property
+    def _all_titles_id(self):
+        return [(movie.id,movie.title) for movie in Movie.movies] # return list of tuples containing 'id' and 'title'
+        # for all movies
+
     # added a method but not sure - just to be able to see the results for now
     @classmethod
     def read_tsv(cls, file_path):
@@ -40,13 +46,13 @@ class Movie:
 
     @classmethod
     def get_all_title(cls):
-        data = cls.read_tsv(file_path)
+        """data = cls.read_tsv(file_path)
         list_all_title = []
         for parts in data:
             title_str = parts[1]
             for title in title_str.split(','): # check if I need this
                 list_all_title.append(title)
-        return list_all_title
+        return list_all_title"""
 
     @classmethod
     def get_all_release_year(cls):
