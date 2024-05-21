@@ -5,5 +5,7 @@
   "file_parser",
   "keywords",
   "process_file",
-  "read_data"
+  "read_data",
+  "line",
+  "conversation"
 ]

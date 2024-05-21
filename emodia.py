@@ -22,13 +22,16 @@ import os
 import inspect
 import sys
 from pathlib import Path
+from pathlib import PurePath
 from core_modules import custom_logger
 from core_modules import messenger
 from core_modules import utils
 from core_modules import module_handler
 from modules import keywords
 from modules import read_data
+from modules import conversation
 from modules import create_graph
+from modules import line
 import pandas as pd
 import numpy as np
 
@@ -36,11 +39,14 @@ import numpy as np
 NAME = "EMODIA"
 MODULES_DIR = Path("modules")
 RESOURCES_DIR = Path("resources")
+DATA_DIR = Path("data")
 
 # Utilities
 TAB = "    "
 LOGGER = object
 MESSENGER = object
+CWD = Path.cwd()
+REL_DATA_DIR = PurePath.joinpath(CWD, DATA_DIR)
 
 
 class ABCProgram:
@@ -285,6 +291,29 @@ class PresetCommands(Commands):
     def preset_display_credits(self):
         """Displays program credits."""
         self.program.program_info.print_authors()
+
+    @staticmethod
+    def preset_example_read_zip_data():
+        """read_data example for file in zip."""
+
+        data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR, file_in_zip='movie_conversations.tsv')
+        # We're using try to make sure the program doesn't crash if there's an error.
+        try:
+            print(len(data))
+        except:
+            print('woops')
+
+    def preset_example_read_data(self):
+        """read_data example."""
+
+        data = read_data.read_data('senticnet.tsv', path=REL_DATA_DIR)
+        # We're using try to make sure the program doesn't crash if there's an error.
+        try:
+            print(len(data))
+        except:
+            print('woops')
+
+
 
 
 def main():
