@@ -28,6 +28,9 @@ from core_modules import utils
 from core_modules import module_handler
 from modules import keywords
 from modules import read_data
+from modules import create_graph
+import pandas as pd
+import numpy as np
 
 # PROGRAM INFO
 NAME = "EMODIA"
@@ -269,6 +272,15 @@ class PresetCommands(Commands):
         else:
             self.msg.log('log_reloaded_module_error')
             self.msg.say('reloaded_module_error')
+
+    def preset_test_create_graph(self):
+        """Test create_graph with random data."""
+
+        graph = create_graph.CreateGraph(title='Title', xlabel='x', ylabel='y')
+        print(graph)
+        exemple_pd = pd.DataFrame(np.random.randint(0,100,size=(10, 2)), columns=['ID', 'Score'])
+        print(exemple_pd)
+        graph.create_graph(data=exemple_pd, graph_type='scatter', x='ID', y='Score')
 
     def preset_display_credits(self):
         """Displays program credits."""
