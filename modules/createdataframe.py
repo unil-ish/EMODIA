@@ -1,7 +1,8 @@
-def hello_world():
-    print('hello world! (but from inside a function this time :)')
+import pandas as pd
 
-#my_df = pd.DataFrame({'Data1': data1, 'Data2': data2, 'DataN': dataN})
+
+def create_dataframe(data1, data2):
+    return pd.DataFrame({'Data1': data1, 'Data2': data2})
 
 #exemple d'utilisation pour créer le dataframe pour les années de sortie:
 
