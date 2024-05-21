@@ -1,19 +1,44 @@
-"""Simple module that takes (1) a Path() or path, (2) a logging.Logger() and (3) optional name of a file within a zip.
-If optional name is given, it looks for it (3) within the zipped file provided at (1).
-It returns the contents of the file as string."""
+"""
+read_data() takes in:
+    1. The name of a file (test.txt)
+    ** 'path' -> Path from the parent directory for files not in the same directory as read_data.
+                  e.g. ('/EMODIA/data/movie_dialog')
+    ** 'file_in_zip' -> Name of the file we want from the zip if (1) is a zipped file.
+    ** 'logger' -> A logger, not implemented right now: ignore
+    ** 'tab' -> not implemented either, ignore.
+    Returns contents of Path() / file within zipped Path() as string.
+"""
 import zipfile
 from pathlib import Path
+from pathlib import PurePath
+
 
 def hello_world():
     print('Hello World!')
 
-def read_data(path, **kwargs):
-    """Needs a path or Path(), logging.Logger, left-padding as string in tab, and an optional file name
-    to get within the zip.
+
+def read_data(file, **kwargs):
+    """
+    Takes in:
+    1. The name of a file (test.txt)
+    ** 'path' -> Path from the parent directory for files not in the same directory as read_data.
+                  e.g. ('/EMODIA/data/movie_dialog')
+    ** 'file_in_zip' -> Name of the file we want from the zip if (1) is a zipped file.
+    ** 'logger' -> A logger, not implemented right now: ignore
+    ** 'tab' -> not implemented either, ignore.
     Returns contents of Path() / file within zipped Path() as string.
     """
+    try:
+        path = PurePath.joinpath(kwargs.get('path'), file)
+    # If the user hasn't specified a path, use 'file' as path.
+    except KeyError:
+        path = file
 
-    path = isinstance(path, Path) or Path(path)  # If not Path(), make it so.
+    # print(path)
+    if not isinstance(path, Path):
+        print('not path :(')
+        path = Path(path)  # If not Path(), make it so.
+        # print(path)
 
     # Setting defaults if not provided when calling read_data()
     tab = kwargs.get('tab') or '    '
@@ -21,21 +46,25 @@ def read_data(path, **kwargs):
 
     error = f'{tab * 2}ERROR: '
 
-    logger_handler(logger, f'{tab * 3}Accessing {path.name}...')  # Logging using logger_handler
+    #logger_handler(logger, f'{tab * 3}Accessing {path.name}...')  # Logging using logger_handler
     if '.zip' in path.name:  # Is it a zip?
-        if not kwargs["zip_name"]:  # If we're not told what to get inside the zip, error.
+        #print('its a zip!')
+        if not kwargs["file_in_zip"]:  # If we're not told what to get inside the zip, error.
             print('Please select a zip file.')
             return
-        zip_name = kwargs['zip_name']  # Else, get what was asked
-        print(f'{tab * 2}Accessing {zip_name}..')
+        file_in_zip = kwargs['file_in_zip']  # Else, get what was asked
+        #print(file_in_zip)
+        print(f'{tab * 2}Accessing {file_in_zip}..')
         try:
+            #zip = zipfile.ZipFile(path)
+            #print(zip.namelist())
             with zipfile.ZipFile(path, 'r') as my_zip:  # Using ZipFile to access file contents.
-                with my_zip.open(zip_name) as data:
+                with my_zip.open(file_in_zip) as data:
                     return_data = data.read()
             return return_data
         except:
             print(f'{error}Unzip error.')
-            logger_handler(logger, f'{tab * 2}Error unzipping {path.name}')
+            #logger_handler(logger, f'{tab * 2}Error unzipping {path.name}')
 
     else:
         try:
@@ -43,7 +72,7 @@ def read_data(path, **kwargs):
                 data = file.read()
                 return data
         except FileNotFoundError or NotADirectoryError:
-            logger_handler(logger, f'{tab * 2}Error accessing {path.name}')
+            #logger_handler(logger, f'{tab * 2}Error accessing {path.name}')
             print(f'{error}Path does not exist.')
         except PermissionError:
             print(f'{error}File exists but permission error.')

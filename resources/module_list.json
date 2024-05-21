@@ -1,8 +1,11 @@
 [
   "analysis_navier_stocker",
   "create_dataframe",
+  "create_graph",
   "file_parser",
   "keywords",
   "process_file",
-  "read_data"
+  "read_data",
+  "line",
+  "conversation"
 ]
