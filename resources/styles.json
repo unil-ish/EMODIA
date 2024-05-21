@@ -1,0 +1,40 @@
+{
+  "clear_line": "2K",
+  "end_style": "0m",
+
+  "cursor_right": "C",
+  "cursor_up": "F",
+  "cursor_down": "E",
+
+  "bold": "1m",
+  "dim": "2m",
+  "underline": "4m",
+
+  "fail": "91m",
+  "warn": "93m",
+
+  "bright_green": "92m",
+  "bright_red": "93m",
+  "bright_blue": "94m",
+  "bright_magenta": "95m",
+  "bright_cyan": "96m",
+
+  "background_green": "42m",
+  "background_red": "41m",
+  "background_blue": "44m",
+  "background_magenta": "45m",
+  "background_cyan": "46m",
+
+  "bright_background_green": "102m",
+  "bright_background_red": "101m",
+  "bright_background_blue": "104m",
+  "bright_background_magenta": "105m",
+  "bright_background_cyan": "106m",
+
+  "logo_block": "48;5;216m",
+  "logo_text": "38;5;216m",
+  "header": "1m░   ",
+  "command": "0m»   ",
+  "error": "91m✗ Error",
+  "success": "92m✓"
+}

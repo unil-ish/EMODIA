@@ -1,0 +1,290 @@
+"""
+EMODIA is a command-line-interface data visualisation program.
+
+It:
+1   Gathers resources from a directory to provide a pleasant GUI.
+2   Checks whether modules have been imported as expected.
+3   Prompts the user for what to do next.
+
+A note on some globals:
+LOGGER  Points to a custom logging.Logger object so that it can be shared.
+TAB     Holds the text indent used for the CLI and logs.
+NAME    Program name, for welcome message.
+MESSENGER     Custom print() alternative, shared.
+MODULES_DIR   Dir for data processing modules. These must be valid .py files.
+RESOURCES_DIR Where resources are located. Used for log messages, CLI, etc.
+
+Main script by Lorelei Chevroulet, 2024
+"""
+
+import importlib.util  # To import modules.
+import os
+import inspect
+import sys
+from pathlib import Path
+from core_modules import custom_logger
+from core_modules import messenger
+from core_modules import utils
+from core_modules import module_handler
+from modules import keywords
+from modules import read_data
+
+# PROGRAM INFO
+NAME = "EMODIA"
+MODULES_DIR = Path("modules")
+RESOURCES_DIR = Path("resources")
+
+# Utilities
+TAB = "    "
+LOGGER = object
+MESSENGER = object
+
+
+class ABCProgram:
+    """
+    Parent class for all modules. Allows them to share a single, custom logger
+    and makes them log a message with their name when they are initialized.
+    """
+
+    def __init__(self):
+        # Ensure children share the logger.
+        self.logger = LOGGER
+        self.msg = MESSENGER
+        self.test = 'hi'
+
+        # Logs any initialized child.
+        name = self.__class__.__name__
+        self.logger.info(f"Initializing {name}", extra={"Type": "🏗️"})
+
+
+class MainProgram(ABCProgram):
+    """The main program, as a class.
+
+    * Handles startup messages
+    * Manages and imports modules
+    * Gets user input as to what to do next.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.program = self
+        self.program_info = object
+        self.module_handler = object
+
+    def start_program(self):
+        self.program_info = ProgramInfo()
+        self.program_info.print_logo()
+
+        module_list = utils.Utils.get_resource(RESOURCES_DIR, "module_list", data_type="json")
+        # Looking for, then importing modules.
+        self.module_handler = module_handler.ModuleHandler(self.logger, self.msg, module_list, MODULES_DIR)
+
+        self.msg.log('log_1_modules_check')
+        self.module_handler.compare_modules_routine()
+
+        # Entering program loop.
+        self.program_loop()
+
+    def program_loop(self):
+        commands = Commands(self)
+        while True:
+            commands.command_dialog()
+
+
+class ProgramInfo(ABCProgram):
+    """
+    Gets logo and author information from resources, formats and displays them.
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.logo = utils.Utils.get_resource(RESOURCES_DIR, "logo", "txt")
+        self.authors: dict = utils.Utils.get_resource(RESOURCES_DIR, "authors", "json")
+
+    def print_logo(self):
+        """Print logo."""
+        for line in self.logo.splitlines():
+            self.msg.say("logo", text=line)
+        print()
+
+    def print_authors(self):
+        """
+        Gets authors, sorts them under each category then
+        formats and prints them.
+        """
+        for (
+                key
+        ) in (
+                self.authors.keys()
+        ):  # Each key being an entry like "authors", "supervisors", etc.
+            self.authors.update(
+                {
+                    # Sorts authors by name under a 'key' category.
+                    key: utils.Utils.sort_dict(self.authors[key], "name")
+                }
+            )
+
+        # Print out all that formatted data.
+        for category in self.authors.keys():
+            self.msg.say(category)
+            for person in self.authors[category]:
+                # Formatting fullname because msg can't.
+                fullname = f"""{person["name"]} {person["surname"]}"""
+                self.msg.say(
+                    "person_list",
+                    fullname=f"{fullname:22}",
+                    institution=person["institution"],
+                )
+            print()
+
+
+class Commands(MainProgram):
+    def __init__(self, program):
+        super().__init__()
+        self.command_dict = {}
+        self.program = program
+
+    def command_dialog(self):
+        """
+        Prints a list of available commands surrounded by a cute CLI GUI.
+        Prompts for user input, and executes function located at user input
+        key in dictionary.
+        Extra bit of code to execute functions as either static methods or
+        with self parameter.
+        """
+        print()
+        self.msg.say("2_command_selection")
+        self.command_dict = self.command_dict_holder()
+
+        # That's the cute GUI part.
+        self.msg.say('select_command')
+        print()
+        self.msg.say("command_list_art_1")
+        self.msg.say("command_list_art_2")
+        for entry, value in self.command_dict.items():
+            name = getattr(PresetCommands, value).__doc__
+            self.msg.say('command_list', number=f"{entry:>3}", name=name)
+        print()
+
+        # Gets user input to pick command.
+        selection = self.command_selection()
+        command = getattr(PresetCommands, selection)
+        self.msg.log('log_selected_command_value', value=command.__name__)
+        print()
+
+        # Checks if command is static or needs self.
+        if isinstance(inspect.getattr_static(PresetCommands, selection), staticmethod):
+            command()
+        else:
+            command(self.program)
+
+    def command_selection(self) -> str:
+        """
+        Checks user input and force attempts until conditions passed.
+        """
+        selected_command = None
+        while not selected_command:
+            user_input = input(f"{TAB}{TAB}> ")
+            try:
+                selected_number = int(user_input)
+                self.msg.log('log_selected_command', number=selected_number)
+                selected_command = self.command_dict.get(selected_number) or None
+                if not selected_command:
+                    self.msg.say('invalid_command', name=user_input)
+
+            except ValueError:
+                self.msg.say('invalid_number', name=user_input)
+
+        return selected_command
+
+    @staticmethod
+    def command_dict_holder() -> dict:
+        """
+        Setups a dict containing an index and a value pointing to a preset_command.
+        """
+        method_list = []
+        method_dict = {}
+
+        # Only grab functions starting with "preset_".
+        for entry in dir(PresetCommands):
+            if not entry.startswith('__'):
+                if entry.startswith('preset_'):
+                    method_list.append(entry)
+
+        # Using enumerate to have index keys.
+        for index, entry in enumerate(method_list):
+            method_dict.update({index: entry})
+        return method_dict
+
+
+class PresetCommands(Commands):
+    """
+    Commands listed in the command selection prompt.
+
+    To work properly, commands MUST:
+    * start with 'preset_'
+    * contain a short (<40 chars) docstring
+
+    The docstring is paramount as it will provide a description of
+    the command to the user.
+    """
+
+    def __init__(self):
+        super().__init__()
+
+    @staticmethod
+    def select_retry():
+        print('command does not exist :( Try again.')
+
+    @staticmethod
+    def preset_test_command_dict():
+        """Prints hello world :)"""
+        print('hello world :)')
+
+    @staticmethod
+    def preset_hello_world_read_data():
+        """Calls hello world from read_data module."""
+        read_data.hello_world()
+
+    @staticmethod
+    def preset_stop_program():
+        """Stops the program."""
+        sys.exit(0)
+
+    def preset_reload_module(self):
+        """Reloads a specific module."""
+        self.module_handler.filtered_list_imported_modules()
+        self.msg.say("which_module_reload")
+        target_module = input(f"{TAB}>")
+
+        try:
+            # Note the sys.modules[] to get an actual module object and not string.
+            status = module_handler.ModuleHandler.reload_module(sys.modules[f'{MODULES_DIR}.{target_module}'])
+        except KeyError:
+            status = False
+
+        if status:
+            self.msg.log('log_reloaded_module', name=target_module)
+            self.msg.say('reloaded_module', name=target_module)
+        else:
+            self.msg.log('log_reloaded_module_error')
+            self.msg.say('reloaded_module_error')
+
+    def preset_display_credits(self):
+        """Displays program credits."""
+        self.program.program_info.print_authors()
+
+
+def main():
+    """Main function. Initializes program."""
+    global LOGGER, MESSENGER  # We need the logger and module import status to be shared.
+    LOGGER = custom_logger.CustomLogger("logger", log_name=NAME)  # Here's our shared, custom logger.
+    MESSENGER = messenger.Messenger(RESOURCES_DIR, LOGGER, TAB)
+
+    program = MainProgram()
+    program.start_program()
+    pass
+
+
+if __name__ == "__main__":
+    main()
