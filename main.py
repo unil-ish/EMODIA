@@ -68,14 +68,14 @@ def main():
     df = pandas.DataFrame({'title': list_line_id, 'speaker': list_char_id, 'speech': list_content})
     print(df)
 
-    # processed_df = ProcessFile(df, "data/senticnet.tsv").process_speeches()
+    processed_df = ProcessFile(df, "data/senticnet.tsv").process_speeches()
 
-    # keywords = get_keywords()
-    # sentiment_dynamics = SentimentDynamics(keywords)
+    keywords = get_keywords()
+    sentiment_dynamics = SentimentDynamics(keywords)
 
-    # speech_analysis = SpeechAnalysis(processed_df, sentiment_dynamics)
+    speech_analysis = SpeechAnalysis(processed_df, sentiment_dynamics)
 
-    # all_s = speech_analysis.calculate_navier_stocker()
+    all_s = speech_analysis.calculate_navier_stocker()
 
 
     test = Line.all_characters_id

@@ -6,7 +6,6 @@ class Line:
     all_characters_id = []
     all_movies_id = []
     all_lines_content = []
-
     def __init__(self, id, movie_id, character_id, line_content):
         self.id = id
         self.character_id = character_id
