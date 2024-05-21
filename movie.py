@@ -2,7 +2,7 @@ import pandas as pd
 
 
 class Movie:
-    all_movie_id = [0, 1, 2] # example to see the result and to try to understand
+    all_movie_id = [0, 1, 2] # examples to see the result and to try to understand
     all_titles = ["Movie 1", "Movie 2", "Movie 3"]
     all_ratings = ["3", "10", "2"]
     all_votes = []
