@@ -42,10 +42,26 @@ Feuille de route du projet
          * Modèle Navier-Stokes (_EmotionnalFlowGraph_)  
   * Planification de qui, quoi, quand. Via plan de projet Github?
   * Writing the code 🧑‍💻
-  * To be determined!
+    * Finish main -> Lorelei
+      * Fix read_data (d> 23.05)
+      * Make sure all preset_commands work etc. (d> 26.05)
+    * Update classes to work with preset_command & read_data
+      * Virgile & Sophie (d> 24.05)
+    * Create preset_commands for data visualisation
+      * Erica, Lorelei (d> 26.05)
+    * Translate comments and UI
+      * Lorelei (d> 28.05)
+  * Documentation
+    * README in branch-erica (> 27.05)
+    * Structure: Erica
+    * UML (d> 24.05)
+    * Each person documents the code they've written 
+  * Presentation
+    * PowerPoint: Erica (d> 26.05), shared on MS365
+      * Each person presents their part, fills their slides
 
 4. **Présentation**
-  * Quand? `2024-MM-DD`
+  * Quand? `2024-05-28`
   * Qui a fait quoi?
   * Projet accompli.
   * Résultats (Graphiques, etc.).
