@@ -12,6 +12,8 @@ class Utils:
         Opens 'name'.'data_type' with either default read() or json.load(),
         returns contents.
         """
+        # TODO: Reformat fullpath, as it is a bit unwieldy like that.
+        # Implemented to handle paths correctly on Windows.
         fullpath = PurePath(resource_dir, (str(name) + '.' + str(data_type)))
         with open(Path(fullpath), "r", encoding='utf-8') as file:
             match data_type:
