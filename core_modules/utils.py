@@ -11,7 +11,7 @@ class Utils:
         Opens 'name'.'data_type' with either default read() or json.load(),
         returns contents.
         """
-        with open(Path(f"{resource_dir}/{name}.{data_type}"), "r") as file:
+        with open(Path(f"{resource_dir}/{name}.{data_type}"), "r", encoding='utf-8') as file:
             match data_type:
                 case "json":
                     return json.load(file)
