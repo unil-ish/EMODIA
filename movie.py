@@ -3,7 +3,7 @@ import pandas as pd
 
 class Movie:
     all_movies_id = [] # une liste de tous les id movie
-    all_titles_id = [] #
+    all_titles_id = [] # une liste de tous les id titles
     all_release_years_id = [] #
     all_ratings_id = [] #
     all_votes_id = [] #
