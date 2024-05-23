@@ -2,94 +2,116 @@ import pandas as pd
 
 
 class Character:
-    # all_characters_id = []
-    def __init__(self, character_id, name, movie_id, gender, credits_position):
+    all_characters_id = []
+    all_names_id = []
+    all_movies_id = []
+    all_genders_id = []
+    all_credits_positions_id = []
+
+    def __init__(self, character_id, name_id, movie_id, gender_id, credits_position_id):
         self.character_id = character_id
-        self.name = name
+        self.name_id = name_id
         self.movie_id = movie_id
-        self.gender = gender
-        self.credits_position = credits_position
+        self.gender_id = gender_id
+        self.credits_position_id = credits_position_id
 
-    def get_name(self):
-        return self.name
+    def get_name_id(self, character_id):
+        merged_list = dict(zip(self.all_characters_id, self.all_names_id))
+        return merged_list[character_id]
 
-    def get_movie_id(self):
-        return self.movie_id
+    def get_movie_id(self, character_id):
+        merged_list = dict(zip(self.all_characters_id, self.all_movies_id))
+        return merged_list[character_id]
 
-    def get_gender(self):
-        return self.gender
+    def get_gender_id(self, character_id):
+        merged_list = dict(zip(self.all_characters_id, self.all_genders_id))
+        return merged_list[character_id]
 
-    def get_credits_position(self): # (self, character_id)
-        return self.credits_position
+    def get_credits_position_id(self, character_id):
+        merged_list = dict(zip(self.all_characters_id, self.all_credits_position_id))
+        return merged_list[character_id]
 
-    # commentaire
+    # création de @property pour pouvoir accéder aux attributs (avant __init__)
+    @property
+    def _all_names_id(self):
+        return self.all_names_id
+
+    @property
+    def _all_movies_id(self):
+        return self.all_movies_id
+
+    @property
+    def _all_genders_id(self):
+        return self.all_genders_id
+
+    @property
+    def _all_credits_positions_id(self):
+        return self.all_credits_positions_id
+
+    @property
+    def _all_characters_id(self):
+        return self.all_characters_id
+
+    # création de @classmethod
     @classmethod
-    def read_tsv(cls, file_path):
-        data = []
-        with open(file_path, 'r', encoding='utf-8') as file:
-            for line in file:
-                parts = line.strip().split('\t')
-                if len(parts) >= 6:  # the file has at least 6 fields
-                    data.append(parts)
-        return data
-
-    @classmethod
-    def get_all_name(cls):
-        # mettre en commentaire
-        data = cls.read_tsv(file_path)
-        list_all_name = []
-        for parts in data:
-            name_str = parts[1]
-            for name in name_str.split(','):  # check if I need this
-                list_all_name.append(name)
-        return list_all_name
-
-    @classmethod
-    def get_all_movie_id(cls):
-        data = cls.read_tsv(file_path)
-        list_all_movie_id = []
-        for parts in data:
-            movie_id_str = parts[2]
-            for movie in movie_id_str.split(','):  # check if I need this
-                list_all_movie_id.append(movie)
-        return list_all_movie_id
-
-    @classmethod
-    def get_all_gender(cls):
-        data = cls.read_tsv(file_path)
-        list_all_gender = []
-        for parts in data:
-            gender_str = parts[4]
-            for gender in gender_str.split(','):  # check if I need this
-                list_all_gender.append(gender)
-        return list_all_gender
+    def get_all_names(cls, id_list):
+        merged_list = dict(zip(Character._all_characters_id, Character._all_names_id))  # dictionnaire qui met
+        # ensemble les listes all_characters_id and all_names_id
+        list_all_names = []
+        for ids in id_list:
+            list_all_names.append(merged_list[ids])
+        return list_all_names
 
     @classmethod
-    def get_all_credits_position(cls):
-        data = cls.read_tsv(file_path) # lorelei fichier read
-        list_all_credits_position = []
-        for parts in data:
-            credits_position_str = parts[5]
-            for credit in credits_position_str.split(','):  # check if I need this
-                list_all_credits_position.append(credit)
-        return list_all_credits_position
+    def get_all_movies_id(cls, id_list):
+        merged_list = dict(zip(Character._all_characters_id, Character._all_movies_id))  # dictionnaire qui met
+        # ensemble les listes all_characters_id and all_names_id
+        list_all_movies = []
+        for ids in id_list:
+            list_all_movies.append(merged_list[ids])
+        return list_all_movies
+
+    @classmethod
+    def get_all_genders_id(cls, id_list):
+        merged_list = dict(zip(Character._all_characters_id, Character._all_genders_id))  # dictionnaire qui met
+        # ensemble les listes all_characters_id and all_names_id
+        list_all_genders = []
+        for ids in id_list:
+            list_all_genders.append(merged_list[ids])
+        return list_all_genders
+
+    @classmethod
+    def get_all_credits_positions_id(cls, id_list):
+        merged_list = dict(
+            zip(Character._all_characters_id, Character._all_credits_positions_id))  # dictionnaire qui met
+        # ensemble les listes all_characters_id and all_names_id
+        list_all_credits_positions = []
+        for ids in id_list:
+            list_all_credits_positions.append(merged_list[ids])
+        return list_all_credits_positions
+
+    @classmethod
+    def create_dataframe(cls, list_ids, attribute_list):
+        df = pd.DataFrame(dict(zip(list_ids, attribute_list)))
+        return df
 
 
-file_path = 'movie_dialog/movie_characters_metadata.tsv'
-Character.read_tsv(file_path)
+class CharacterHolder:
+    def get_character(self):
+        return self.character_dataset()
 
-# testing that it prints correctly
-"""print(Character.get_all_name())
-print(Character.get_all_movie_id())
-print(Character.get_all_gender())
-print(Character.get_all_credits_position())"""
+    @staticmethod
+    def character_dataset():
+        if (
+                Character.all_characters_id
+                and Character.all_names_id
+                and Character.all_movies_id
+                and Character.all_genders_id
+                and Character.all_credits_positions_id
+        ):
+            return True
+        else:
+            return False
 
-# put them into variables to be able to call them easily in the DataFrame
-all_names = Character.get_all_name()
-all_movie_ids = Character.get_all_movie_id()
-all_genders = Character.get_all_gender()
-all_credits_positions = Character.get_all_credits_position()
-
-character_df = pd.DataFrame(list(zip(all_names, all_movie_ids, all_genders, all_credits_positions)),
-                            columns=['Name:', 'Movie ID:', 'Gender:', 'Credits Position:'])
-print(character_df)
+    def create_character_dataset(self, provided_data):
+        return

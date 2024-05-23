@@ -48,7 +48,7 @@ class Movie:
 
     @property
     def _all_ratings_id(self):
-        return self._all_ratings_id
+        return self.all_ratings_id
 
     @property
     def _all_votes_id(self):
@@ -66,7 +66,7 @@ class Movie:
     @classmethod
     def get_all_titles(cls, id_list):
         merged_list = dict(zip(Movie._all_movies_id, Movie._all_titles_id)) # dictionnaire qui met ensemble les
-        # listes all_movie_id and all_titles
+        # listes all_movie_id and all_titles_id
         list_all_titles = []
         for ids in id_list:
             list_all_titles.append(merged_list[ids])
@@ -104,8 +104,34 @@ class Movie:
             list_all_genres_id.append(merged_list[ids])
         return list_all_genres_id
 
+    # création d'un dataframe df
+    @classmethod
+    def create_dataframe(cls, list_ids, attribute_list):
+        df = pd.DataFrame(dict(zip(list_ids, attribute_list)))
+        return df
+
+
+class MovieHolder:
+    def get_movie(self):
+        return self.movie_dataset()
+
+    @staticmethod
+    def movie_dataset():
+        if(
+            Movie.all_movies_id
+            and Movie.all_titles_id
+            and Movie.all_release_years_id
+            and Movie.all_ratings_id
+            and Movie.all_votes_id
+            and Movie.all_genres_id
+        ):
+            return True
+        else:
+            return False
+
     def create_movie_dataset(self, provided_data):
         return
+
 
 
 """title = Movie.get_all_titles(2) # retrieving title with ID 2 from all_titles list
