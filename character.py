@@ -1,22 +1,27 @@
+# code pour la classe Character
 import pandas as pd
 
 
 class Character:
-    all_characters_id = []
+    # attributs de classe
+    all_characters_id = []  # une liste de tous les id de character
     all_names_id = []
     all_movies_id = []
     all_genders_id = []
     all_credits_positions_id = []
 
     def __init__(self, character_id, name_id, movie_id, gender_id, credits_position_id):
-        self.character_id = character_id
+        self.character_id = character_id  # id d'un character en particulier
         self.name_id = name_id
         self.movie_id = movie_id
         self.gender_id = gender_id
         self.credits_position_id = credits_position_id
 
+    # donner un name_id associé à un character_id
     def get_name_id(self, character_id):
+        # mettre deux listes ensemble et mettre cette liste dans un dictionnaire
         merged_list = dict(zip(self.all_characters_id, self.all_names_id))
+        # cherche l'id character donné et retourne l'id name associé
         return merged_list[character_id]
 
     def get_movie_id(self, character_id):

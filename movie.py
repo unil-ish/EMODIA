@@ -1,24 +1,29 @@
+# code pour la classe Movie
 import pandas as pd
 
 
 class Movie:
-    all_movies_id = [] # une liste de tous les id movie
-    all_titles_id = [] # une liste de tous les id titles
-    all_release_years_id = [] #
-    all_ratings_id = [] #
-    all_votes_id = [] #
-    all_genres_id = [] #
+    # attributs de classe
+    all_movies_id = []  # une liste de tous les id de movie
+    all_titles_id = []
+    all_release_years_id = []
+    all_ratings_id = []
+    all_votes_id = []
+    all_genres_id = []
 
     def __init__(self, movie_id, title_id, release_year_id, ratings_id, votes_id, genres_id):
-        self.movie_id = movie_id # liste de tous les id
+        self.movie_id = movie_id  # id d'un movie en particulier
         self.title_id = title_id
         self.release_year_id = release_year_id
         self.ratings_id = ratings_id
         self.votes_id = votes_id
         self.genres_id = genres_id
 
+    # méthodes getter, donner un title_id associé à un movie_id
     def get_title_id(self, movie_id):
+        # mettre deux listes ensemble et mettre cette liste dans un dictionnaire
         merged_list = dict(zip(self.all_movies_id, self.all_titles_id))
+        # cherche l'id movie donné et retourne l'id title associé
         return merged_list[movie_id]
 
     def get_release_year_id(self, movie_id):
@@ -37,7 +42,7 @@ class Movie:
         merged_list = dict(zip(self.all_movies_id, self.all_genres_id))
         return merged_list[movie_id]
 
-    # création de @property pour pouvoir accéder aux attributs (avant __init__)
+    # création de @property pour pouvoir accéder aux attributs de classe (avant __init__)
     @property
     def _all_titles_id(self):
         return self.all_titles_id
@@ -65,10 +70,12 @@ class Movie:
     # création de @classmethod
     @classmethod
     def get_all_titles(cls, id_list):
-        merged_list = dict(zip(Movie._all_movies_id, Movie._all_titles_id)) # dictionnaire qui met ensemble les
-        # listes all_movie_id and all_titles_id
+        # mettre ensemble listes all_movies_id et all_titles_id, créer un dictionnaire
+        merged_list = dict(zip(Movie._all_movies_id, Movie._all_titles_id))  # dictionnaire qui met ensemble les
+        # liste vide pour mettre les titres qui correspondent aux ids dans id_list
         list_all_titles = []
         for ids in id_list:
+            # prendre titre associé à l'id et le met dans list_all_titles
             list_all_titles.append(merged_list[ids])
         return list_all_titles
 
@@ -112,12 +119,15 @@ class Movie:
 
 
 class MovieHolder:
+    # chercher le data de movie
     def get_movie(self):
+        # appelle la méthode
         return self.movie_dataset()
 
     @staticmethod
     def movie_dataset():
-        if(
+        # vérifie si les listes ne sont pas vides = True, sinon = False
+        if (
             Movie.all_movies_id
             and Movie.all_titles_id
             and Movie.all_release_years_id
@@ -131,10 +141,3 @@ class MovieHolder:
 
     def create_movie_dataset(self, provided_data):
         return
-
-
-
-"""title = Movie.get_all_titles(2) # retrieving title with ID 2 from all_titles list
-print(f"Title:", title)
-ratings = Movie.get_all_ratings(1)
-print(f"Rating:", ratings)"""
