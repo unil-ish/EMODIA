@@ -5,9 +5,8 @@ class Movie:
     all_movie_id = [0, 1, 2] # examples to see the result and to try to understand
     all_titles = ["Movie 1", "Movie 2", "Movie 3"]
     all_ratings = ["3", "10", "2"]
-    all_votes = []
+    all_votes = ["2"]
     all_genres = []
-
 
     def __init__(self, movie_id, title, release_year, rating, votes, genres):
         self.movie_id = movie_id
