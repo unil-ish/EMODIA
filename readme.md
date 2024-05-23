@@ -77,14 +77,23 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
 
 ### Structure logique du projet --> je sais pas à quel point il faut être précis la dessus :O 
 📁 core_modules
+
 📁 data
+
 📁 model
+
 📁 modules 
+
 📁 ressources
+
 📄 .gitignore
+
 📄 README.md
+
 📄 Emodia.py
+
 📄 Objectifs.md
+
 📄 Roadmap.md
 
 ### Contributeur-ices 
