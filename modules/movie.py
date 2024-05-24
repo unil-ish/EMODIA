@@ -126,7 +126,7 @@ class MovieHolder:
 
     @staticmethod
     def movie_dataset():
-        # vérifie si les listes ne sont pas vides = True, sinon = False
+        # vérifie si les listes sont remplies = True, sinon = False
         if (
             Movie.all_movies_id
             and Movie.all_titles_id
@@ -139,8 +139,25 @@ class MovieHolder:
         else:
             return False
 
-    def create_movie_dataset(self, provided_data):
-        """movie_data = read_data(provided_data)
+    """@staticmethod
+    def create_movie_dataset(provided_data):
+        # fills Conversation class variables from readdata
+        movie_data = read_data(provided_data)
+
+        # verifie si les clés "id", "title", etc sont présentes
         for movie in movie_data:
-        """
-        return
+            if 'id' in movie:
+                Movie.all_movies_id.append(movie['id'])
+            if 'title' in movie:
+                Movie.all_titles_id.append(movie['title'])
+            if 'release_year' in movie:
+                Movie.all_release_years_id.append(movie['release_year'])
+            if 'rating' in movie:
+                Movie.all_ratings_id.append(movie['rating'])
+            if 'votes' in movie:
+                Movie.all_votes_id.append(movie['votes'])
+            if 'genres' in movie:
+                Movie.all_genres_id.append(movie['genres'])
+
+    def read_data(provided_data):
+        return provided_data"""
