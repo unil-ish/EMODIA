@@ -2,6 +2,7 @@ import pandas as pd #ce sera importé avant mais il ne faut pas l'oublier
 import seaborn as sns
 #seaborn est plus adaptée aux dataframe et est construite au-dessus de matplot. De plus, elle offre moins de possibilités de custom, ce qui simplifie le code. Si on voulait des graphiques plus complexes, il faudrait peut-être travailler avec matplot.
 import matplotlib.pyplot as plt
+import networkx as nx
 
 #Déclaration de la classe CreateGraph qui va créer les graphiques demandés
 class CreateGraph: 
@@ -19,9 +20,17 @@ class CreateGraph:
             self.create_histogram(data, **kwargs)
         elif graph_type == 'heatmap':
             self.create_heatmap(data, **kwargs)
+        elif graph_type == 'stacked_bar_chart':
+            self.create_stacked_bar_chart(data, **kwargs)
+        elif graph_type == ('network_graph')
+            edges = kwargs.get(edges, character_list)
+            G = self.create_network_graph(edges, character_list)
+            self.visualize_network_graph(G)
+        else: 
+            print("Ce type de graphe n'est pas pris en compte par le programme :(")
             
     #on peut ajouter d'autres types de graph si besoin: ici on choisirait d'implémenter de nouvelles méthodes mais si on voit qu'il y a 56 types de graphiques, on pourrait créer des sous-classes
-
+            
     def create_scatterplot(self, data, x, y): 
         sns.scatterplot(x=x, y=y, data=data)
         plt.title(self.title)
@@ -30,13 +39,13 @@ class CreateGraph:
         plt.show()
     
     def create_histogram(self, data, column):
-        sns.histplot(data=data[column])
+        sns.histplot(data=data[column], palette='tab10')
         plt.title(self.title)
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.show()
         
-    def create_heatmap(self, data, values):
+    def create_heatmap(self):
         pivot_table = data.pivot_table(values = values, index = y, columns = x)
         sns.heatmap(data=pivot_table, cmap="coolwarm")
         plt.title(self.title)
@@ -44,22 +53,26 @@ class CreateGraph:
         plt.ylabel(self.ylabel)
         plt.show()
         
-# exemples d'utilisations à implémenter dans la fonction main: 
+    def create_stacked_bar_chart(self):
+        sns.countplot(data=data, x=x, hue=hue, palette='tab10')
+        plt.title(self.title)
+        plt.xlabel(self.xlabel)
+        plt.ylabel(self.ylabel)
+        plt.show()
+        
+    def create_network_graph(self, dialogue_list):
+        # Initialiser un graphe vide
+        G = nx.Graph()
 
-# Création d'une instance de la classe abstraite avec un titre approprié
-#graph = CreateGraph(title='Title', xlabel='x', ylabel='y')
+        # Ajouter les arêtes au graphe
+        G.add_edges_from(edges)
 
-#charger les données des DataFrame créé dans les autres classes: 
-#exemple_pd = pd.read_csv('exemple.pd')
-
-# Création d'un scatterplot en utilisant la méthode create_graph: il faut modifier le nom du df
-#graph.create_graph(data=exemple_pd, graph_type='scatter', x='ID', y='Score')
-
-#exemple pour le graphique release_year: 
-#graph.create_graph(data=df_release_year, graph_type='histogram', column='release_year')
-
-# Création d'un histogramme en utilisant la méthode create_graph: il faut modifier le nom du df
-#graph.create_graph(data=exemple_pd, graph_type='histogram', column='Score')
-
-# Création d'une carte de chaleur en utilisant la méthode create_graph: il faut modifier le nom du df
-#graph.create_graph(data=exemple_pd, graph_type='heatmap', x='ID', y='Titre', values='Score')
+        return G
+    
+    def visualize_network_graph(self, G):
+        # Afficher le graphe de réseau
+        plt.figure(figsize=(10, 6))
+        pos = nx.spring_layout(G)  # Choisir une disposition pour les nœuds
+        nx.draw(G, pos, with_labels=True, node_color='skyblue', node_size=1500, font_size=10, font_weight='bold', edge_color='gray')
+        plt.title(self.title)
+        plt.show()
