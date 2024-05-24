@@ -44,22 +44,71 @@ class CreateGraph:
         plt.ylabel(self.ylabel)
         plt.show()
         
-# exemples d'utilisations à implémenter dans la fonction main: 
+# tentatives de création de graphiques 
 
-# Création d'une instance de la classe abstraite avec un titre approprié
-#graph = CreateGraph(title='Title', xlabel='x', ylabel='y')
+#analyse de l'année de sortie
 
-#charger les données des DataFrame créé dans les autres classes: 
-#exemple_pd = pd.read_csv('exemple.pd')
+df_release_year = pd.DataFrame('Release_year': list_all_release_years_id, columns=['Release_year'])
 
-# Création d'un scatterplot en utilisant la méthode create_graph: il faut modifier le nom du df
-#graph.create_graph(data=exemple_pd, graph_type='scatter', x='ID', y='Score')
+graph = CreateGraph(title='Analyse temporelle des films', xlabel='Année de sortie', ylabel='Nb de films')
+graph.create_graph(data=df_release_year, graph_type='histogram', column='Release_year')
+#si ça fonctionne pas on peut essayer de définir data avant 
 
-#exemple pour le graphique release_year: 
-#graph.create_graph(data=df_release_year, graph_type='histogram', column='release_year')
+#analyse des genres 
 
-# Création d'un histogramme en utilisant la méthode create_graph: il faut modifier le nom du df
-#graph.create_graph(data=exemple_pd, graph_type='histogram', column='Score')
+df_genres = pd.DataFrame('Genres': list_all_genres_id, columns=['Genres'])
 
-# Création d'une carte de chaleur en utilisant la méthode create_graph: il faut modifier le nom du df
-#graph.create_graph(data=exemple_pd, graph_type='heatmap', x='ID', y='Titre', values='Score')
+graph = CreateGraph(title='Analyse des genres de films', xlabel='Genres', ylabel='Nb de films')
+graph.create_graph(data=df_genres, graph_type='histogram', column='Genres')
+
+
+
+#rating et votes
+
+df_rating = pd.DataFrame('Rating': list_all_ratings_id, 'Votes': list_all_votes_id, 'Genres': list_all_genres_id, columns=['Rating', 'Votes', 'Genres'])
+
+graph = CreateGraph(title='Analyse des votes et de la cote', xlabel='Cote IMBD', ylabel='Nb de votes')
+graph.create_graph(data=df_rating, graph_type='scatterplot', x='Rating', y='Votes', hue='Genres')
+
+
+#personnages
+
+df_characters = pd.DataFrame('Gender': list_all_genders, 'Credit_position': list_all_credits_positions, columns=['Gender', 'Credit_position'])
+
+graph = CreateGraph(title='Analyse croisée des personnages en fonction du genre et de la position dans les crédits', xlabel='Position', ylabel='Nombre de personnages')
+graph.create_graph(data=df_characters, graph_type='create_stacked_bar_chart', x='Credit_position', hue='Gender')
+
+
+#dialogues par personnages et films krkrkrkrkrkr je comprend pas à quoi doit ressembler ce graphique, est-ce qu'il faudrait compter le nombre de dialogue par personnags?
+
+df_dialogues = pd.DataFrame('Movies' = all_movies_id, 'Characters' = list_characters #dans la classe conversation)
+graph = CreateGraph(title='Fréquence des dialogues par personnages', xlabel='Personnage', ylablel='Nombre de personnage')
+graph.create_graph(data=df_dialogues, graph_type='stacked_bar_chart', x='Characters', hue='Movies')
+
+
+#Exécuter une analyse de sentiment sur les répliques pour comprendre les dynamiques émotionnelles des dialogues.
+??
+
+#Créer des graphes de réseau pour visualiser les interactions entre personnages dans les films, en illustrant la fréquence et la profondeur des dialogues.
+
+graph = CreateGraph(title='Graphe de Réseau des Interactions entre Personnages')
+edges = 
+character_list = 
+graph.create_graph(data=None, graph_type='network_graph', edges=edges, character_list=character_list)
+
+
+#Utiliser des cartes de chaleur pour montrer la densité des échanges entre différents personnages principaux
+get_all_characters()
+get_all_characters()
+
+df_density_exchanges = pd.DataFrame('X' = list_characters, 'Y' = list_characters
+
+graph = CreateGraph(title='Carte de chaleur des échanges entre personnages principaux')
+graph.create_graph(data=df_density_exchanges, graph_type='heatmap', x='X', y='Y')
+
+
+#Tracer des graphiques de série temporelle montrant l'évolution des sentiments au cours des conversations pour visualiser comment les émotions fluctuent à travers un dialogue.
+??
+
+#Modélisation des Flux Emotionnels: Modèle Navier-Stokes
+
