@@ -164,6 +164,7 @@ class DataImport(MainProgram):
         cls.create_character()
         cls.create_conversation()
         cls.create_movie()
+        cls.create_line()
         pass
 
     @staticmethod
@@ -184,6 +185,13 @@ class DataImport(MainProgram):
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_titles_metadata.tsv')
         movie.MovieHolder.create_movie_dataset(provided_data)
+
+    @staticmethod
+    def create_line():
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
+                                            file_in_zip='movie_lines.tsv')
+        line.Line.create_line_dataset(provided_data)
+
 class Commands(MainProgram):
     def __init__(self, program):
         super().__init__()

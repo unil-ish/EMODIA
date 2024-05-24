@@ -176,7 +176,7 @@ class MovieHolder:
 
         print(f'success! {len(Movie.all_movies_id)} objects created.')
 
-        print(Movie.all_titles_id)
+        #print(Movie.all_titles_id)
         # vérifie si les clés "id", "title", etc sont présentes
         #for movie in movie_data:
         #    if 'id' in movie:
