@@ -32,6 +32,7 @@ from modules import read_data
 from modules import conversation
 from modules import create_graph
 from modules import line
+from modules import character
 import pandas as pd
 import numpy as np
 
@@ -74,6 +75,8 @@ class MainProgram(ABCProgram):
     * Gets user input as to what to do next.
     """
 
+    datasets = {}
+
     def __init__(self):
         super().__init__()
         self.program = self
@@ -90,6 +93,10 @@ class MainProgram(ABCProgram):
 
         self.msg.log('log_1_modules_check')
         self.module_handler.compare_modules_routine()
+
+
+        #self.msg.log('log_2_data_import')
+        DataImport.create_dataset_routine()
 
         # Entering program loop.
         self.program_loop()
@@ -146,6 +153,29 @@ class ProgramInfo(ABCProgram):
                 )
             print()
 
+
+class DataImport(MainProgram):
+    def __init__(self):
+        super().__init__()
+
+    @classmethod
+    def create_dataset_routine(cls):
+        cls.create_character()
+        cls.create_conversation()
+        pass
+
+    @staticmethod
+    def create_character():
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR, file_in_zip='movie_characters_metadata.tsv')
+        character.CharacterHolder.create_character_dataset(provided_data)
+        #print(len(character.Character.all_character_objects))
+        #print('create_character successful!')
+        #print(character.Character.all_characters_id)
+
+    @staticmethod
+    def create_conversation():
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR, file_in_zip='movie_conversations.tsv')
+        conversation.ConversationHolder.create_conversation_dataset(provided_data)
 
 class Commands(MainProgram):
     def __init__(self, program):
@@ -239,7 +269,7 @@ class PresetCommands(Commands):
     """
 
     def __init__(self):
-        super().__init__()
+        super().__init__(self.program)
 
     @staticmethod
     def select_retry():
@@ -279,7 +309,8 @@ class PresetCommands(Commands):
             self.msg.log('log_reloaded_module_error')
             self.msg.say('reloaded_module_error')
 
-    def preset_test_create_graph(self):
+    @staticmethod
+    def preset_test_create_graph():
         """Test create_graph with random data."""
 
         graph = create_graph.CreateGraph(title='Title', xlabel='x', ylabel='y')
@@ -303,7 +334,8 @@ class PresetCommands(Commands):
         except:
             print('woops')
 
-    def preset_example_read_data(self):
+    @staticmethod
+    def preset_example_read_data():
         """read_data example."""
 
         data = read_data.read_data('senticnet.tsv', path=REL_DATA_DIR)
@@ -312,8 +344,6 @@ class PresetCommands(Commands):
             print(len(data))
         except:
             print('woops')
-
-
 
 
 def main():
