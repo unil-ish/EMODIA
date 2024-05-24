@@ -4,6 +4,7 @@ import pandas as pd
 
 
 class Conversation:
+    all_conversations_objects = []
     all_conversations_id = []  # une liste de tous les id
     all_characters_id = []  # une liste de dictionnaires de tous les id de characters
     all_movies_id = []  # une liste de tous les id de film
@@ -126,6 +127,7 @@ class ConversationHolder():
 
                 conversation_obj.all_conversations_id.append(index)
                 conversation_obj.all_characters_id.append(conversation_obj.characters_id)
+                conversation_obj.all_conversations_objects.append(conversation_obj)
             except TypeError:
                 conversation_obj = Conversation(index, "?", "?", "?")
 

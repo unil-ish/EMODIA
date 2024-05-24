@@ -23,11 +23,12 @@ import inspect
 import sys
 from pathlib import Path
 from pathlib import PurePath
+import math
 from core_modules import custom_logger
 from core_modules import messenger
 from core_modules import utils
 from core_modules import module_handler
-from modules import keywords
+import random
 from modules import read_data
 from modules import conversation
 from modules import create_graph
@@ -75,8 +76,6 @@ class MainProgram(ABCProgram):
     * Manages and imports modules
     * Gets user input as to what to do next.
     """
-
-    datasets = {}
 
     def __init__(self):
         super().__init__()
@@ -169,15 +168,14 @@ class DataImport(MainProgram):
 
     @staticmethod
     def create_character():
-        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR, file_in_zip='movie_characters_metadata.tsv')
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
+                                            file_in_zip='movie_characters_metadata.tsv')
         character.CharacterHolder.create_character_dataset(provided_data)
-        #print(len(character.Character.all_character_objects))
-        #print('create_character successful!')
-        #print(character.Character.all_characters_id)
 
     @staticmethod
     def create_conversation():
-        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR, file_in_zip='movie_conversations.tsv')
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
+                                            file_in_zip='movie_conversations.tsv')
         conversation.ConversationHolder.create_conversation_dataset(provided_data)
 
     @staticmethod
@@ -337,6 +335,35 @@ class PresetCommands(Commands):
     def preset_display_credits(self):
         """Displays program credits."""
         self.program.program_info.print_authors()
+
+    @staticmethod
+    def preset_test_modules():
+        """Grabs a random entry in each dataset, and prints a linked value."""
+        a = random.choice(movie.Movie.all_movies_id)
+        movie_title = movie.Movie.get_title_id(movie.Movie.all_movies_objects[0], a)
+        print(f'Movie: {a}, {movie_title}')
+
+        b = random.choice(line.Line.all_lines_id)
+        line_content = line.Line.get_line_content(line.Line.all_lines_objects[0], b)
+        print(f'Line: {b}, {line_content}')
+
+        c = random.choice(character.Character.all_characters_id)
+        character_name = character.Character.get_name_id(character.Character.all_character_objects[0], c)
+        print(f'Character: {c}, {character_name}')
+
+        d = random.choice(conversation.Conversation.all_conversations_id)
+        conversation_characters = conversation.Conversation.get_characters_id(
+            conversation.Conversation.all_conversations_objects[0], d
+        )
+        print(f'Conversation: {d}, {conversation_characters}')
+
+        extra = []
+        for character_id in conversation_characters.values():
+            extra.append(character.Character.get_name_id(character.Character.all_character_objects[0], character_id))
+        print(f'Conversation Characters: {extra}')
+
+
+
 
     @staticmethod
     def preset_example_read_zip_data():
