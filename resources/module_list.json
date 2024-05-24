@@ -7,5 +7,7 @@
   "process_file",
   "read_data",
   "line",
-  "conversation"
+  "conversation",
+  "movie",
+  "character"
 ]
