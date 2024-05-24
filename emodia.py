@@ -32,6 +32,7 @@ from modules import read_data
 from modules import conversation
 from modules import create_graph
 from modules import line
+from modules import movie
 from modules import character
 import pandas as pd
 import numpy as np
@@ -162,6 +163,7 @@ class DataImport(MainProgram):
     def create_dataset_routine(cls):
         cls.create_character()
         cls.create_conversation()
+        cls.create_movie()
         pass
 
     @staticmethod
@@ -177,6 +179,11 @@ class DataImport(MainProgram):
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR, file_in_zip='movie_conversations.tsv')
         conversation.ConversationHolder.create_conversation_dataset(provided_data)
 
+    @staticmethod
+    def create_movie():
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
+                                            file_in_zip='movie_titles_metadata.tsv')
+        movie.MovieHolder.create_movie_dataset(provided_data)
 class Commands(MainProgram):
     def __init__(self, program):
         super().__init__()
