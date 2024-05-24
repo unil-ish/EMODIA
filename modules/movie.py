@@ -42,7 +42,8 @@ class Movie:
         merged_list = dict(zip(self.all_movies_id, self.all_genres_id))
         return merged_list[movie_id]
 
-    # création de @property pour pouvoir accéder aux attributs de classe (avant __init__)
+    # création de @property pour pouvoir accéder
+    # aux attributs de classe (avant __init__)
     @property
     def _all_titles_id(self):
         return self.all_titles_id
@@ -70,8 +71,8 @@ class Movie:
     # création de @classmethod
     @classmethod
     def get_all_titles(cls, id_list):
-        # mettre ensemble listes all_movies_id et all_titles_id, créer un dictionnaire
-        merged_list = dict(zip(Movie._all_movies_id, Movie._all_titles_id))  # dictionnaire qui met ensemble les
+        # listes all_movies_id et all_titles_id ensemble dans un dictionnaire
+        merged_list = dict(zip(Movie._all_movies_id, Movie._all_titles_id))
         # liste vide pour mettre les titres qui correspondent aux ids dans id_list
         list_all_titles = []
         for ids in id_list:
@@ -139,12 +140,12 @@ class MovieHolder:
         else:
             return False
 
-    """@staticmethod
+    @staticmethod
     def create_movie_dataset(provided_data):
-        # fills Conversation class variables from readdata
-        movie_data = read_data(provided_data)
+        # fills Movie class variables from read_data
+        movie_data = MovieHolder.read_data(provided_data)
 
-        # verifie si les clés "id", "title", etc sont présentes
+        # vérifie si les clés "id", "title", etc sont présentes
         for movie in movie_data:
             if 'id' in movie:
                 Movie.all_movies_id.append(movie['id'])
@@ -159,5 +160,10 @@ class MovieHolder:
             if 'genres' in movie:
                 Movie.all_genres_id.append(movie['genres'])
 
+    @staticmethod
     def read_data(provided_data):
-        return provided_data"""
+        return provided_data
+
+    """ PEP 8
+    comments: maximum 72 characters
+    """

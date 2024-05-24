@@ -36,7 +36,8 @@ class Character:
         merged_list = dict(zip(self.all_characters_id, self.all_credits_position_id))
         return merged_list[character_id]
 
-    # création de @property pour pouvoir accéder aux attributs (avant __init__)
+    # création de @property pour pouvoir accéder
+    # aux attributs de classe (avant __init__)
     @property
     def _all_names_id(self):
         return self.all_names_id
@@ -60,17 +61,18 @@ class Character:
     # création de @classmethod
     @classmethod
     def get_all_names(cls, id_list):
+        # listes all_characters_id et all_movies_id ensemble dans un dictionnaire
         merged_list = dict(zip(Character._all_characters_id, Character._all_names_id))  # dictionnaire qui met
-        # ensemble les listes all_characters_id and all_names_id
+        # liste vide pour mettre les noms qui correspondent aux ids dans id_list
         list_all_names = []
         for ids in id_list:
+            # prendre nom associé à l'id et le met dans list_all_names
             list_all_names.append(merged_list[ids])
         return list_all_names
 
     @classmethod
     def get_all_movies_id(cls, id_list):
-        merged_list = dict(zip(Character._all_characters_id, Character._all_movies_id))  # dictionnaire qui met
-        # ensemble les listes all_characters_id and all_names_id
+        merged_list = dict(zip(Character._all_characters_id, Character._all_movies_id))
         list_all_movies = []
         for ids in id_list:
             list_all_movies.append(merged_list[ids])
@@ -78,8 +80,7 @@ class Character:
 
     @classmethod
     def get_all_genders_id(cls, id_list):
-        merged_list = dict(zip(Character._all_characters_id, Character._all_genders_id))  # dictionnaire qui met
-        # ensemble les listes all_characters_id and all_names_id
+        merged_list = dict(zip(Character._all_characters_id, Character._all_genders_id))
         list_all_genders = []
         for ids in id_list:
             list_all_genders.append(merged_list[ids])
@@ -88,13 +89,13 @@ class Character:
     @classmethod
     def get_all_credits_positions_id(cls, id_list):
         merged_list = dict(
-            zip(Character._all_characters_id, Character._all_credits_positions_id))  # dictionnaire qui met
-        # ensemble les listes all_characters_id and all_names_id
+            zip(Character._all_characters_id, Character._all_credits_positions_id))
         list_all_credits_positions = []
         for ids in id_list:
             list_all_credits_positions.append(merged_list[ids])
         return list_all_credits_positions
 
+    # création d'un dataframe df
     @classmethod
     def create_dataframe(cls, list_ids, attribute_list):
         df = pd.DataFrame(dict(zip(list_ids, attribute_list)))
@@ -102,11 +103,14 @@ class Character:
 
 
 class CharacterHolder:
+    # chercher le data de character
     def get_character(self):
+        # appelle la méthode
         return self.character_dataset()
 
     @staticmethod
     def character_dataset():
+        # fills Character class variables from read_data
         if (
                 Character.all_characters_id
                 and Character.all_names_id
