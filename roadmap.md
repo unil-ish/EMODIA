@@ -17,29 +17,29 @@ Feuille de route du projet
       * Code review -> Lorelei
     * Graphes (cf.readme: UML)
     * **-> Analyses statistiques et visualisations**
-      * Distribution des genres de film (6.i: _MovieGenresAnalysisGraph_)
+      * Distribution des genres de film 
         * type: Histogramme
-      * Analyse de la cote IMDB et des votes (6.iii: _RatingsAndVotesAnalysisGraph_)
+      * Analyse de la cote IMDB et des votes 
         * .color
         * type: Scatterplot
-      * Analyse temporelle des films (6.ii: _TemporalAnalysisGraph_)
+      * Analyse temporelle des films
         * type: Histogramme
-      * Analyse des personnages (6.iv: _CharacterAnalysisGraph_)
+      * Analyse des personnages
         * Position dans le générique en fonction du genre
         * type: Double histogramme
-      * Exploration des dialogues (6.v)
-        * Analyse de fréquence et distribution des dialogues par film (_ConversationByMovieGraph_) et personnage (_ConversationByCharacterGraph_) pour identifier les personnages clés dans la narration.
-        * Exécuter une analyse de sentiment sur les répliques pour comprendre les dynamiques émotionnelles des dialogues (_LinesFlowAnalysisGraph_)
+      * Exploration des dialogues
+        * Analyse de fréquence et distribution des dialogues par film et personnage pour identifier les personnages clés dans la narration.
+        * Exécuter une analyse de sentiment sur les répliques pour comprendre les dynamiques émotionnelles des dialogues 
         * Pour simplifier pour commencer: histogrammes (à voir pour l'analyse de sentiments sur les répliques)
      * **-> Visualisations des données textuelles**
        * À redéfinir et distribuer quand on y arrive au vu de la taille de l'étape mais en attendant:
-       * Cartographies des dialogues (6.2.i)
-         * Graphes de réseau pour visualiser les interactions entre personnages dans les films, en illustrant la fréquence et la profondeur des dialogues (_InteractionsGraph_)
-         * Utiliser des cartes de chaleur pour montrer la densité des échanges entre différents personnages principaux (_ConversationDensityGraph_)
-       * Chronologie des Echanges Emotionnels (6.2.ii) 
-         * Tracer des graphiques de série temporelle montrant l'évolution des sentiments au cours des conversations pour visualiser comment les émotions fluctuent à travers un dialogue. (_ConversationEmotionalTimelineGraph_)
-       * Modélisation des Flux Emotionnels (6.2.iii)
-         * Modèle Navier-Stokes (_EmotionnalFlowGraph_)  
+       * Cartographies des dialogues
+         * Graphes de réseau pour visualiser les interactions entre personnages dans les films, en illustrant la fréquence et la profondeur des dialogues 
+         * Utiliser des cartes de chaleur pour montrer la densité des échanges entre différents personnages principaux
+       * Chronologie des Echanges Emotionnels
+         * Tracer des graphiques de série temporelle montrant l'évolution des sentiments au cours des conversations pour visualiser comment les émotions fluctuent à travers un dialogue.
+       * Modélisation des Flux Emotionnels 
+         * Modèle Navier-Stokes
   * Planification de qui, quoi, quand. Via plan de projet Github?
   * Writing the code 🧑‍💻
     * Finish main -> Lorelei
