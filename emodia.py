@@ -23,15 +23,18 @@ import inspect
 import sys
 from pathlib import Path
 from pathlib import PurePath
+import math
 from core_modules import custom_logger
 from core_modules import messenger
 from core_modules import utils
 from core_modules import module_handler
-from modules import keywords
+import random
 from modules import read_data
 from modules import conversation
 from modules import create_graph
 from modules import line
+from modules import movie
+from modules import character
 import pandas as pd
 import numpy as np
 
@@ -91,6 +94,10 @@ class MainProgram(ABCProgram):
         self.msg.log('log_1_modules_check')
         self.module_handler.compare_modules_routine()
 
+
+        #self.msg.log('log_2_data_import')
+        DataImport.create_dataset_routine()
+
         # Entering program loop.
         self.program_loop()
 
@@ -146,6 +153,42 @@ class ProgramInfo(ABCProgram):
                 )
             print()
 
+
+class DataImport(MainProgram):
+    def __init__(self):
+        super().__init__()
+
+    @classmethod
+    def create_dataset_routine(cls):
+        cls.create_character()
+        cls.create_conversation()
+        cls.create_movie()
+        cls.create_line()
+        pass
+
+    @staticmethod
+    def create_character():
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
+                                            file_in_zip='movie_characters_metadata.tsv')
+        character.CharacterHolder.create_character_dataset(provided_data)
+
+    @staticmethod
+    def create_conversation():
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
+                                            file_in_zip='movie_conversations.tsv')
+        conversation.ConversationHolder.create_conversation_dataset(provided_data)
+
+    @staticmethod
+    def create_movie():
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
+                                            file_in_zip='movie_titles_metadata.tsv')
+        movie.MovieHolder.create_movie_dataset(provided_data)
+
+    @staticmethod
+    def create_line():
+        provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
+                                            file_in_zip='movie_lines.tsv')
+        line.Line.create_line_dataset(provided_data)
 
 class Commands(MainProgram):
     def __init__(self, program):
@@ -239,7 +282,7 @@ class PresetCommands(Commands):
     """
 
     def __init__(self):
-        super().__init__()
+        super().__init__(self.program)
 
     @staticmethod
     def select_retry():
@@ -279,7 +322,8 @@ class PresetCommands(Commands):
             self.msg.log('log_reloaded_module_error')
             self.msg.say('reloaded_module_error')
 
-    def preset_test_create_graph(self):
+    @staticmethod
+    def preset_test_create_graph():
         """Test create_graph with random data."""
 
         graph = create_graph.CreateGraph(title='Title', xlabel='x', ylabel='y')
@@ -293,6 +337,35 @@ class PresetCommands(Commands):
         self.program.program_info.print_authors()
 
     @staticmethod
+    def preset_test_modules():
+        """Grabs a random entry in each dataset, and prints a linked value."""
+        a = random.choice(movie.Movie.all_movies_id)
+        movie_title = movie.Movie.get_title_id(movie.Movie.all_movies_objects[0], a)
+        print(f'Movie: {a}, {movie_title}')
+
+        b = random.choice(line.Line.all_lines_id)
+        line_content = line.Line.get_line_content(line.Line.all_lines_objects[0], b)
+        print(f'Line: {b}, {line_content}')
+
+        c = random.choice(character.Character.all_characters_id)
+        character_name = character.Character.get_name_id(character.Character.all_character_objects[0], c)
+        print(f'Character: {c}, {character_name}')
+
+        d = random.choice(conversation.Conversation.all_conversations_id)
+        conversation_characters = conversation.Conversation.get_characters_id(
+            conversation.Conversation.all_conversations_objects[0], d
+        )
+        print(f'Conversation: {d}, {conversation_characters}')
+
+        extra = []
+        for character_id in conversation_characters.values():
+            extra.append(character.Character.get_name_id(character.Character.all_character_objects[0], character_id))
+        print(f'Conversation Characters: {extra}')
+
+
+
+
+    @staticmethod
     def preset_example_read_zip_data():
         """read_data example for file in zip."""
 
@@ -303,7 +376,8 @@ class PresetCommands(Commands):
         except:
             print('woops')
 
-    def preset_example_read_data(self):
+    @staticmethod
+    def preset_example_read_data():
         """read_data example."""
 
         data = read_data.read_data('senticnet.tsv', path=REL_DATA_DIR)
@@ -312,8 +386,6 @@ class PresetCommands(Commands):
             print(len(data))
         except:
             print('woops')
-
-
 
 
 def main():

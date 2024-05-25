@@ -59,10 +59,15 @@ def read_data(file, **kwargs):
             #zip = zipfile.ZipFile(path)
             #print(zip.namelist())
             with zipfile.ZipFile(path, 'r') as my_zip:  # Using ZipFile to access file contents.
-                with my_zip.open(file_in_zip) as data:
-                    return_data = data.read()
+                # Note the use of zipfile.Path() to access data as string and not bytes.
+                data = zipfile.Path(my_zip, file_in_zip)
+                zipped_data = data.read_text()
+                #with my_zip.open(file_in_zip) as data:
+                    #zipped_data = data.read_text()
+                #print(f'data type: {type(zipped_data)}')
+                return_data = zipped_data
             return return_data
-        except:
+        except zipfile.BadZipFile:
             print(f'{error}Unzip error.')
             #logger_handler(logger, f'{tab * 2}Error unzipping {path.name}')
 
