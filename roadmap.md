@@ -17,25 +17,25 @@ Feuille de route du projet
       * Code review -> Lorelei
     * Graphes (cf.readme: UML)
     * **-> Analyses statistiques et visualisations**
-      * Distribution des genres de film 
+      * Distribution des genres de film: 1st attempt
         * type: Histogramme
       * Analyse de la cote IMDB et des votes 
         * .color
         * type: Scatterplot
-      * Analyse temporelle des films
+      * Analyse temporelle des films: 1st attempt
         * type: Histogramme
-      * Analyse des personnages
+      * Analyse des personnages: 1st attempt
         * Position dans le générique en fonction du genre
-        * type: Double histogramme
+        * type: barres empilées
       * Exploration des dialogues
-        * Analyse de fréquence et distribution des dialogues par film et personnage pour identifier les personnages clés dans la narration.
+        * Analyse de fréquence et distribution des dialogues par film et personnage pour identifier les personnages clés dans la narration.: 1st attempt
         * Exécuter une analyse de sentiment sur les répliques pour comprendre les dynamiques émotionnelles des dialogues 
         * Pour simplifier pour commencer: histogrammes (à voir pour l'analyse de sentiments sur les répliques)
      * **-> Visualisations des données textuelles**
        * À redéfinir et distribuer quand on y arrive au vu de la taille de l'étape mais en attendant:
        * Cartographies des dialogues
-         * Graphes de réseau pour visualiser les interactions entre personnages dans les films, en illustrant la fréquence et la profondeur des dialogues 
-         * Utiliser des cartes de chaleur pour montrer la densité des échanges entre différents personnages principaux
+         * Graphes de réseau pour visualiser les interactions entre personnages dans les films, en illustrant la fréquence et la profondeur des dialogues: 1st attempt :/
+         * Utiliser des cartes de chaleur pour montrer la densité des échanges entre différents personnages principaux: 1st attempt
        * Chronologie des Echanges Emotionnels
          * Tracer des graphiques de série temporelle montrant l'évolution des sentiments au cours des conversations pour visualiser comment les émotions fluctuent à travers un dialogue.
        * Modélisation des Flux Emotionnels 
