@@ -1,6 +1,6 @@
 # code pour la classe Movie
 import pandas as pd
-from string import digits
+from string import digits, ascii_letters
 
 
 class Movie:
@@ -153,16 +153,24 @@ class MovieHolder:
             #print(index, line)
             #line = str(line)
             parts = line.split('\t')
+            print(parts)
+            genres = parts[5].split(' ')
+            print(genres)
+            clean_genres = []
+            for entry in genres:
+                clean_genre = ''.join(l for l in entry if l in ascii_letters)
+                print(clean_genre)
+                clean_genres.append(clean_genre)
+            print(clean_genres)
             #print(parts)
-
-
+            # TODO: add proper type handling with try or smth like that
             entries = {
                 'movie_id': parts[0],
                 'title_id': parts[1],
                 'release_year_id': ''.join(d for d in parts[2] if d in digits),
-                'ratings_id': parts[3],
-                'votes_id': parts[4],
-                'genres_id': parts[5:]
+                'ratings_id': float(parts[3]),
+                'votes_id': int(parts[4]),
+                'genres_id': clean_genres,
             }
 
             Movie.all_movies_objects.append(

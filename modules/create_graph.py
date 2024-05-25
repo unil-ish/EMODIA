@@ -16,6 +16,7 @@ class CreateGraph:
             ylabel="y-axis label goes here",
     ):
         print(title, xlabel, ylabel)
+        sns.set_theme()  # Use default Seaborn theme.
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
@@ -33,28 +34,33 @@ class CreateGraph:
             self.create_histogram(data, **kwargs)
         elif graph_type == 'heatmap':
             self.create_heatmap(data, **kwargs)
-        elif graph_type == 'stacked_bar_chart':
-            self.create_stacked_bar_chart(data, **kwargs)
+        elif graph_type == 'bar_chart':
+            self.create_bar_chart(data, **kwargs)
         elif graph_type == ('network_graph'):
             edges = kwargs.get(edges, character_list)
             G = self.create_network_graph(edges, character_list)
             self.visualize_network_graph(G)
+        elif graph_type == 'dist':
+            self.create_dist_chart(data, **kwargs)
+        elif graph_type == 'box':
+            self.create_box_chart(data, **kwargs)
         else:
             print("Ce type de graphe n'est pas pris en compte par le programme :(")
 
     # on peut ajouter d'autres types de graph si besoin: ici on choisirait d'implémenter de nouvelles méthodes mais si on voit qu'il y a 56 types de graphiques, on pourrait créer des sous-classes
 
-    def create_scatterplot(self, data, x, y):
-        sns.scatterplot(x=x, y=y, data=data)
+    def create_scatterplot(self, data, x, y, hue=None, palette='magma_r', color=None):
+        sns.scatterplot(x=x, y=y, data=data, hue=hue, color=color)
         plt.title(self.title)
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
+        plt.tight_layout()
         plt.show()
 
-    def create_histogram(self, data, column, palette='magma_r', bins='auto', discrete=True):
+    def create_histogram(self, data, column, palette=None, bins='auto', discrete=True, color='coral'):
         print(f'hist title: {self.title}')
         with sns.color_palette(palette):
-            sns.histplot(data=data[column], discrete=discrete, bins=bins)
+            sns.histplot(data=data[column], discrete=discrete, bins=bins, color=color)
         plt.title(self.title)
         #plt.title('test')
         plt.xlabel(self.xlabel)
@@ -69,9 +75,29 @@ class CreateGraph:
         plt.ylabel(self.ylabel)
         plt.show()
 
-    def create_stacked_bar_chart(self):
-        sns.countplot(data=data, x=x, hue=hue, palette='tab10')
-        plt.title(self.title)
+    def create_bar_chart(self, data, x,  hue=None, y=None, orient='v', order=None, rotation=0, palette=None, color=None):
+        plot = sns.catplot(kind='bar', data=data, x=x, y=y, hue=hue, palette=palette, orient=orient, order=order, color=color)
+        plot.set_xticklabels(rotation=rotation)
+        plt.tight_layout()
+        plt.title(self.title, y=1.0, pad=-14)
+        plt.xlabel(self.xlabel)
+        plt.ylabel(self.ylabel)
+        plt.show()
+
+    def create_dist_chart(self, data, x, hue=None, y=None, palette=None, color=None):
+        sns.histplot(data=data, x=x, y=y, hue=hue, palette=palette, log_scale=False,
+                           color=color, stat='proportion', cumulative=True, common_norm=False, fill=False, element='step')
+        plt.tight_layout()
+        plt.title(self.title, y=1.0, pad=-14)
+        plt.xlabel(self.xlabel)
+        plt.ylabel(self.ylabel)
+        plt.show()
+
+    def create_box_chart(self, data, x, hue=None, y=None, palette=None, color=None):
+        #sns.boxplot(data=data, x=x, y=y, hue=hue, palette=palette, color=color, showfliers=False, width=.5, gap=.2)
+        sns.catplot(kind='violin', data=data, x=x, y=y, hue=hue, split=True, log_scale=True, gap=0.1, inner=None, palette='Pastel2')
+        plt.tight_layout()
+        plt.title(self.title, y=1.0, pad=-14)
         plt.xlabel(self.xlabel)
         plt.ylabel(self.ylabel)
         plt.show()
