@@ -386,7 +386,39 @@ class PresetCommands(Commands):
             print(len(data))
         except:
             print('woops')
+            
+    @staticmethod
+    def preset_test_graph_release_year():
+        """Test release_year graph with placeholder data."""
+        df_data_c1 = [2001, 2002, 2003, 2004]
+        df_data_c2 = ['11', '12', '13', '14']
+        df_data_total = {'Release_year': df_data_c1,
+                         'Movie_ID': df_data_c2}
+        print(f'data: {df_data_total}')
 
+        df_release_year = pd.DataFrame(data=df_data_total, columns = ['Release_year', 'Movie_ID'])
+        print(f'dataframe: {df_release_year}')
+
+        graph = create_graph.CreateGraph(title='Analyse temporelle des films', xlabel='Année de sortie', ylabel='Nb de films')
+        print(graph)
+        graph.create_graph(data=df_release_year, graph_type='histogram', column='Release_year')
+
+    @staticmethod
+    def preset_graph_release_year():
+        """Displays release years."""
+        df_data_c2 = movie.Movie.all_movies_id
+        df_data_c1 = movie.Movie.all_release_years_id
+        df_data_c1 = list(map(int, df_data_c1))
+        df_data_total = {'Release_year': df_data_c1,
+                         'Movie_ID': df_data_c2}
+        #print(f'data: {df_data_total}')
+
+        df_release_year = pd.DataFrame(data=df_data_total, columns = ['Release_year', 'Movie_ID'])
+        print(f'dataframe: {df_release_year}')
+
+        graph = create_graph.CreateGraph(title='Répartition temporelle des films', xlabel='Année de sortie', ylabel='Nb de films')
+        print(graph)
+        graph.create_graph(data=df_release_year, graph_type='histogram', column='Release_year', bins=2)
 
 def main():
     """Main function. Initializes program."""

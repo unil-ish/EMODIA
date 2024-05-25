@@ -1,5 +1,6 @@
 # code pour la classe Movie
 import pandas as pd
+from string import digits
 
 
 class Movie:
@@ -154,10 +155,11 @@ class MovieHolder:
             parts = line.split('\t')
             #print(parts)
 
+
             entries = {
                 'movie_id': parts[0],
                 'title_id': parts[1],
-                'release_year_id': parts[2],
+                'release_year_id': ''.join(d for d in parts[2] if d in digits),
                 'ratings_id': parts[3],
                 'votes_id': parts[4],
                 'genres_id': parts[5:]
