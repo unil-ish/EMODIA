@@ -43,21 +43,21 @@ Feuille de route du projet
   * Planification de qui, quoi, quand. Via plan de projet Github?
   * Writing the code 🧑‍💻
     * Finish main -> Lorelei
-      * Fix read_data (d> 23.05)
-      * Make sure all preset_commands work etc. (d> 26.05)
+      * Fix read_data (d> 23.05) DONE
+      * Make sure all preset_commands work etc. (d> 26.05) DONE
     * Update classes to work with preset_command & read_data
-      * Virgile & Sophie (d> 24.05)
+      * Virgile & Sophie (d> 24.05) DONE
     * Create preset_commands for data visualisation
-      * Erica, Lorelei (d> 26.05)
+      * Erica, Lorelei (d> 26.05) ToDo
     * Translate comments and UI
-      * Lorelei (d> 28.05)
+      * Lorelei (d> 28.05) ToDo
   * Documentation
-    * README in branch-erica (> 27.05)
+    * README in branch-erica (> 27.05) ToDo 
     * Structure: Erica
-    * UML (d> 24.05)
-    * Each person documents the code they've written 
+    * UML (d> 24.05) ToDo
+    * Each person documents the code they've written ToDo
   * Presentation
-    * PowerPoint: Erica (d> 26.05), shared on MS365
+    * PowerPoint: Erica (d> 26.05), shared on MS365 ToDo
       * Each person presents their part, fills their slides
 
 4. **Présentation**
