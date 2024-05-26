@@ -171,7 +171,7 @@ class DataImport(MainProgram):
     def create_character():
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_characters_metadata.tsv')
-        character.CharacterHolder.create_character_dataset(provided_data)
+        character.Character.create_character_dataset(provided_data)
 
     @staticmethod
     def create_conversation():
@@ -183,7 +183,7 @@ class DataImport(MainProgram):
     def create_movie():
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_titles_metadata.tsv')
-        movie.MovieHolder.create_movie_dataset(provided_data)
+        movie.Movie.create_movie_dataset(provided_data)
 
     @staticmethod
     def create_line():

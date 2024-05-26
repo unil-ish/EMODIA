@@ -102,8 +102,42 @@ class Character:
         df = pd.DataFrame(dict(zip(list_ids, attribute_list)))
         return df
 
+    @classmethod
+    def create_character_dataset(cls, provided_data):
+        for line in provided_data.splitlines():
+            line = str(line)
+            parts = line.split('\t')
 
-class CharacterHolder:
+            try:
+                credits_pos = int(parts[5])
+                if credits_pos == 1000:
+                    credits_pos = '?'
+            except:
+                credits_pos = '?'
+
+            entries = {
+                'character_id': parts[0],
+                'name_id': parts[1],
+                'movie_id': parts[2],
+                'gender_id': parts[4],
+                'credits_position_id': credits_pos,
+            }
+
+            Character.all_character_objects.append(
+                Character(**entries)
+            )
+
+            Character.all_characters_id.append(entries['character_id'])
+            Character.all_names_id.append(entries['name_id'])
+            Character.all_movies_id.append(entries['movie_id'])
+            Character.all_genders_id.append(entries['gender_id'])
+            Character.all_credits_positions_id.append(entries['credits_position_id'])
+
+        print(f'success! {len(Character.all_character_objects)} objects created.')
+        return
+
+
+"""class CharacterHolder:
 
     @staticmethod
     def create_character_dataset(provided_data):
@@ -137,4 +171,4 @@ class CharacterHolder:
             Character.all_credits_positions_id.append(entries['credits_position_id'])
 
         print(f'success! {len(Character.all_character_objects)} objects created.')
-        return
+        return"""

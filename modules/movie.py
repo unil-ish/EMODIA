@@ -126,8 +126,46 @@ class Movie:
         df = pd.DataFrame(dict(zip(list_ids, attribute_list)))
         return df
 
+    @classmethod
+    def create_movie_dataset(cls, provided_data):
+        # méthode remplie attributs de la classe Movie depuis read_data
 
-class MovieHolder:
+        for line in provided_data.splitlines():
+            # print(index, line): split le data en lignes
+            parts = line.split('\t')
+            genres = parts[5].split(' ')
+            clean_genres = []  # instancie une liste vide
+            for entry in genres:
+                clean_genre = ''.join(l for l in entry if l in ascii_letters)  # garde seulement lettres ASCII
+                clean_genres.append(clean_genre)
+            #print(parts)
+            # TODO: add proper type handling with try or smth like that
+            entries = {
+                'movie_id': parts[0],
+                'title_id': parts[1],
+                'release_year_id': ''.join(d for d in parts[2] if d in digits),
+                'ratings_id': float(parts[3]),
+                'votes_id': int(parts[4]),
+                'genres_id': clean_genres,
+            }
+
+            # ajoute le dictionnaire à la liste all_movie_objects
+            Movie.all_movies_objects.append(
+                Movie(**entries)  # met le dictionnaire en mots-clés
+            )
+
+            # stock les listes individuelles
+            Movie.all_movies_id.append(entries['movie_id'])
+            Movie.all_titles_id.append(entries['title_id'])
+            Movie.all_release_years_id.append(entries['release_year_id'])
+            Movie.all_ratings_id.append(entries['ratings_id'])
+            Movie.all_votes_id.append(entries['votes_id'])
+            Movie.all_genres_id.append(entries['genres_id'])
+
+        print(f'success! {len(Movie.all_movies_id)} objects created.')
+
+
+"""class MovieHolder:
 
     # @staticmethod car méthode peut être appelée sur la classe elle-même
     @staticmethod
@@ -166,4 +204,4 @@ class MovieHolder:
             Movie.all_votes_id.append(entries['votes_id'])
             Movie.all_genres_id.append(entries['genres_id'])
 
-        print(f'success! {len(Movie.all_movies_id)} objects created.')
+        print(f'success! {len(Movie.all_movies_id)} objects created.')"""
