@@ -1,11 +1,15 @@
 # code pour la classe Movie
+
+# on importe Pandas afin de créer des DataFrames
 import pandas as pd
+# on importe des constants spécifiques du module string
+# digits = nombres, ascii_lettres = alphabet en miniscule et majuscule
 from string import digits, ascii_letters
 
 
 class Movie:
     # attributs de classe
-    all_movies_objects = []
+    all_movies_objects = []  # une liste qui contient tous les objets de movie
     all_movies_id = []  # une liste de tous les id de movie
     all_titles_id = []
     all_release_years_id = []
@@ -21,11 +25,11 @@ class Movie:
         self.votes_id = votes_id
         self.genres_id = genres_id
 
-    # méthodes getter, donner un title_id associé à un movie_id
+    # méthodes getter, va chercher un title_id associé à un movie_id
     def get_title_id(self, movie_id):
         # mettre deux listes ensemble et mettre cette liste dans un dictionnaire
         merged_list = dict(zip(self.all_movies_id, self.all_titles_id))
-        # cherche l'id movie donné et retourne l'id title associé
+        # cherche l'id movie donné et retourne l'id du title associé
         return merged_list[movie_id]
 
     def get_release_year_id(self, movie_id):
@@ -71,6 +75,8 @@ class Movie:
         return self.all_movies_id
 
     # création de @classmethod
+    # chaque méthode prend une liste ID and cherche les attributs associés
+    # depuis les listes de classe
     @classmethod
     def get_all_titles(cls, id_list):
         # listes all_movies_id et all_titles_id ensemble dans un dictionnaire
@@ -114,7 +120,7 @@ class Movie:
             list_all_genres_id.append(merged_list[ids])
         return list_all_genres_id
 
-    # création d'un dataframe df
+    # création d'un DataFrame à partir des listes ID et attributs
     @classmethod
     def create_dataframe(cls, list_ids, attribute_list):
         df = pd.DataFrame(dict(zip(list_ids, attribute_list)))
@@ -123,19 +129,18 @@ class Movie:
 
 class MovieHolder:
 
+    # @staticmethod car méthode peut être appelée sur la classe elle-même
     @staticmethod
     def create_movie_dataset(provided_data):
-        # fills Movie class variables from read_data
-        #movie_data = MovieHolder.read_data(provided_data)
+        # méthode remplie attributs de la classe Movie depuis read_data
 
         for line in provided_data.splitlines():
-            #print(index, line)
-            #line = str(line)
+            # print(index, line): split le data en lignes
             parts = line.split('\t')
             genres = parts[5].split(' ')
-            clean_genres = []
+            clean_genres = []  # instancie une liste vide
             for entry in genres:
-                clean_genre = ''.join(l for l in entry if l in ascii_letters)
+                clean_genre = ''.join(l for l in entry if l in ascii_letters)  # garde seulement lettres ASCII
                 clean_genres.append(clean_genre)
             #print(parts)
             # TODO: add proper type handling with try or smth like that
@@ -148,10 +153,12 @@ class MovieHolder:
                 'genres_id': clean_genres,
             }
 
+            # ajoute le dictionnaire à la liste all_movie_objects
             Movie.all_movies_objects.append(
-                Movie(**entries)
+                Movie(**entries)  # met le dictionnaire en mots-clés
             )
 
+            # stock les listes individuelles
             Movie.all_movies_id.append(entries['movie_id'])
             Movie.all_titles_id.append(entries['title_id'])
             Movie.all_release_years_id.append(entries['release_year_id'])
@@ -160,19 +167,3 @@ class MovieHolder:
             Movie.all_genres_id.append(entries['genres_id'])
 
         print(f'success! {len(Movie.all_movies_id)} objects created.')
-
-        #print(Movie.all_titles_id)
-        # vérifie si les clés "id", "title", etc sont présentes
-        #for movie in movie_data:
-        #    if 'id' in movie:
-        #        Movie.all_movies_id.append(movie['id'])
-        #    if 'title' in movie:
-        #        Movie.all_titles_id.append(movie['title'])
-        #    if 'release_year' in movie:
-        #        Movie.all_release_years_id.append(movie['release_year'])
-        #    if 'rating' in movie:
-        #        Movie.all_ratings_id.append(movie['rating'])
-        #    if 'votes' in movie:
-        #        Movie.all_votes_id.append(movie['votes'])
-        #    if 'genres' in movie:
-        #        Movie.all_genres_id.append(movie['genres'])

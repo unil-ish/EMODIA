@@ -1,4 +1,5 @@
 # code pour la classe Character
+# on importe Pandas afin de créer des DataFrames
 import pandas as pd
 
 
