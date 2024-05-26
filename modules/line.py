@@ -87,7 +87,6 @@ class Line:
     def create_line_dataset(provided_data):
         # fills Line class variables from read_data
 
-        print(f'len data: {len(provided_data)}')
         #print(provided_data)
         for line in provided_data.splitlines():
             #print(index, line)

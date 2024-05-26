@@ -110,12 +110,19 @@ class CharacterHolder:
             line = str(line)
             parts = line.split('\t')
 
+            try:
+                credits_pos = int(parts[5])
+                if credits_pos == 1000:
+                    credits_pos = '?'
+            except:
+                credits_pos = '?'
+
             entries = {
                 'character_id': parts[0],
                 'name_id': parts[1],
                 'movie_id': parts[2],
                 'gender_id': parts[4],
-                'credits_position_id': parts[5],
+                'credits_position_id': credits_pos,
             }
 
             Character.all_character_objects.append(

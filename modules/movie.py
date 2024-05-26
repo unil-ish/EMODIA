@@ -1,5 +1,6 @@
 # code pour la classe Movie
 import pandas as pd
+from string import digits, ascii_letters
 
 
 class Movie:
@@ -121,46 +122,30 @@ class Movie:
 
 
 class MovieHolder:
-    # chercher le data de movie
-    def get_movie(self):
-        # appelle la méthode
-        return self.movie_dataset()
-
-    @staticmethod
-    def movie_dataset():
-        # vérifie si les listes sont remplies = True, sinon = False
-        if (
-            Movie.all_movies_id
-            and Movie.all_titles_id
-            and Movie.all_release_years_id
-            and Movie.all_ratings_id
-            and Movie.all_votes_id
-            and Movie.all_genres_id
-        ):
-            return True
-        else:
-            return False
 
     @staticmethod
     def create_movie_dataset(provided_data):
         # fills Movie class variables from read_data
         #movie_data = MovieHolder.read_data(provided_data)
 
-        print(f'len data: {len(provided_data)}')
-        #print(provided_data)
         for line in provided_data.splitlines():
             #print(index, line)
             #line = str(line)
             parts = line.split('\t')
+            genres = parts[5].split(' ')
+            clean_genres = []
+            for entry in genres:
+                clean_genre = ''.join(l for l in entry if l in ascii_letters)
+                clean_genres.append(clean_genre)
             #print(parts)
-
+            # TODO: add proper type handling with try or smth like that
             entries = {
                 'movie_id': parts[0],
                 'title_id': parts[1],
-                'release_year_id': parts[2],
-                'ratings_id': parts[3],
-                'votes_id': parts[4],
-                'genres_id': parts[5:]
+                'release_year_id': ''.join(d for d in parts[2] if d in digits),
+                'ratings_id': float(parts[3]),
+                'votes_id': int(parts[4]),
+                'genres_id': clean_genres,
             }
 
             Movie.all_movies_objects.append(
@@ -191,7 +176,3 @@ class MovieHolder:
         #        Movie.all_votes_id.append(movie['votes'])
         #    if 'genres' in movie:
         #        Movie.all_genres_id.append(movie['genres'])
-
-    @staticmethod
-    def read_data(provided_data):
-        return provided_data

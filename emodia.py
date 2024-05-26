@@ -37,6 +37,7 @@ from modules import movie
 from modules import character
 import pandas as pd
 import numpy as np
+from collections import Counter
 
 # PROGRAM INFO
 NAME = "EMODIA"
@@ -386,7 +387,160 @@ class PresetCommands(Commands):
             print(len(data))
         except:
             print('woops')
+            
+    @staticmethod
+    def preset_test_graph_release_year():
+        """Test release_year graph with placeholder data."""
+        df_data_c1 = [2001, 2002, 2003, 2004]
+        df_data_c2 = ['11', '12', '13', '14']
+        df_data_total = {'Release_year': df_data_c1,
+                         'Movie_ID': df_data_c2}
+        print(f'data: {df_data_total}')
 
+        df_release_year = pd.DataFrame(data=df_data_total, columns = ['Release_year', 'Movie_ID'])
+        print(f'dataframe: {df_release_year}')
+
+        graph = create_graph.CreateGraph(title='Analyse temporelle des films', xlabel='Année de sortie', ylabel='Nb de films')
+        print(graph)
+        graph.create_graph(data=df_release_year, graph_type='histogram', column='Release_year')
+
+    @staticmethod
+    def preset_graph_release_year():
+        """Displays release years."""
+        df_data_c2 = movie.Movie.all_movies_id
+        df_data_c1 = movie.Movie.all_release_years_id
+        df_data_c1 = list(map(int, df_data_c1))
+        df_data_total = {'Release_year': df_data_c1,
+                         'Movie_ID': df_data_c2}
+        #print(f'data: {df_data_total}')
+
+        df_release_year = pd.DataFrame(data=df_data_total, columns = ['Release_year', 'Movie_ID'])
+        print(f'dataframe: {df_release_year}')
+
+        graph = create_graph.CreateGraph(title='Répartition temporelle des films', xlabel='Année de sortie', ylabel='Nb de films')
+        print(graph)
+        graph.create_graph(data=df_release_year, graph_type='histogram', column='Release_year', bins=2)
+
+    @staticmethod
+    def preset_graph_genres():
+        """Displays genres"""
+
+        df_data_c1 = movie.Movie.all_genres_id
+        df_data_c2 = movie.Movie.all_movies_id
+        xss = df_data_c1
+        print(xss)
+        flat_list = [
+            x
+            for xs in xss
+            for x in xs
+        ]
+        print(flat_list)
+        genres_set = set(flat_list)
+        print(genres_set)
+
+        counted_genres = Counter(flat_list)
+        print(f'genres: {counted_genres}')
+        counted_genres['undefined'] = counted_genres.pop('')
+        df_data_total = {'Genres': counted_genres.keys(),
+                         'Count': list(map(int, counted_genres.values()))}
+        df_genres = pd.DataFrame(data=df_data_total, columns=['Genres', 'Count'])
+        df_genres = df_genres.sort_values(['Count']).reset_index(drop=True)
+        order = sorted(genres_set)
+        print(df_genres)
+        graph = create_graph.CreateGraph(title='Répartition des genres de films', ylabel='Genre', xlabel='Nombre de films')
+        graph.create_graph(data=df_genres, graph_type='bar_chart', y='Genres', x='Count', orient='h', color='coral')
+
+    @staticmethod
+    def preset_graph_rating():
+        """Displays ratings and votes"""
+
+        df_data_c1 = movie.Movie.all_votes_id
+        df_data_c2 = movie.Movie.all_ratings_id
+        df_data_c3 = movie.Movie.all_movies_id
+        #df_data_c4 = movie.Movie.all_genres_id
+        df_data_total = {
+            'Votes': df_data_c1,
+            'Ratings': df_data_c2,
+            'Movie': df_data_c3,
+            #'Genres': df_data_c4
+                         }
+        df_ratings_votes = pd.DataFrame(data=df_data_total, columns = ['Votes', 'Ratings'])
+        print(df_ratings_votes)
+        graph = create_graph.CreateGraph(title='Distribution Votes x Note', xlabel='Note', ylabel='Votes')
+        graph.create_graph(x='Ratings', y='Votes', data=df_ratings_votes, graph_type='scatter', color='coral')
+
+
+    @staticmethod
+    def preset_graph_credits():
+        """Graph: Position in credits x Gender"""
+
+        df_data_c1 = character.Character.all_credits_positions_id
+        df_data_c2 = character.Character.all_genders_id
+        df_data_c3 = character.Character.all_characters_id
+
+        #print(
+        #    str(len(df_data_c1)) + '\n' +
+        #    str(len(df_data_c2)) + '\n' +
+        #    str(len(df_data_c3)) + '\n'
+        #)
+
+        counted_credits = Counter(df_data_c3)
+        #print(f'counted_credits: {counted_credits}')
+
+        df_data_total = {
+            'Position': df_data_c1,
+            'Gender': df_data_c2,
+            'Character_ID': df_data_c3,
+                         }
+
+        df = pd.DataFrame(data=df_data_total, columns = ['Position', 'Gender', 'Character_ID'])
+        mask = df['Position'] == '?'
+        df = df[~mask]
+        #print(df)
+
+        #df['Rel_Position'] = df['Character_ID'].map(
+        #    PresetCommands.util_get_rel_credit_pos
+        #)
+        #print(df)
+        #graph = create_graph.CreateGraph(title='Position Crédits x Genre', xlabel='Position', ylabel='Genre')
+        #graph.create_graph(x='Rel_Position', data=df, graph_type='dist', color='coral', hue='Gender')
+
+        graph = create_graph.CreateGraph(title='Position Crédits x Genre', xlabel='Position')
+        graph.create_graph(x='Position', data=df, graph_type='box', y='Gender')
+
+
+    @staticmethod
+    def util_get_rel_credit_pos(character_id):
+        """Unused."""
+        total_credits = 0
+        obj = character.Character.all_character_objects[0]
+        movie_id = character.Character.get_movie_id(obj, character_id)
+        self_credits = character.Character.get_credits_position_id(obj, character_id)
+
+        #print(character.Character.all_character_objects)
+        #sys.exit()
+        for entry in character.Character.all_character_objects:
+            #print(entry)
+            #print(entry.movie_id)
+            if entry.movie_id == movie_id:
+                total_credits += 1
+            else:
+                pass
+
+        counted = Counter(character.Character.all_movies_id)
+        total_movie_credits = len(counted)
+
+        #print(character_id)
+        #print(movie_id)
+        #print(self_credits)
+        #print(total_credits)
+        ##print(f'{x}')
+        #print(f'{movie}')
+        #print(f'test: {totals.get(movie, 'error')}')
+        #print('x value:' + str(x))
+        #print(self_credits)
+        relative_credits = (self_credits / total_credits)# / total_movie_credits
+        return relative_credits
 
 def main():
     """Main function. Initializes program."""
