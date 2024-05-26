@@ -1,11 +1,12 @@
 # code pour la classe Character
+
 # on importe Pandas afin de créer des DataFrames
 import pandas as pd
 
 
 class Character:
     # attributs de classe
-    all_character_objects = []
+    all_character_objects = [] # une liste qui contient tous les objets de character
     all_characters_id = []  # une liste de tous les id de character
     all_names_id = []
     all_movies_id = []
@@ -19,7 +20,7 @@ class Character:
         self.gender_id = gender_id
         self.credits_position_id = credits_position_id
 
-    # donner un name_id associé à un character_id
+    # méthodes getter, va chercher un name_id associé à un character_id
     def get_name_id(self, character_id):
         # mettre deux listes ensemble et mettre cette liste dans un dictionnaire
         merged_list = dict(zip(self.all_characters_id, self.all_names_id))
@@ -38,7 +39,8 @@ class Character:
         merged_list = dict(zip(self.all_characters_id, self.all_credits_positions_id))
         return merged_list[character_id]
 
-    # création de @property pour pouvoir accéder aux attributs (avant __init__)
+    # création de @property pour pouvoir accéder
+    # aux attributs de classe (avant __init__)
     @property
     def _all_names_id(self):
         return self.all_names_id
@@ -60,18 +62,22 @@ class Character:
         return self.all_characters_id
 
     # création de @classmethod
+    # chaque méthode prend une liste ID and cherche les attributs associés
+    # depuis les listes de classe
     @classmethod
     def get_all_names(cls, id_list):
-        merged_list = dict(zip(Character._all_characters_id, Character._all_names_id))  # dictionnaire qui met
-        # ensemble les listes all_characters_id and all_names_id
+        # listes all_characters_id et all_names_id ensemble dans un dictionnaire
+        merged_list = dict(zip(Character._all_characters_id, Character._all_names_id))
+        # liste vide pour mettre les noms qui correspondent aux ids dans id_list
         list_all_names = []
         for ids in id_list:
+            # prendre nom associé à l'id et le mettre dans list_all_names
             list_all_names.append(merged_list[ids])
         return list_all_names
 
     @classmethod
-    def get_all_movies_id(cls, id_list):
-        merged_list = dict(zip(Character._all_characters_id, Character._all_movies_id))  # dictionnaire qui met
+    def get_all_movies(cls, id_list):
+        merged_list = dict(zip(Character._all_characters_id, Character._all_movies_id))
         # ensemble les listes all_characters_id and all_names_id
         list_all_movies = []
         for ids in id_list:
@@ -79,7 +85,7 @@ class Character:
         return list_all_movies
 
     @classmethod
-    def get_all_genders_id(cls, id_list):
+    def get_all_genders(cls, id_list):
         merged_list = dict(zip(Character._all_characters_id, Character._all_genders_id))  # dictionnaire qui met
         # ensemble les listes all_characters_id and all_names_id
         list_all_genders = []
@@ -88,7 +94,7 @@ class Character:
         return list_all_genders
 
     @classmethod
-    def get_all_credits_positions_id(cls, id_list):
+    def get_all_credits_positions(cls, id_list):
         merged_list = dict(
             zip(Character._all_characters_id, Character._all_credits_positions_id))  # dictionnaire qui met
         # ensemble les listes all_characters_id and all_names_id
