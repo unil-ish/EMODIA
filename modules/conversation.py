@@ -1,4 +1,5 @@
 # code de la classe conversation
+# on importe pandas pour faire des dataframes
 import pandas
 import pandas as pd
 
@@ -49,26 +50,25 @@ class Conversation:
         return self.all_conversations_id
 
     # les classmethod pour accéder à des listes d'éléments voulus, demande une liste de id conversation
-    # le _all ne veut pas dire que la methode retourne tout, mais c'est pour dire qu'on en prend une liste
     @classmethod
-    def get_all_characters(cls, id_list):
-        merged_list = dict(zip(Conversation._all_conversations_id, Conversation._all_characters_id))
+    def get_list_characters(cls, id_list):
+        merged_list = dict(zip(Conversation.all_conversations_id, Conversation.all_characters_id))
         list_characters = []
         for ids in id_list:
             list_characters.append(merged_list[ids])
         return list_characters
 
     @classmethod
-    def get_all_movie_ids(cls, id_list):
-        merged_list = dict(zip(Conversation._all_conversations_id, Conversation._all_movies_id))
+    def get_list_movie_ids(cls, id_list):
+        merged_list = dict(zip(Conversation.all_conversations_id, Conversation.all_movies_id))
         list_all_movies = []
         for ids in id_list:
             list_all_movies.append(merged_list[ids])
         return list_all_movies
 
     @classmethod
-    def get_all_lines(cls, id_list):
-        merged_list = dict(zip(Conversation._all_conversations_id, Conversation._all_lines_id))
+    def get_list_lines(cls, id_list):
+        merged_list = dict(zip(Conversation.all_conversations_id, Conversation.all_lines_id))
         list_all_lines = []
         for ids in id_list:
             list_all_lines.append(merged_list[ids])
@@ -80,7 +80,7 @@ class Conversation:
         df = pandas.DataFrame(dict(zip(list_ids, attribute_list)))
         return df
 
-
+# utilisé pour la lecture des données
 class ConversationHolder():
 
     @staticmethod
@@ -106,7 +106,7 @@ class ConversationHolder():
             #print(entries)
             # Crée un objet Conversation et lui attribue les données splitées
             # la première conversation serait : u0	u2	m0	['L194' 'L195' 'L196' 'L197']
-            # S'il y a un problème, toute la ligne de données devient "?",
+            # S'il y a un problème, toute la ligne de données devient "?", sauf l'index
             try:
                 conversation_obj = Conversation(**entries)
 
@@ -127,39 +127,3 @@ class ConversationHolder():
 
         print(f'success! {len(Conversation.all_conversations_id)} objects created.')
         return
-
-################### TOUT CECI DISPARAITRA AU FINAL #######################
-# le chemin vers movie_conversations.tsv
-#tsv_file_path = 'movie_dialog/movie_conversations.tsv'
-# on crée un identifiant unique, car le tsv n'en contient pas
-#conversation_id = 0
-
-# Ouvre le tsv ligne par ligne en encodage utf8 comme movie_conversations.tsv, un peu lent mais fonctionne
-#with open(tsv_file_path, 'r', encoding="utf8") as tsvfile:
-#    # on boucle sur chaque ligne du tsv
-#    for line in tsvfile:
-
-# pour tester le bon fonctionnement
-# print(line)
-
-# Sépare les entrées grâce à la tabulation "\t"
-#        parts = line.strip().split('\t')
-
-# Crée un objet Conversation et lui attribue les données splitées
-# la première conversation serait : u0	u2	m0	['L194' 'L195' 'L196' 'L197']
-# S'il y a un problème, toute la ligne de données devient "?",
-#        try:
-#            conversation_obj = Conversation(conversation_id, parts[2], {"character1":parts[0],"character2":parts[1]}, parts[3])
-
-# conversation_obj.all_conversations_id.append(conversation_id)
-# conversation_obj.all_characters.append(conversation_obj.characters_id)
-#        except:
-#            conversation_obj = Conversation(conversation_id,"?","?","?")
-
-# pour tester
-# print(conversation_obj.id, conversation_obj.movie_id, conversation_obj.character_id, conversation_obj.lines)
-
-# on incrémente conversation_id de 1
-#        conversation_id = conversation_id+1
-
-# print(conversation_obj.get_characters_id(conversation_obj.id))
