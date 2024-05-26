@@ -83,21 +83,6 @@ class Conversation:
 
 class ConversationHolder():
 
-    def get_conversation(self):
-        return self.conversation_dataset()
-
-    @staticmethod
-    def conversation_dataset():
-        if (
-                Conversation.all_conversations_id  # une liste de tous les id
-                and Conversation.all_characters_id  # une liste de dictionnaires de tous les id de characters
-                and Conversation.all_movies_id  # une liste de tous les id de film
-                and Conversation.all_lines_id
-        ):
-            return True
-        else:
-            return False
-
     @staticmethod
     def create_conversation_dataset(provided_data):
         # Using enumerate so we don't have to increment a variable.

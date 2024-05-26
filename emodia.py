@@ -498,12 +498,12 @@ class PresetCommands(Commands):
         df = df[~mask]
         #print(df)
 
-        df['Rel_Position'] = df['Character_ID'].map(
-            PresetCommands.util_get_rel_credit_pos
-        )
-        print(df)
-        graph = create_graph.CreateGraph(title='Position Crédits x Genre', xlabel='Position', ylabel='Genre')
-        graph.create_graph(x='Rel_Position', data=df, graph_type='dist', color='coral', hue='Gender')
+        #df['Rel_Position'] = df['Character_ID'].map(
+        #    PresetCommands.util_get_rel_credit_pos
+        #)
+        #print(df)
+        #graph = create_graph.CreateGraph(title='Position Crédits x Genre', xlabel='Position', ylabel='Genre')
+        #graph.create_graph(x='Rel_Position', data=df, graph_type='dist', color='coral', hue='Gender')
 
         graph = create_graph.CreateGraph(title='Position Crédits x Genre', xlabel='Position')
         graph.create_graph(x='Position', data=df, graph_type='box', y='Gender')
@@ -511,6 +511,7 @@ class PresetCommands(Commands):
 
     @staticmethod
     def util_get_rel_credit_pos(character_id):
+        """Unused."""
         total_credits = 0
         obj = character.Character.all_character_objects[0]
         movie_id = character.Character.get_movie_id(obj, character_id)

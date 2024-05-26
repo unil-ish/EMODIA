@@ -15,14 +15,12 @@ class CreateGraph:
             xlabel="x-axis label goes here",
             ylabel="y-axis label goes here",
     ):
-        print(title, xlabel, ylabel)
         sns.set_theme()  # Use default Seaborn theme.
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
 
     def create_graph(self, data, graph_type, **kwargs):
-        print(kwargs)
         # Todo : match: case
         # match graph_type:
         #   case: 'scatter'
@@ -58,7 +56,6 @@ class CreateGraph:
         plt.show()
 
     def create_histogram(self, data, column, palette=None, bins='auto', discrete=True, color='coral'):
-        print(f'hist title: {self.title}')
         with sns.color_palette(palette):
             sns.histplot(data=data[column], discrete=discrete, bins=bins, color=color)
         plt.title(self.title)
