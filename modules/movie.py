@@ -9,13 +9,13 @@ from string import digits, ascii_letters
 
 class Movie:
     # attributs de classe
-    all_movies_objects = []  # une liste qui contient tous les objets de movie
+    all_movies_objects = []  # une liste d'un dictionnaire qui contient tous les objets de movie
     all_movies_id = []  # une liste de tous les id de movie
     all_titles_id = []
     all_release_years_id = []
     all_ratings_id = []
     all_votes_id = []
-    all_genres_id = []
+    all_genres_id = []  # liste de listes de genres de chaque film
 
     def __init__(self, movie_id, title_id, release_year_id, ratings_id, votes_id, genres_id):
         self.movie_id = movie_id  # id d'un movie en particulier
