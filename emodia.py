@@ -653,6 +653,64 @@ class PresetCommands(Commands):
             print(e)
             return
 
+    def preset_graph_sentiment_analysis(self):
+        """⧉ Analyse sentiment."""
+        title = 'Analyse sentiment'
+
+        self.msg.say('4_graph_creation', name=title)
+        self.msg.say('4_1_graph_access_data')
+
+        self.msg.say('graph_get_data')
+        try:
+            one_movie = random.sample(movie.Movie.all_movies_objects, 1)[0]
+            all_lines = line.Line.all_lines_objects
+            self.msg.say('graph_get_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('graph_compute_data')
+        try:
+            movie_id = one_movie.movie_id
+
+            speaker_list = []
+            speech_list = []
+            for entry in all_lines:
+                if entry.movie_id == movie_id:
+                    speaker = entry.character_id # Get character ID for this line
+                    speech = entry.line_content # Get line content for this line
+
+                    # Get full character name from their ID
+                    speaker = character.Character.get_name_id(character.Character.all_character_objects[0], speaker)
+                    #b = character.Character.get_name_id(character.Character.all_character_objects[0], b)
+
+                    speaker_list.append(speaker)
+                    speech_list.append(speech)
+
+            df_sentiment = {
+                'title': None,
+                'speaker': speaker_list,
+                'speech': speech_list
+            }
+
+            df = pd.DataFrame(data=df_sentiment, columns=['title', 'speaker', 'speech'])
+            df['title'] = movie_id
+
+            self.msg.say('graph_compute_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('4_2_graph_create')
+        #try:
+        #    graph = create_graph.CreateGraph(title=title)
+        #    graph.create_graph(data=c, graph_type='network')
+        #    self.msg.say('4_3_success')
+        #except Exception as e:
+        #    print(e)
+        #    return
+        print(df)
+
 
 def main():
     """Fonction principale. Initialise le programme."""

@@ -4,6 +4,8 @@ import spacy
 import pandas as pd
 from tqdm import tqdm
 
+# tqdm -> progress bar
+# spacy -> natural language processing
 
 class ProcessFile:
 
