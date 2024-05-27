@@ -1,20 +1,20 @@
 """
-EMODIA is a command-line-interface data visualisation program.
+EMODIA est un programme de visualisation de données en ligne de commande.
 
-It:
-1   Gathers resources from a directory to provide a pleasant GUI.
-2   Checks whether modules have been imported as expected.
-3   Prompts the user for what to do next.
+Il :
+1 Rassemble les ressources d'un répertoire pour fournir une interface graphique agréable.
+2 Vérifie que les modules ont été importés comme prévu.
+3 Demande à l'utilisateur ce qu'il doit faire ensuite.
 
-A note on some globals:
-LOGGER  Points to a custom logging.Logger object so that it can be shared.
-TAB     Holds the text indent used for the CLI and logs.
-NAME    Program name, for welcome message.
-MESSENGER     Custom print() alternative, shared.
-MODULES_DIR   Dir for data processing modules. These must be valid .py files.
-RESOURCES_DIR Where resources are located. Used for log messages, CLI, etc.
+Quelques remarques sur certaines variables globales :
+LOGGER Pointe vers un objet logging.Logger personnalisé afin qu'il puisse être partagé.
+TAB Contient l'indentation du texte utilisée pour la CLI et les journaux.
+NAME Nom du programme, pour le message de bienvenue.
+MESSENGER Alternative print() personnalisée, partagée.
+MODULES_DIR Dir pour les modules de traitement des données. Il doit s'agir de fichiers .py valides.
+RESOURCES_DIR Emplacement des ressources. Utilisé pour les messages de log, le CLI, etc.
 
-Main script by Lorelei Chevroulet, 2024
+Script principal par Lorelei Chevroulet, 2024
 """
 
 import importlib.util  # To import modules.
@@ -45,7 +45,7 @@ from collections import Counter
 import networkx as nx
 import netgraph
 
-# PROGRAM INFO
+# INFO
 NAME = "EMODIA"
 MODULES_DIR = Path("modules")
 RESOURCES_DIR = Path("resources")
@@ -61,53 +61,57 @@ REL_DATA_DIR = PurePath.joinpath(CWD, DATA_DIR)
 
 class ABCProgram:
     """
-    Parent class for all modules. Allows them to share a single, custom logger
-    and makes them log a message with their name when they are initialized.
+    Classe parent pour tous les modules. Permet de partager un logger unique et personnalisé
+    et permet d'enregistrer un message avec leur nom lorsqu'ils sont initialisés.
     """
 
     def __init__(self):
-        # Ensure children share the logger.
+        # Veille à ce que les childs partagent l'enregistreur.
         self.logger = LOGGER
         self.msg = MESSENGER
         self.test = 'hi'
 
-        # Logs any initialized child.
+        # Logs tout child initialisé.
         name = self.__class__.__name__
         self.logger.info(f"Initializing {name}", extra={"Type": "🏗️"})
 
 
 class MainProgram(ABCProgram):
-    """The main program, as a class.
+    """Le programme principal, en tant que classe.
 
-    * Handles startup messages
-    * Manages and imports modules
-    * Gets user input as to what to do next.
+    * Gère les messages de démarrage
+    * Gère et importe les modules
+    * Obtient les entrées utilisateur sur la prochaine action à effectuer.
     """
 
     def __init__(self):
+        """Initialise la classe MainProgram."""
         super().__init__()
         self.program = self
         self.program_info = None
         self.module_handler = None
 
     def start_program(self):
+        """Démarre le programme."""
         self.program_info = ProgramInfo()
         self.program_info.print_logo()
 
+        # Obtenir la liste des modules et les importer.
         module_list = utils.Utils.get_resource(RESOURCES_DIR, "module_list", data_type="json")
-        # Looking for, then importing modules.
         self.module_handler = module_handler.ModuleHandler(self.logger, self.msg, module_list, MODULES_DIR)
 
         self.msg.log('log_1_modules_check')
         self.module_handler.compare_modules_routine()
 
+        # Importation des données.
         #self.msg.log('log_2_data_import')
         DataImport.create_dataset_routine(self.msg)
 
-        # Entering program loop.
+        # Entrer dans la boucle du programme.
         self.program_loop()
 
     def program_loop(self):
+        """Boucle principale du programme."""
         commands = Commands(self)
         while True:
             commands.command_dialog()
@@ -115,42 +119,43 @@ class MainProgram(ABCProgram):
 
 class ProgramInfo(ABCProgram):
     """
-    Gets logo and author information from resources, formats and displays them.
+    Obtient le logo et les informations sur l'auteur à partir des ressources, les formate et les affiche.
     """
 
     def __init__(self):
+        """Initialise la classe ProgramInfo."""
         super().__init__()
         self.logo = utils.Utils.get_resource(RESOURCES_DIR, "logo", "txt")
         self.authors: dict = utils.Utils.get_resource(RESOURCES_DIR, "authors", "json")
 
     def print_logo(self):
-        """Print logo."""
+        """Affiche le logo."""
         for logo_line in self.logo.splitlines():
             self.msg.say("logo", text=logo_line)
         print()
 
     def print_authors(self):
         """
-        Gets authors, sorts them under each category then
-        formats and prints them.
+        Obtient les contributrices et contributeurs, les trie dans chaque catégorie puis
+        les formate et les affiche.
         """
         for (
                 key
         ) in (
                 self.authors.keys()
-        ):  # Each key being an entry like "authors", "supervisors", etc.
+        ):  # Chaque clé représente une entrée comme "auteurs", "superviseurs", etc.
             self.authors.update(
                 {
-                    # Sorts authors by name under a 'key' category.
+                    # Trie les auteurs par nom sous une catégorie 'clé'.
                     key: utils.Utils.sort_dict(self.authors[key], "name")
                 }
             )
 
-        # Print out all that formatted data.
+        # Affiche toutes ces données formatées.
         for category in self.authors.keys():
             self.msg.say(category)
             for person in self.authors[category]:
-                # Formatting fullname because msg can't.
+                # Formatage du nom complet car msg ne peut pas le faire.
                 fullname = f"""{person["name"]} {person["surname"]}"""
                 self.msg.say(
                     "person_list",
@@ -166,6 +171,11 @@ class DataImport(MainProgram):
 
     @classmethod
     def create_dataset_routine(cls, msg):
+        """
+        Crée le jeu de données en routine.
+
+        :param msg: Objet de messagerie pour l'affichage de messages.
+        """
         msg.say('2_import_corpus')
         msg.say('2_1_import_corpus_steps')
         msg.say('corpus_list_art_1')
@@ -178,6 +188,11 @@ class DataImport(MainProgram):
 
     @staticmethod
     def create_character(msg):
+        """
+        Importe les données des personnages.
+
+        :param msg: Objet de messagerie pour l'affichage de messages.
+        """
         msg.say('import_character')
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_characters_metadata.tsv')
@@ -186,6 +201,11 @@ class DataImport(MainProgram):
 
     @staticmethod
     def create_conversation(msg):
+        """
+        Importe les données des conversations.
+
+        :param msg: Objet de messagerie pour l'affichage de messages.
+        """
         msg.say('import_conversation')
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_conversations.tsv')
@@ -194,6 +214,11 @@ class DataImport(MainProgram):
 
     @staticmethod
     def create_movie(msg):
+        """
+        Importe les données des films.
+
+        :param msg: Objet de messagerie pour l'affichage de messages.
+        """
         msg.say('import_movie')
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_titles_metadata.tsv')
@@ -202,6 +227,11 @@ class DataImport(MainProgram):
 
     @staticmethod
     def create_line(msg):
+        """
+        Importe les données des lignes de dialogue.
+
+        :param msg: Objet de messagerie pour l'affichage de messages.
+        """
         msg.say('import_line')
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_lines.tsv')
@@ -217,16 +247,17 @@ class Commands(MainProgram):
 
     def command_dialog(self):
         """
-        Prints a list of available commands surrounded by a cute CLI GUI.
-        Prompts for user input, and executes function located at user input
-        key in dictionary.
-        Extra bit of code to execute functions as either static methods or
-        with self parameter.
+        Affiche une liste de commandes disponibles entourée d'une interface utilisateur en ligne de commande.
+        Demande une saisie utilisateur et exécute la fonction située à la clé de saisie utilisateur
+        dans le dictionnaire.
+
+        Un peu de code supplémentaire pour exécuter les fonctions en tant que méthodes statiques ou
+        avec le paramètre self.
         """
         self.msg.say("3_command_selection")
         self.command_dict = self.command_dict_holder()
 
-        # That's the cute GUI part.
+        # C'est la partie mimi de l'interface utilisateurice en ligne de commande.
         self.msg.say('select_command')
         self.msg.say("command_list_art_1")
         self.msg.say("command_list_art_2")
@@ -235,13 +266,13 @@ class Commands(MainProgram):
             self.msg.say('command_list', number=f"{entry:>3}", name=name)
         print()
 
-        # Gets user input to pick command.
+        # Obtient la saisie de l'utilisateurice pour choisir la commande.
         selection = self.command_selection()
         command = getattr(PresetCommands, selection)
         self.msg.log('log_selected_command_value', value=command.__name__)
         print()
 
-        # Checks if command is static or needs self.
+        # Vérifie si la commande est statique ou nécessite self.
         if isinstance(inspect.getattr_static(PresetCommands, selection), staticmethod):
             command()
         else:
@@ -249,7 +280,7 @@ class Commands(MainProgram):
 
     def command_selection(self) -> str:
         """
-        Checks user input and force attempts until conditions passed.
+        Vérifie la saisie utilisateur et effectue des tentatives forcées jusqu'à ce que les conditions soient remplies.
         """
         selected_command = None
         while not selected_command:
@@ -268,8 +299,8 @@ class Commands(MainProgram):
 
     @staticmethod
     def command_dict_holder() -> dict:
-        """
-        Setups a dict containing an index and a value pointing to a preset_command.
+        """"
+        Configure un dictionnaire contenant un index et une valeur pointant vers une commande prédéfinie.
         """
         method_list = []
         method_dict = {}
@@ -288,14 +319,14 @@ class Commands(MainProgram):
 
 class PresetCommands(Commands):
     """
-    Commands listed in the command selection prompt.
+    Commandes répertoriées dans la boîte de sélection de commandes.
 
-    To work properly, commands MUST:
-    * start with 'preset_'
-    * contain a short (<40 chars) docstring
+    Pour fonctionner correctement, les commandes DOIVENT :
+    * commencer par 'preset_'
+    * contenir une courte docstring (<40 caractères)
 
-    The docstring is paramount as it will provide a description of
-    the command to the user.
+    La docstring est primordiale car elle fournira une description de
+    la commande à l'utilisateur.
     """
 
     def __init__(self):
@@ -303,6 +334,7 @@ class PresetCommands(Commands):
 
     @staticmethod
     def select_retry():
+        """Retiens la sélection de la commande."""
         print('command does not exist :( Try again.')
 
     @staticmethod
@@ -317,7 +349,7 @@ class PresetCommands(Commands):
         target_module = input(f"{TAB}>")
 
         try:
-            # Note the sys.modules[] to get an actual module object and not string.
+            # Notez que sys.modules[] permet d'obtenir un objet module réel et non une chaîne de caractères.
             status = module_handler.ModuleHandler.reload_module(sys.modules[f'{MODULES_DIR}.{target_module}'])
         except KeyError:
             status = False
@@ -331,7 +363,7 @@ class PresetCommands(Commands):
 
     @staticmethod
     def _preset_test_create_graph():
-        """Test create_graph with random data."""
+        """Teste create_graph avec des données aléatoires."""
 
         graph = create_graph.CreateGraph(title='Title', xlabel='x', ylabel='y')
         print(graph)
@@ -340,12 +372,12 @@ class PresetCommands(Commands):
         graph.create_graph(data=exemple_pd, graph_type='scatter', x='ID', y='Score')
 
     def preset_display_credits(self):
-        """✎ Displays program credits."""
+        """✎ Affiche les crédits du programme."""
         self.program.program_info.print_authors()
 
     @staticmethod
     def _preset_test_modules():
-        """Grabs a random entry in each dataset, and prints a linked value."""
+        """Teste les modules."""
         a = random.choice(movie.Movie.all_movies_id)
         movie_title = movie.Movie.get_title_id(movie.Movie.all_movies_objects[0], a)
         print(f'Movie: {a}, {movie_title}')
@@ -371,7 +403,7 @@ class PresetCommands(Commands):
 
     @staticmethod
     def _preset_test_graph_release_year():
-        """Test release_year graph with placeholder data."""
+        """Teste le graphique release_year avec des données fictives."""
         df_data_c1 = [2001, 2002, 2003, 2004]
         df_data_c2 = ['11', '12', '13', '14']
         df_data_total = {'Release_year': df_data_c1,
@@ -387,7 +419,7 @@ class PresetCommands(Commands):
         graph.create_graph(data=df_release_year, graph_type='histogram', column='Release_year')
 
     def preset_graph_release_year(self):
-        """⧉ Distribution Années de sortie."""
+        """⧉ Exécute le graphique des années de sortie."""
         title = 'Distribution Années de sortie.'
 
         self.msg.say('4_graph_creation', name=title)
@@ -432,7 +464,7 @@ class PresetCommands(Commands):
             return
 
     def preset_graph_genres(self):
-        """⧉ Distribution Genres de film."""
+        """⧉ Exécute le graphique de la distribution Genres de film."""
         title = 'Distribution Genres de film.'
 
         self.msg.say('4_graph_creation', name=title)
@@ -448,7 +480,7 @@ class PresetCommands(Commands):
 
         self.msg.say('graph_compute_data')
         try:
-            xss = df_data_c1  # Flattening the list
+            xss = df_data_c1  # aplatis la liste
             flat_list = [
                 x
                 for xs in xss
@@ -483,7 +515,7 @@ class PresetCommands(Commands):
             print(e)
             return
     def preset_graph_rating(self):
-        """⧉ Nombre notes × Score film."""
+        """⧉ Exécute le graphique du nombre notes × Score film."""
         title = 'Nombre notes × Score film'
 
         self.msg.say('4_graph_creation', name=title)
@@ -529,7 +561,7 @@ class PresetCommands(Commands):
             return
 
     def preset_graph_credits(self):
-        """⧉ Position crédits × Genre personnage."""
+        """⧉ Exécute le graphique de position crédits × Genre personnage."""
         title = 'Position crédits × Genre f/m'
 
         self.msg.say('4_graph_creation', name=title)
@@ -577,7 +609,7 @@ class PresetCommands(Commands):
             return
 
     def preset_graph_dialog_network(self):
-        """⧉ Réseau de dialogues."""
+        """⧉ Exécute le graphique en réseau des dialogues."""
         title = 'Réseau de dialogues'
 
         self.msg.say('4_graph_creation', name=title)
@@ -623,9 +655,9 @@ class PresetCommands(Commands):
 
 
 def main():
-    """Main function. Initializes program."""
-    global LOGGER, MESSENGER  # We need the logger and module import status to be shared.
-    LOGGER = custom_logger.CustomLogger("logger", log_name=NAME)  # Here's our shared, custom logger.
+    """Fonction principale. Initialise le programme."""
+    global LOGGER, MESSENGER  # Il faut que l'état du log et de l'importation des modules soient partagés.
+    LOGGER = custom_logger.CustomLogger("logger", log_name=NAME)  # Log partagé et personnalisé
     MESSENGER = messenger.Messenger(RESOURCES_DIR, LOGGER, TAB)
 
     program = MainProgram()
