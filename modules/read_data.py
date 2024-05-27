@@ -61,7 +61,8 @@ def read_data(file, **kwargs):
             with zipfile.ZipFile(path, 'r') as my_zip:  # Using ZipFile to access file contents.
                 # Note the use of zipfile.Path() to access data as string and not bytes.
                 data = zipfile.Path(my_zip, file_in_zip)
-                zipped_data = data.read_text()
+                # We're specifying encoding type to make sure Windows doesn't try to read it wrong.
+                zipped_data = data.read_text(encoding='utf-8')
                 #with my_zip.open(file_in_zip) as data:
                     #zipped_data = data.read_text()
                 #print(f'data type: {type(zipped_data)}')
