@@ -55,7 +55,7 @@ Feuille de route du projet
     * README in branch-erica (> 27.05) DONE
     * Structure: Erica
     * UML (d> 24.05) DONE
-    * Each person documents the code they've written ToDo
+    * Each person documents the code they've written DONE
   * Presentation
     * PowerPoint: Erica (d> 26.05), shared on MS365 ToDo
       * Each person presents their part, fills their slides
