@@ -75,16 +75,45 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
 3. 
 ...
 
-### Structure logique du projet --> je sais pas à quel point il faut être précis la dessus :O 
-📁 core_modules
+### Structure logique du projet 
 
-📁 data
+📁 core_modules
+      - __init__.py
+      - custom_logger.py
+      - messenger.py
+      - module_handler.py
+      - utils.py
+
+📁 data 
+      -  movie_dialog.zip
+      - senticnet.tsv
 
 📁 model
+      - différentes étapes du modèle UML
+      - dernière version: model_finalversion.drawio.pdf
+      
 
 📁 modules 
+      - __init__.py
+      - analysis_navier_stocker.py
+      - character.py
+      - conversation.py
+      - create_dataframe.py
+      - create_graph.py
+      - file_parser.py
+      - keyowrds.py
+      - line.py
+      - movie.py
+      - process_file.py
+      - read_data.py
 
 📁 ressources
+      - authors.json
+      - logo.txt
+      - MathNLP24_Fluid_Dynamics_Inspired_Emotional_Analysis_in_Shakespearean_Tragedies_A_Novel_Computational_Linguistics_Mtehodology (5).pdf
+      - messages.json
+      - styles.json
+      - oldREADME.py
 
 📄 .gitignore
 
