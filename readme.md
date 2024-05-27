@@ -78,6 +78,7 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
 ### Structure logique du projet 
 
 📁 core_modules
+
       - __init__.py
       - custom_logger.py
       - messenger.py
@@ -85,15 +86,18 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
       - utils.py
 
 📁 data 
+
       -  movie_dialog.zip
       - senticnet.tsv
 
 📁 model
+
       - différentes étapes du modèle UML
       - dernière version: model_finalversion.drawio.pdf
       
 
 📁 modules 
+
       - __init__.py
       - analysis_navier_stocker.py
       - character.py
@@ -108,6 +112,7 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
       - read_data.py
 
 📁 ressources
+
       - authors.json
       - logo.txt
       - MathNLP24_Fluid_Dynamics_Inspired_Emotional_Analysis_in_Shakespearean_Tragedies_A_Novel_Computational_Linguistics_Mtehodology (5).pdf
