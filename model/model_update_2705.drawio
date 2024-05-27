@@ -1,0 +1,196 @@
+<mxfile host="app.diagrams.net" modified="2024-05-27T13:50:07.210Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36" etag="GYSN8TCDktCpd0hmdihR" version="24.4.8" type="device">
+  <diagram name="Page-1" id="_akyt0slHFYUT6teFZli">
+    <mxGraphModel dx="3320" dy="2091" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamond;endFill=0;fontFamily=Verdana;strokeWidth=4;curved=0;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-7" target="NsqWC6Qmyju4j9Wvl-nv-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-300" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-2" value="Aggregation&lt;div style=&quot;font-size: 14px;&quot;&gt;(1 Movie: n Conversation)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=1;fontSize=14;fontFamily=Verdana;" vertex="1" connectable="0" parent="NsqWC6Qmyju4j9Wvl-nv-1">
+          <mxGeometry x="0.7893" y="2" relative="1" as="geometry">
+            <mxPoint x="-212" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=4;curved=0;endArrow=diamond;endFill=0;fontFamily=Verdana;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-7" target="NsqWC6Qmyju4j9Wvl-nv-24">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1500" y="630" />
+              <mxPoint x="-1500" y="630" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-4" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Aggregation&lt;/font&gt;&lt;/b&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;(1 Movie: n Character)&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=14;fontFamily=Verdana;" vertex="1" connectable="0" parent="NsqWC6Qmyju4j9Wvl-nv-3">
+          <mxGeometry x="-0.5448" y="1" relative="1" as="geometry">
+            <mxPoint x="-41" y="27" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=4;curved=0;endArrow=diamond;endFill=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Verdana;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-7" target="NsqWC6Qmyju4j9Wvl-nv-16">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-730" y="140" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-6" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Aggregation&lt;/font&gt;&lt;/b&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;(1 Movie: n Line)&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=14;fontFamily=Verdana;" vertex="1" connectable="0" parent="NsqWC6Qmyju4j9Wvl-nv-5">
+          <mxGeometry x="0.6478" y="4" relative="1" as="geometry">
+            <mxPoint x="-129" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-7" value="Movie" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fontFamily=Verdana;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-1640" y="-18" width="540" height="605" as="geometry">
+            <mxRectangle x="-1500" y="50" width="80" height="30" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-8" value="&lt;div&gt;+&amp;nbsp;all_movie_objects: [Movie]&lt;/div&gt;&lt;div&gt;+&amp;nbsp;all_movies_id = [str]&lt;/div&gt;&lt;div&gt;+&amp;nbsp;all_titles_id = [str]&lt;/div&gt;&lt;div&gt;+&amp;nbsp;all_release_years_id = [int]&lt;/div&gt;&lt;div&gt;+&amp;nbsp;all_ratings_id = [float]&lt;/div&gt;&lt;div&gt;+ all_votes_id = [int]&lt;/div&gt;&lt;div&gt;+ all_genres_id = [[str]]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ movie_id: str&lt;/div&gt;&lt;div&gt;+ title_id: str&lt;/div&gt;&lt;div&gt;+ release_year_id: int&lt;/div&gt;&lt;div&gt;+ ratings_id: float&lt;/div&gt;&lt;div&gt;+ votes_id: int&lt;/div&gt;&lt;div&gt;+ genres_id: [str]&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-7">
+          <mxGeometry y="26" width="540" height="214" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-9" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-7">
+          <mxGeometry y="240" width="540" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-10" value="&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;+ __init__(self, movie_id, title_id, release_year_id, ratings_id, votes_id, genres_id)&lt;/span&gt;&lt;div&gt;&lt;br&gt;&lt;div&gt;+ get_title_id(self,&amp;nbsp;movie_id): title_id&lt;/div&gt;&lt;div&gt;+ get_release_year_id(self,&amp;nbsp;movie_id):&amp;nbsp;release_year_id&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ get_ratings_id(self,&amp;nbsp;movie_id):&amp;nbsp;ratings_id&lt;/div&gt;&lt;div&gt;+ get_votes_id(self,&amp;nbsp;movie_id):&amp;nbsp;votes_id&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ get_genres_id(self,&amp;nbsp;movie_id):&amp;nbsp;genres_id&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@p _all_titles_id(self): [all_titles_id]&lt;/div&gt;&lt;div&gt;@p _all_release_years_id(self): [all_release_years_id]&lt;/div&gt;&lt;div&gt;@p _all_ratings_id(self): [all_ratings_id]&lt;/div&gt;&lt;div&gt;@p _all_votes_id(self): [all_votes_id]&lt;/div&gt;&lt;div&gt;@p _all_genres_id(self): [all_genres_id]&lt;/div&gt;&lt;div&gt;@p _all_movies_id(self): [all_movies_id]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c get_all_titles(cls, [id_list]): [all_titles]&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c get_all_release_years(cls, [id_list]): [all_release_years]&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c get_all_ratings(cls, [id_list]): [all_ratings]&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c get_all_votes(cls, [id_list]): [all_votes]&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;@c get_all_genres(cls, [id_list]): [all_genres]&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c create_dataframe(cls, [list_ids], [attribute_list]): DataFrame&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c create_movie_dataset(cls, str):&amp;nbsp;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-7">
+          <mxGeometry y="248" width="540" height="357" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamond;endFill=1;fontFamily=Verdana;strokeWidth=4;curved=0;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-12" target="NsqWC6Qmyju4j9Wvl-nv-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-12" value="Conversation" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fontFamily=Verdana;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-480" y="184" width="450" height="469" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-13" value="&lt;div&gt;+ all_conversations_objects : [Conversation]&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;+ all_conversations_id : [int]&lt;/div&gt;&lt;div&gt;+ all_characters_id : [{str}] &amp;nbsp;#liste de dict de string&lt;/div&gt;&lt;div&gt;+ all_movies_id : [str] &amp;nbsp;&lt;/div&gt;&lt;div&gt;+ all_lines_id : [[str]] &amp;nbsp;#liste de liste de string&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ id: int&lt;/div&gt;&lt;div&gt;+ characters_id: {str}&lt;/div&gt;&lt;div&gt;+ movie_id: str&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ lines: [str] #Clé (pas le contenu)&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-12">
+          <mxGeometry y="26" width="450" height="159" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-14" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-12">
+          <mxGeometry y="185" width="450" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-15" value="&lt;div&gt;&lt;div&gt;+ __init__(self, id, character_id, movie_id , lines)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ get_characters_id(self, id): {&quot;character_1&quot;: str, &quot;character_2&quot;: str}&lt;/div&gt;&lt;div&gt;+ get_movie_id(self, id): move_id&lt;/div&gt;&lt;div&gt;+ get_lines(self, id): [lines]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@p _all_characters_id(self): [all_characters_id]&lt;/div&gt;&lt;div&gt;@p _all_movies_id(self): [all_movies_id]&lt;br&gt;&lt;/div&gt;&lt;div&gt;@p _all_lines_id(self): [all_lines_id]&lt;/div&gt;&lt;div&gt;@p _all_conversations_id(self): [all_conversations_id]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c get_list_characters(cls, [id]): [characters_id]&lt;/div&gt;&lt;div&gt;@c get_list_movie_ids(cls, [id]): [movie_id]&lt;/div&gt;&lt;div&gt;@c get_list_lines(cls, [id]): [lines]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;@c create_dataframe(cls, [id],[arg]): DataFrame&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c create_conversation_dataset(cls, str):&lt;br&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-12">
+          <mxGeometry y="195" width="450" height="274" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-16" value="Line" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fontFamily=Verdana;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-910" y="190" width="360" height="450" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-17" value="&lt;div&gt;+ all_lines_objects : [Line]&lt;/div&gt;&lt;div&gt;+ all_lines_id : [str]&lt;/div&gt;&lt;div&gt;+ all_characters_id : [str]&lt;/div&gt;&lt;div&gt;+ all_movies_id : [str] &amp;nbsp;&lt;/div&gt;&lt;div&gt;+ all_lines_content = [str]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&amp;gt; id : str&lt;/div&gt;&lt;div&gt;+ character_id : str&lt;/div&gt;&lt;div&gt;+ movie_id : str&lt;/div&gt;&lt;div&gt;+ line_content : str&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Verdana;strokeWidth=2;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-16">
+          <mxGeometry y="26" width="360" height="144" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-18" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-16">
+          <mxGeometry y="170" width="360" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-19" value="&lt;div&gt;+ __init__(self, id, movie_id, character_id, line_content)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;+ get_character_id(self, id): character_id&lt;div&gt;+ get_movie_id(self, id): movie_id&lt;/div&gt;&lt;div&gt;+ get_content(self, id): line_content&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;@p _all_lines_id(self): [all_lines_id]&lt;/div&gt;&lt;div&gt;@p _all_characters_id(self): [all_characters_id]&lt;/div&gt;&lt;div&gt;@p _all_movies_id(self): [all_movies_id]&lt;/div&gt;&lt;div&gt;@p _all_lines_content(self): [all_lines_content]&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;@c get_list_characters_id(cls, [id]): [character_id]&lt;/div&gt;&lt;div&gt;@c get_list_movie_ids(cls, [id]): [movie_id]&lt;/div&gt;&lt;div&gt;@c get_list_contents(cls, [id]): [line_content]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c create_dataframe(cls,[id],[arg]) : DataFrame&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c create_line_dataset(cls, str) :&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-16">
+          <mxGeometry y="178" width="360" height="272" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-20" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=4;endArrow=diamond;endFill=0;fontFamily=Verdana;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-24" target="NsqWC6Qmyju4j9Wvl-nv-15">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1360" y="730" as="sourcePoint" />
+            <mxPoint x="-304.99999999999955" y="505.0000000000002" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-1310" y="760" />
+              <mxPoint x="-305" y="760" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-21" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Aggregation&lt;/font&gt;&lt;/b&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;(2 Character: 1 Conversation)&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=14;fontFamily=Verdana;" vertex="1" connectable="0" parent="NsqWC6Qmyju4j9Wvl-nv-20">
+          <mxGeometry x="0.8465" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-22" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=diamond;endFill=0;strokeWidth=4;curved=0;fontFamily=Verdana;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-24" target="NsqWC6Qmyju4j9Wvl-nv-16">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-1330" y="640" />
+              <mxPoint x="-1040" y="640" />
+              <mxPoint x="-1040" y="375" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-23" value="&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;Aggregation&lt;/font&gt;&lt;/b&gt;&lt;div style=&quot;font-size: 14px;&quot;&gt;&lt;b style=&quot;font-size: 14px;&quot;&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;(1 Character: n Line)&lt;/font&gt;&lt;/b&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=14;fontFamily=Verdana;" vertex="1" connectable="0" parent="NsqWC6Qmyju4j9Wvl-nv-22">
+          <mxGeometry x="0.7559" y="1" relative="1" as="geometry">
+            <mxPoint x="-42" y="89" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-24" value="Character" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fontFamily=Verdana;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-1464" y="655" width="510" height="538" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-25" value="&lt;div&gt;&lt;div&gt;+&amp;nbsp;all_character_objects: [Character]&lt;/div&gt;&lt;div&gt;+&amp;nbsp;all_characters_id = [str]&lt;/div&gt;&lt;div&gt;+&amp;nbsp;all_names_id = [str]&lt;/div&gt;&lt;div&gt;+&amp;nbsp;all_movies_id = [str]&lt;/div&gt;&lt;div&gt;+&amp;nbsp;all_genders_id = [str]&lt;/div&gt;&lt;div&gt;+ all_credits_positions_id = [str]&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ character_id: str&lt;/div&gt;&lt;div&gt;+ name_id: str&lt;/div&gt;&lt;div&gt;+ movie_id: str&lt;/div&gt;&lt;div&gt;+ gender_id: str&amp;nbsp;&lt;/div&gt;&lt;div&gt;+ credits_position_id:&amp;nbsp;str&amp;nbsp;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-24">
+          <mxGeometry y="26" width="510" height="184" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-26" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-24">
+          <mxGeometry y="210" width="510" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-27" value="&lt;div&gt;+ __init__(self, character_id, name_id, movie_id, gender_id, credits_position_id)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;+ get_name_id(self, character_id): name_id&lt;/span&gt;&lt;div&gt;+ get_movie_id(self,&amp;nbsp;character_id):&amp;nbsp;movie_id&lt;/div&gt;&lt;div&gt;+ get_gender_id(self,&amp;nbsp;character_id):&amp;nbsp;gender_id&lt;/div&gt;&lt;div&gt;+ get_credits_position_id(self,&amp;nbsp;character_id):&amp;nbsp;credits_position_id&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@p _all_names_id(self): [all_names_id]&lt;/div&gt;&lt;div&gt;@p _all_movies_id(self): [all_movies_id]&lt;/div&gt;&lt;div&gt;@p _all_genders_id(self): [all_genders_id]&lt;/div&gt;&lt;div&gt;@p _all_credits_positions_id(self): [all_credits_positions_id]&lt;/div&gt;&lt;div&gt;@p _all_characters_id(self): [all_characters_id]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c get_all_names(cls,&amp;nbsp;[id_list]): [list_all_names]&lt;/div&gt;&lt;div&gt;@c get_all_movies(cls, [id_list]): [list_all_movies]&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c get_all_genders(cls, [id_list]): [list_all_genders]&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c get_all_credits_positions(cls, [id_list]): [list_all_credits_positions]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;@c create_dataframe(cls, [list_ids], [attribute_list]): DataFrame&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;@c create_character_dataset(cls, str):&amp;nbsp;&lt;/div&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-24">
+          <mxGeometry y="218" width="510" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-28" style="rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=4;endArrow=none;endFill=0;fontFamily=Verdana;exitX=0.011;exitY=-0.007;exitDx=0;exitDy=0;exitPerimeter=0;edgeStyle=orthogonalEdgeStyle;entryX=0.608;entryY=0.999;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-38" target="NsqWC6Qmyju4j9Wvl-nv-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-920" y="899" />
+              <mxPoint x="-920" y="610" />
+              <mxPoint x="-1312" y="610" />
+            </Array>
+            <mxPoint x="-898.5999999999999" y="1032.42" as="sourcePoint" />
+            <mxPoint x="-1310" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-29" value="Association&lt;div style=&quot;font-size: 14px;&quot;&gt;(1 Graph: n Movie)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=1;fontSize=14;fontFamily=Verdana;" vertex="1" connectable="0" parent="NsqWC6Qmyju4j9Wvl-nv-28">
+          <mxGeometry x="0.6968" y="1" relative="1" as="geometry">
+            <mxPoint x="351" y="279" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-30" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=4;endArrow=none;endFill=0;fontFamily=Verdana;entryX=0.417;entryY=1.001;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-36" target="NsqWC6Qmyju4j9Wvl-nv-27">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1380" y="1075" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-31" value="Association&lt;div style=&quot;font-size: 14px;&quot;&gt;(1 Graph: n Character)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=1;fontSize=14;fontFamily=Verdana;" vertex="1" connectable="0" parent="NsqWC6Qmyju4j9Wvl-nv-30">
+          <mxGeometry x="0.593" y="-4" relative="1" as="geometry">
+            <mxPoint x="283" y="-54" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-32" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=4;curved=0;endArrow=none;endFill=0;fontFamily=Verdana;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-36" target="NsqWC6Qmyju4j9Wvl-nv-12">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-20" y="910" />
+              <mxPoint x="-20" y="400" />
+            </Array>
+            <mxPoint x="-610" y="995.0285714285715" as="sourcePoint" />
+            <mxPoint x="-40" y="555" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-33" value="Association&lt;div style=&quot;font-size: 14px;&quot;&gt;(1 Graph: n Conversation)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=1;fontSize=14;fontFamily=Verdana;" vertex="1" connectable="0" parent="NsqWC6Qmyju4j9Wvl-nv-32">
+          <mxGeometry x="0.6466" relative="1" as="geometry">
+            <mxPoint x="-110" y="361" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-34" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=4;curved=0;jumpStyle=arc;endArrow=none;endFill=0;jumpSize=15;fontFamily=Verdana;" edge="1" parent="1" source="NsqWC6Qmyju4j9Wvl-nv-36" target="NsqWC6Qmyju4j9Wvl-nv-16">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-630" y="960" />
+              <mxPoint x="-630" y="705" />
+              <mxPoint x="-745" y="705" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-35" value="Association&lt;div style=&quot;font-size: 14px;&quot;&gt;(1 Graph: n Line)&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontStyle=1;fontSize=14;fontFamily=Verdana;" vertex="1" connectable="0" parent="NsqWC6Qmyju4j9Wvl-nv-34">
+          <mxGeometry x="0.771" y="1" relative="1" as="geometry">
+            <mxPoint y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-36" value="CreateGraph" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;fontFamily=Verdana;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="-750" y="820" width="540" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-37" value="&amp;nbsp;+ title: str&lt;div&gt;&amp;nbsp;+ xlabel: str&lt;br&gt;&amp;nbsp;+ ylabel: str&lt;/div&gt;" style="html=1;whiteSpace=wrap;align=left;fillColor=none;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-36">
+          <mxGeometry y="26" width="540" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-38" value="&lt;div&gt;+ __init__(self, title, xlabel, ylabel)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ create_graph(self, data, graph_type, **kwargs): graph&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;+ create_scatterplot(self, data, x, y, hue, palette, color): graph&lt;/div&gt;&lt;div&gt;+ create_histogram(self, data, column, palette, bins, discrete, color): graph&lt;/div&gt;&lt;div&gt;+ create_heatmap(self): graph&lt;/div&gt;&lt;div&gt;+create_bar_chart(self, data, x, hue, y, orient, order, rotation, palette, color): graph&lt;/div&gt;&lt;div&gt;+create_dist_chart(self, data, x, hue, y, palette, color): graph&lt;/div&gt;&lt;div&gt;+ create_box_chart(self, data, x, hue, y, palette, color): graph&lt;/div&gt;&lt;div&gt;+ create_network_graph(self, ): graph&lt;/div&gt;&lt;div&gt;+ visualise_nework_graph(self, G): graph&lt;/div&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Verdana;" vertex="1" parent="NsqWC6Qmyju4j9Wvl-nv-36">
+          <mxGeometry y="80" width="540" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="NsqWC6Qmyju4j9Wvl-nv-39" value="Légende:&amp;nbsp;&lt;br&gt;- @p: par convention, ce symbole fait référence à un méthode abstraite &quot;property&quot;&amp;nbsp;&lt;div&gt;-@c_ par convention, ce symbole fait référence à une méthode abstraite &quot;classmethod&quot;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-290" y="1090" width="270" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
