@@ -132,8 +132,8 @@ class Movie:
 
         for line in provided_data.splitlines():  # split provided_data en lignes
             # print(index, line):
-            parts = line.split('\t')
-            genres = parts[5].split(' ')  # genres divisés par espaces
+            parts = line.split('\t')  # split chaque ligne en parties, chaque partie représente un attribut de movie
+            genres = parts[5].split(' ')  # genres (partie 5) divisés par des espaces
             clean_genres = []  # instancie une liste vide
             for entry in genres:
                 clean_genre = ''.join(l for l in entry if l in ascii_letters)  # garde seulement lettres ASCII
@@ -141,7 +141,7 @@ class Movie:
             #print(parts)
             # TODO: add proper type handling with try or smth like that
             entries = {
-                # clé : valeur
+                # clé (attributs) : valeur
                 'movie_id': parts[0],
                 'title_id': parts[1],
                 'release_year_id': ''.join(d for d in parts[2] if d in digits),
@@ -207,3 +207,5 @@ class Movie:
             Movie.all_genres_id.append(entries['genres_id'])
 
         print(f'success! {len(Movie.all_movies_id)} objects created.')"""
+
+print(df)
