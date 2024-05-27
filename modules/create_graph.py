@@ -7,7 +7,9 @@ import networkx as nx
 
 
 class CreateGraph:
-    """Déclaration de la classe CreateGraph pour créer différents types de graphiques"""
+    """
+    Déclaration de la classe CreateGraph pour créer différents types de graphiques.
+    """
 
     def __init__(
             self,
@@ -15,14 +17,28 @@ class CreateGraph:
             xlabel="x-axis label goes here",
             ylabel="y-axis label goes here",
                 ):
-        """Initialisation de la classe CreateGraph avec en paramètres le titre et le label des axe x et y"""
+        """
+        Initialisation de la classe CreateGraph avec en paramètres le titre et le label des axes x et y.
+
+        Args:
+            title (str): Le titre du graphique.
+            xlabel (str): Le label de l'axe x.
+            ylabel (str): Le label de l'axe y.
+        """
         sns.set_theme()  # utilise le thème par défaut de Seaborn
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
 
     def create_graph(self, data, graph_type, **kwargs):
-        """Créer un graphique en fonction du type demandé"""
+         """
+        Crée un graphique en fonction du type demandé.
+
+        Args:
+            data (pd.DataFrame): Les données à utiliser pour le graphique.
+            graph_type (str): Le type de graphique à créer.
+            **kwargs: Arguments supplémentaires à passer aux fonctions de création de graphique.
+        """
         # Todo : match: case
         # match graph_type:
         #   case: 'scatter'
@@ -45,10 +61,22 @@ class CreateGraph:
         else:
             print("Ce type de graphe n'est pas pris en compte par le programme :(")
 
-    #Il est possible d'ajouter d'autres types de graphiques: 1. Déclarer un nouveau type de graphique et définir ses paramètres 2. L'ajouter à la méthde de création de grahpiques
+    #Il est possible d'ajouter d'autres types de graphiques:
+    # 1. Déclarer un nouveau type de graphique et définir ses paramètres
+    # 2. L'ajouter à la méthde de création de grahpiques
 
     def create_scatterplot(self, data, x, y, hue=None, palette='magma_r', color=None):
-        """Création d'un scatterplot."""
+        """
+        Création d'un scatterplot.
+
+        Args:
+            data (pd.DataFrame): Les données à utiliser pour le graphique.
+            x (str): Colonne pour l'axe x.
+            y (str): Colonne pour l'axe y.
+            hue (str, optional): Colonne pour la couleur des points.
+            palette (str, optional): Palette de couleurs à utiliser.
+            color (str, optional): Couleur des points.
+        """
         sns.scatterplot(x=x, y=y, data=data, hue=hue, color=color)
         plt.title(self.title)
         plt.xlabel(self.xlabel)
@@ -57,7 +85,17 @@ class CreateGraph:
         plt.show()
 
     def create_histogram(self, data, column, palette=None, bins='auto', discrete=True, color='coral'):
-        """Création d'un histogramme."""
+        """
+        Création d'un scatterplot.
+
+        Args:
+            data (pd.DataFrame): Les données à utiliser pour le graphique.
+            x (str): Colonne pour l'axe x.
+            y (str): Colonne pour l'axe y.
+            hue (str, optional): Colonne pour la couleur des points.
+            palette (str, optional): Palette de couleurs à utiliser.
+            color (str, optional): Couleur des points.
+        """
         with sns.color_palette(palette):
             sns.histplot(data=data[column], discrete=discrete, bins=bins, color=color)
         plt.title(self.title)
@@ -67,7 +105,15 @@ class CreateGraph:
         plt.show()
 
     def create_heatmap(self):
-        """Création d'une carte de chaleur."""
+        """
+        Création d'une carte de chaleur.
+
+        Args:
+            data (pd.DataFrame): Les données à utiliser pour le graphique.
+            values (str): Colonne pour les valeurs à afficher.
+            x (str): Colonne pour les labels de l'axe x.
+            y (str): Colonne pour les labels de l'axe y.
+        """
         pivot_table = data.pivot_table(values=values, index=y, columns=x)
         sns.heatmap(data=pivot_table, cmap="coolwarm")
         plt.title(self.title)
@@ -76,7 +122,20 @@ class CreateGraph:
         plt.show()
 
     def create_bar_chart(self, data, x,  hue=None, y=None, orient='v', order=None, rotation=0, palette=None, color=None):
-        """Création d'un graphique en barres."""
+        """
+        Création d'un graphique en barres.
+
+        Args:
+            data (pd.DataFrame): Les données à utiliser pour le graphique.
+            x (str): Colonne pour l'axe x.
+            hue (str, optional): Colonne pour la couleur des barres.
+            y (str, optional): Colonne pour l'axe y.
+            orient (str, optional): Orientation des barres ('v' pour vertical, 'h' pour horizontal).
+            order (list, optional): Ordre des catégories.
+            rotation (int, optional): Rotation des labels de l'axe x.
+            palette (str, optional): Palette de couleurs à utiliser.
+            color (str, optional): Couleur des barres.
+        """
         plot = sns.catplot(kind='bar', data=data, x=x, y=y, hue=hue, palette=palette, orient=orient, order=order, color=color)
         plot.set_xticklabels(rotation=rotation)
         plt.tight_layout()
@@ -86,7 +145,17 @@ class CreateGraph:
         plt.show()
 
     def create_dist_chart(self, data, x, hue=None, y=None, palette=None, color=None):
-        """Création d'un graphique de distribution."""
+        """
+        Création d'un graphique de distribution.
+
+        Args:
+            data (pd.DataFrame): Les données à utiliser pour le graphique.
+            x (str): Colonne pour l'axe x.
+            hue (str, optional): Colonne pour la couleur des barres.
+            y (str, optional): Colonne pour l'axe y.
+            palette (str, optional): Palette de couleurs à utiliser.
+            color (str, optional): Couleur des barres.
+        """
         sns.histplot(data=data, x=x, y=y, hue=hue, palette=palette, log_scale=False,
                            color=color, stat='proportion', cumulative=True, common_norm=False, fill=False, element='step')
         plt.tight_layout()
@@ -96,7 +165,17 @@ class CreateGraph:
         plt.show()
 
     def create_box_chart(self, data, x, hue=None, y=None, palette=None, color=None):
-        """Création d'un boxplot."""
+        """
+        Création d'un boxplot.
+
+        Args:
+            data (pd.DataFrame): Les données à utiliser pour le graphique.
+            x (str): Colonne pour l'axe x.
+            hue (str, optional): Colonne pour la couleur des boîtes.
+            y (str, optional): Colonne pour l'axe y.
+            palette (str, optional): Palette de couleurs à utiliser.
+            color (str, optional): Couleur des boîtes.
+        """
         #sns.boxplot(data=data, x=x, y=y, hue=hue, palette=palette, color=color, showfliers=False, width=.5, gap=.2)
         sns.catplot(kind='violin', data=data, x=x, y=y, hue=hue, split=True, log_scale=True, gap=0.1, inner=None, palette='Pastel2', legend=False)
         plt.tight_layout()
@@ -106,9 +185,15 @@ class CreateGraph:
         plt.show()
 
     def create_network_graph(self, data, **kwargs):
-        """Création d'un graph de réseau."""
-        # Initialiser un graphe vide
-        # plt doesn't support rendering of multi edges yet :( so we use weight.
+        """
+        Création d'un graphe de réseau.
+
+        Args:
+            data (dict): Les données à utiliser pour le graphique sous forme de dictionnaire.
+            **kwargs: Arguments supplémentaires pour la création du graphe de réseau.
+        """
+
+        # plt ne supporte pas encore les arêtes multiples :( donc nous utilisons le poids
         F = nx.Graph()
         for (a, b), weight in data.items():
             F.add_edge(a, b, weight=weight)
@@ -124,8 +209,12 @@ class CreateGraph:
         plt.show()
 
     def visualize_network_graph(self, data):
-        """Affichage du graph de réseau"""
-        # Afficher le graphe de réseau
+        """
+        Affichage du graphe de réseau.
+
+        Args:
+            data (dict): Les données à utiliser pour le graphique sous forme de dictionnaire.
+        """
         plt.figure(figsize=(10, 6))
         pos = nx.spring_layout(G)  # Choisir une disposition pour les nœuds
         nx.draw(G, pos, with_labels=True, node_color='skyblue', node_size=1500, font_size=10, font_weight='bold',

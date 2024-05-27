@@ -1,8 +1,8 @@
-import pandas as pd
+#import pandas as pd
 
 
-def create_dataframe(data1, data2):
-    return pd.DataFrame({'Data1': data1, 'Data2': data2})
+#def create_dataframe(data1, data2):
+    #return pd.DataFrame({'Data1': data1, 'Data2': data2})
 
 #exemple d'utilisation pour créer le dataframe pour les années de sortie:
 
