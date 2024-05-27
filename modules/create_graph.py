@@ -31,7 +31,7 @@ class CreateGraph:
         self.ylabel = ylabel
 
     def create_graph(self, data, graph_type, **kwargs):
-         """
+        """
         Crée un graphique en fonction du type demandé.
 
         Args:

@@ -52,14 +52,14 @@ class SafeDict(dict):
     Dictionnaire sécurisé qui retourne la clé entre accolades si la clé est manquante.
     """
     def __missing__(self, key):
-    """
-    Retourne la clé entre accolades si elle est manquante dans le dictionnaire.
+        """
+        Retourne la clé entre accolades si elle est manquante dans le dictionnaire.
 
-    Args:
-        key (str): Clé manquante.
+        Args:
+            key (str): Clé manquante.
 
-    Returns:
-        str: Clé entre accolades.
-    """
+        Returns:
+            str: Clé entre accolades.
+        """
         return "{" + key + "}"
 
