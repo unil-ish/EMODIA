@@ -207,5 +207,3 @@ class Movie:
             Movie.all_genres_id.append(entries['genres_id'])
 
         print(f'success! {len(Movie.all_movies_id)} objects created.')"""
-
-print(df)
