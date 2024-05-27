@@ -41,6 +41,7 @@ class ModuleHandler:
         for i in range(len(self.module_list)):
             self.msg.say('up')
         self.compare_modules()
+        self.msg.say('1_module_check_ok')
 
     def compare_modules(self):
         for module in self.module_list:
@@ -56,6 +57,7 @@ class ModuleHandler:
             return True
         except ModuleNotFoundError:
             return False
+
     def filtered_list_imported_modules(self):
         self.msg.say('filtered_list_imported_modules')
         for module in sys.modules.keys():

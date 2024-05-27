@@ -74,25 +74,11 @@ class Conversation:
             list_all_lines.append(merged_list[ids])
         return list_all_lines
 
-    # la création du dataframe qui demande une liste d'id de conversation et une autre liste
-    @classmethod
-    def create_dataframe(cls, list_ids, attribute_list):
-        df = pandas.DataFrame(dict(zip(list_ids, attribute_list)))
-        return df
-
-# utilisé pour la lecture des données
-class ConversationHolder():
-
     @staticmethod
     def create_conversation_dataset(provided_data):
         # Using enumerate so we don't have to increment a variable.
-        print(f'len data: {len(provided_data)}')
-        #print(provided_data)
         for index, line in enumerate(provided_data.splitlines()):
-            #print(index, line)
-            #line = str(line)
             parts = line.split('\t')
-            #print(parts)
 
             entries = {
                 'conversation_id': index,
@@ -115,15 +101,4 @@ class ConversationHolder():
                 conversation_obj.all_conversations_objects.append(conversation_obj)
             except TypeError:
                 conversation_obj = Conversation(index, "?", "?", "?")
-
-            # pour tester
-            #print(conversation_obj.id, conversation_obj.movie_id, conversation_obj.characters_id,
-            #      conversation_obj.lines)
-
-            # on incrémente conversation_id de 1
-            #        conversation_id = conversation_id+1
-
-            #print(conversation_obj.get_characters_id(conversation_obj.id))
-
-        print(f'success! {len(Conversation.all_conversations_id)} objects created.')
         return

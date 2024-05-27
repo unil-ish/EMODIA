@@ -24,6 +24,9 @@ import sys
 from pathlib import Path
 from pathlib import PurePath
 import math
+
+from matplotlib import pyplot as plt
+
 from core_modules import custom_logger
 from core_modules import messenger
 from core_modules import utils
@@ -39,6 +42,9 @@ import pandas as pd
 import numpy as np
 from collections import Counter
 
+import networkx as nx
+import netgraph
+
 # PROGRAM INFO
 NAME = "EMODIA"
 MODULES_DIR = Path("modules")
@@ -48,7 +54,7 @@ DATA_DIR = Path("data")
 # Utilities
 TAB = "    "
 LOGGER = object
-MESSENGER = object
+MESSENGER = None
 CWD = Path.cwd()
 REL_DATA_DIR = PurePath.joinpath(CWD, DATA_DIR)
 
@@ -81,8 +87,8 @@ class MainProgram(ABCProgram):
     def __init__(self):
         super().__init__()
         self.program = self
-        self.program_info = object
-        self.module_handler = object
+        self.program_info = None
+        self.module_handler = None
 
     def start_program(self):
         self.program_info = ProgramInfo()
@@ -95,9 +101,8 @@ class MainProgram(ABCProgram):
         self.msg.log('log_1_modules_check')
         self.module_handler.compare_modules_routine()
 
-
         #self.msg.log('log_2_data_import')
-        DataImport.create_dataset_routine()
+        DataImport.create_dataset_routine(self.msg)
 
         # Entering program loop.
         self.program_loop()
@@ -120,8 +125,8 @@ class ProgramInfo(ABCProgram):
 
     def print_logo(self):
         """Print logo."""
-        for line in self.logo.splitlines():
-            self.msg.say("logo", text=line)
+        for logo_line in self.logo.splitlines():
+            self.msg.say("logo", text=logo_line)
         print()
 
     def print_authors(self):
@@ -160,36 +165,49 @@ class DataImport(MainProgram):
         super().__init__()
 
     @classmethod
-    def create_dataset_routine(cls):
-        cls.create_character()
-        cls.create_conversation()
-        cls.create_movie()
-        cls.create_line()
+    def create_dataset_routine(cls, msg):
+        msg.say('2_import_corpus')
+        msg.say('2_1_import_corpus_steps')
+        msg.say('corpus_list_art_1')
+        msg.say('corpus_list_art_2')
+        cls.create_character(msg)
+        cls.create_conversation(msg)
+        cls.create_movie(msg)
+        cls.create_line(msg)
         pass
 
     @staticmethod
-    def create_character():
+    def create_character(msg):
+        msg.say('import_character')
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_characters_metadata.tsv')
-        character.CharacterHolder.create_character_dataset(provided_data)
+        character.Character.create_character_dataset(provided_data)
+        msg.say('import_character_ok', number=len(character.Character.all_character_objects))
 
     @staticmethod
-    def create_conversation():
+    def create_conversation(msg):
+        msg.say('import_conversation')
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_conversations.tsv')
-        conversation.ConversationHolder.create_conversation_dataset(provided_data)
+        conversation.Conversation.create_conversation_dataset(provided_data)
+        msg.say('import_conversation_ok', number=len(conversation.Conversation.all_conversations_objects))
 
     @staticmethod
-    def create_movie():
+    def create_movie(msg):
+        msg.say('import_movie')
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_titles_metadata.tsv')
-        movie.MovieHolder.create_movie_dataset(provided_data)
+        movie.Movie.create_movie_dataset(provided_data)
+        msg.say('import_movie_ok', number=len(movie.Movie.all_movies_objects))
 
     @staticmethod
-    def create_line():
+    def create_line(msg):
+        msg.say('import_line')
         provided_data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR,
                                             file_in_zip='movie_lines.tsv')
         line.Line.create_line_dataset(provided_data)
+        msg.say('import_line_ok', number=f'{len(line.Line.all_lines_objects):<8}')
+
 
 class Commands(MainProgram):
     def __init__(self, program):
@@ -205,13 +223,11 @@ class Commands(MainProgram):
         Extra bit of code to execute functions as either static methods or
         with self parameter.
         """
-        print()
-        self.msg.say("2_command_selection")
+        self.msg.say("3_command_selection")
         self.command_dict = self.command_dict_holder()
 
         # That's the cute GUI part.
         self.msg.say('select_command')
-        print()
         self.msg.say("command_list_art_1")
         self.msg.say("command_list_art_2")
         for entry, value in self.command_dict.items():
@@ -290,22 +306,12 @@ class PresetCommands(Commands):
         print('command does not exist :( Try again.')
 
     @staticmethod
-    def preset_test_command_dict():
-        """Prints hello world :)"""
-        print('hello world :)')
-
-    @staticmethod
-    def preset_hello_world_read_data():
-        """Calls hello world from read_data module."""
-        read_data.hello_world()
-
-    @staticmethod
     def preset_stop_program():
-        """Stops the program."""
+        """⏻ Arrêter le programme."""
         sys.exit(0)
 
     def preset_reload_module(self):
-        """Reloads a specific module."""
+        """↻ Recharger un module."""
         self.module_handler.filtered_list_imported_modules()
         self.msg.say("which_module_reload")
         target_module = input(f"{TAB}>")
@@ -324,21 +330,21 @@ class PresetCommands(Commands):
             self.msg.say('reloaded_module_error')
 
     @staticmethod
-    def preset_test_create_graph():
+    def _preset_test_create_graph():
         """Test create_graph with random data."""
 
         graph = create_graph.CreateGraph(title='Title', xlabel='x', ylabel='y')
         print(graph)
-        exemple_pd = pd.DataFrame(np.random.randint(0,100,size=(10, 2)), columns=['ID', 'Score'])
+        exemple_pd = pd.DataFrame(np.random.randint(0, 100, size=(10, 2)), columns=['ID', 'Score'])
         print(exemple_pd)
         graph.create_graph(data=exemple_pd, graph_type='scatter', x='ID', y='Score')
 
     def preset_display_credits(self):
-        """Displays program credits."""
+        """✎ Displays program credits."""
         self.program.program_info.print_authors()
 
     @staticmethod
-    def preset_test_modules():
+    def _preset_test_modules():
         """Grabs a random entry in each dataset, and prints a linked value."""
         a = random.choice(movie.Movie.all_movies_id)
         movie_title = movie.Movie.get_title_id(movie.Movie.all_movies_objects[0], a)
@@ -363,33 +369,8 @@ class PresetCommands(Commands):
             extra.append(character.Character.get_name_id(character.Character.all_character_objects[0], character_id))
         print(f'Conversation Characters: {extra}')
 
-
-
-
     @staticmethod
-    def preset_example_read_zip_data():
-        """read_data example for file in zip."""
-
-        data = read_data.read_data('movie_dialog.zip', path=REL_DATA_DIR, file_in_zip='movie_conversations.tsv')
-        # We're using try to make sure the program doesn't crash if there's an error.
-        try:
-            print(len(data))
-        except:
-            print('woops')
-
-    @staticmethod
-    def preset_example_read_data():
-        """read_data example."""
-
-        data = read_data.read_data('senticnet.tsv', path=REL_DATA_DIR)
-        # We're using try to make sure the program doesn't crash if there's an error.
-        try:
-            print(len(data))
-        except:
-            print('woops')
-            
-    @staticmethod
-    def preset_test_graph_release_year():
+    def _preset_test_graph_release_year():
         """Test release_year graph with placeholder data."""
         df_data_c1 = [2001, 2002, 2003, 2004]
         df_data_c2 = ['11', '12', '13', '14']
@@ -397,150 +378,249 @@ class PresetCommands(Commands):
                          'Movie_ID': df_data_c2}
         print(f'data: {df_data_total}')
 
-        df_release_year = pd.DataFrame(data=df_data_total, columns = ['Release_year', 'Movie_ID'])
+        df_release_year = pd.DataFrame(data=df_data_total, columns=['Release_year', 'Movie_ID'])
         print(f'dataframe: {df_release_year}')
 
-        graph = create_graph.CreateGraph(title='Analyse temporelle des films', xlabel='Année de sortie', ylabel='Nb de films')
+        graph = create_graph.CreateGraph(title='Analyse temporelle des films', xlabel='Année de sortie',
+                                         ylabel='Nb de films')
         print(graph)
         graph.create_graph(data=df_release_year, graph_type='histogram', column='Release_year')
 
-    @staticmethod
-    def preset_graph_release_year():
-        """Displays release years."""
-        df_data_c2 = movie.Movie.all_movies_id
-        df_data_c1 = movie.Movie.all_release_years_id
-        df_data_c1 = list(map(int, df_data_c1))
-        df_data_total = {'Release_year': df_data_c1,
-                         'Movie_ID': df_data_c2}
-        #print(f'data: {df_data_total}')
+    def preset_graph_release_year(self):
+        """⧉ Distribution Années de sortie."""
+        title = 'Distribution Années de sortie.'
 
-        df_release_year = pd.DataFrame(data=df_data_total, columns = ['Release_year', 'Movie_ID'])
-        print(f'dataframe: {df_release_year}')
+        self.msg.say('4_graph_creation', name=title)
+        self.msg.say('4_1_graph_access_data')
 
-        graph = create_graph.CreateGraph(title='Répartition temporelle des films', xlabel='Année de sortie', ylabel='Nb de films')
-        print(graph)
-        graph.create_graph(data=df_release_year, graph_type='histogram', column='Release_year', bins=2)
+        self.msg.say('graph_get_data')
+        try:
+            df_data_c2 = movie.Movie.all_movies_id
+            df_data_c1 = movie.Movie.all_release_years_id
+            df_data_c1 = list(map(int, df_data_c1))
+            self.msg.say('graph_get_data_ok')
+        except Exception as e:
+            print(e)
+            return
 
-    @staticmethod
-    def preset_graph_genres():
-        """Displays genres"""
+        self.msg.say('graph_compute_data')
+        try:
 
-        df_data_c1 = movie.Movie.all_genres_id
-        df_data_c2 = movie.Movie.all_movies_id
-        xss = df_data_c1
-        print(xss)
-        flat_list = [
-            x
-            for xs in xss
-            for x in xs
-        ]
-        print(flat_list)
-        genres_set = set(flat_list)
-        print(genres_set)
+            df_data_total = {'Release_year': df_data_c1,
+                             'Movie_ID': df_data_c2}
+            self.msg.say('graph_compute_data_ok')
+        except Exception as e:
+            print(e)
+            return
 
-        counted_genres = Counter(flat_list)
-        print(f'genres: {counted_genres}')
-        counted_genres['undefined'] = counted_genres.pop('')
-        df_data_total = {'Genres': counted_genres.keys(),
-                         'Count': list(map(int, counted_genres.values()))}
-        df_genres = pd.DataFrame(data=df_data_total, columns=['Genres', 'Count'])
-        df_genres = df_genres.sort_values(['Count']).reset_index(drop=True)
-        order = sorted(genres_set)
-        print(df_genres)
-        graph = create_graph.CreateGraph(title='Répartition des genres de films', ylabel='Genre', xlabel='Nombre de films')
-        graph.create_graph(data=df_genres, graph_type='bar_chart', y='Genres', x='Count', orient='h', color='coral')
+        self.msg.say('graph_dataframe_data')
+        try:
+            df_release_year = pd.DataFrame(data=df_data_total, columns=['Release_year', 'Movie_ID'])
+            self.msg.say('graph_dataframe_data_ok')
+        except Exception as e:
+            print(e)
+            return
 
-    @staticmethod
-    def preset_graph_rating():
-        """Displays ratings and votes"""
+        self.msg.say('4_2_graph_create')
+        try:
+            graph = create_graph.CreateGraph(title='Répartition temporelle des films', xlabel='Année de sortie',
+                                             ylabel='Nb de films')
+            graph.create_graph(data=df_release_year, graph_type='histogram', column='Release_year', bins=2)
+            self.msg.say('4_3_success')
+        except Exception as e:
+            print(e)
+            return
 
-        df_data_c1 = movie.Movie.all_votes_id
-        df_data_c2 = movie.Movie.all_ratings_id
-        df_data_c3 = movie.Movie.all_movies_id
-        #df_data_c4 = movie.Movie.all_genres_id
-        df_data_total = {
-            'Votes': df_data_c1,
-            'Ratings': df_data_c2,
-            'Movie': df_data_c3,
-            #'Genres': df_data_c4
-                         }
-        df_ratings_votes = pd.DataFrame(data=df_data_total, columns = ['Votes', 'Ratings'])
-        print(df_ratings_votes)
-        graph = create_graph.CreateGraph(title='Distribution Votes x Note', xlabel='Note', ylabel='Votes')
-        graph.create_graph(x='Ratings', y='Votes', data=df_ratings_votes, graph_type='scatter', color='coral')
+    def preset_graph_genres(self):
+        """⧉ Distribution Genres de film."""
+        title = 'Distribution Genres de film.'
 
+        self.msg.say('4_graph_creation', name=title)
+        self.msg.say('4_1_graph_access_data')
 
-    @staticmethod
-    def preset_graph_credits():
-        """Graph: Position in credits x Gender"""
+        self.msg.say('graph_get_data')
+        try:
+            df_data_c1 = movie.Movie.all_genres_id
+            self.msg.say('graph_get_data_ok')
+        except Exception as e:
+            print(e)
+            return
 
-        df_data_c1 = character.Character.all_credits_positions_id
-        df_data_c2 = character.Character.all_genders_id
-        df_data_c3 = character.Character.all_characters_id
+        self.msg.say('graph_compute_data')
+        try:
+            xss = df_data_c1  # Flattening the list
+            flat_list = [
+                x
+                for xs in xss
+                for x in xs
+            ]
 
-        #print(
-        #    str(len(df_data_c1)) + '\n' +
-        #    str(len(df_data_c2)) + '\n' +
-        #    str(len(df_data_c3)) + '\n'
-        #)
+            counted_genres = Counter(flat_list)
+            counted_genres['undefined'] = counted_genres.pop('')
+            self.msg.say('graph_compute_data_ok')
+        except Exception as e:
+            print(e)
+            return
 
-        counted_credits = Counter(df_data_c3)
-        #print(f'counted_credits: {counted_credits}')
+        self.msg.say('graph_dataframe_data')
+        try:
+            df_data_total = {'Genres': counted_genres.keys(),
+                             'Count': list(map(int, counted_genres.values()))}
+            df_genres = pd.DataFrame(data=df_data_total, columns=['Genres', 'Count'])
+            df_genres = df_genres.sort_values(['Count']).reset_index(drop=True)
+            self.msg.say('graph_dataframe_data_ok')
+        except Exception as e:
+            print(e)
+            return
 
-        df_data_total = {
-            'Position': df_data_c1,
-            'Gender': df_data_c2,
-            'Character_ID': df_data_c3,
-                         }
+        self.msg.say('4_2_graph_create')
+        try:
+            graph = create_graph.CreateGraph(title='Répartition des genres de films', ylabel='Genre',
+                                             xlabel='Nombre de films')
+            graph.create_graph(data=df_genres, graph_type='bar_chart', y='Genres', x='Count', orient='h', color='coral')
+            self.msg.say('4_3_success')
+        except Exception as e:
+            print(e)
+            return
+    def preset_graph_rating(self):
+        """⧉ Nombre notes × Score film."""
+        title = 'Nombre notes × Score film'
 
-        df = pd.DataFrame(data=df_data_total, columns = ['Position', 'Gender', 'Character_ID'])
-        mask = df['Position'] == '?'
-        df = df[~mask]
-        #print(df)
+        self.msg.say('4_graph_creation', name=title)
+        self.msg.say('4_1_graph_access_data')
 
-        #df['Rel_Position'] = df['Character_ID'].map(
-        #    PresetCommands.util_get_rel_credit_pos
-        #)
-        #print(df)
-        #graph = create_graph.CreateGraph(title='Position Crédits x Genre', xlabel='Position', ylabel='Genre')
-        #graph.create_graph(x='Rel_Position', data=df, graph_type='dist', color='coral', hue='Gender')
+        self.msg.say('graph_get_data')
+        try:
+            df_data_c1 = movie.Movie.all_votes_id
+            df_data_c2 = movie.Movie.all_ratings_id
+            df_data_c3 = movie.Movie.all_movies_id
+            self.msg.say('graph_get_data_ok')
+        except Exception as e:
+            print(e)
+            return
 
-        graph = create_graph.CreateGraph(title='Position Crédits x Genre', xlabel='Position')
-        graph.create_graph(x='Position', data=df, graph_type='box', y='Gender')
+        self.msg.say('graph_compute_data')
+        try:
+            df_data_total = {
+                'Votes': df_data_c1,
+                'Ratings': df_data_c2,
+                'Movie': df_data_c3,
+                }
+            self.msg.say('graph_compute_data_ok')
+        except Exception as e:
+            print(e)
+            return
 
+        self.msg.say('graph_dataframe_data')
+        try:
+            df_ratings_votes = pd.DataFrame(data=df_data_total, columns=['Votes', 'Ratings'])
+            self.msg.say('graph_dataframe_data_ok')
+        except Exception as e:
+            print(e)
+            return
 
-    @staticmethod
-    def util_get_rel_credit_pos(character_id):
-        """Unused."""
-        total_credits = 0
-        obj = character.Character.all_character_objects[0]
-        movie_id = character.Character.get_movie_id(obj, character_id)
-        self_credits = character.Character.get_credits_position_id(obj, character_id)
+        self.msg.say('4_2_graph_create')
+        try:
+            graph = create_graph.CreateGraph(title='Distribution Votes x Note', xlabel='Note', ylabel='Votes')
+            graph.create_graph(x='Ratings', y='Votes', data=df_ratings_votes, graph_type='scatter', color='coral')
+            self.msg.say('4_3_success')
+        except Exception as e:
+            print(e)
+            return
 
-        #print(character.Character.all_character_objects)
-        #sys.exit()
-        for entry in character.Character.all_character_objects:
-            #print(entry)
-            #print(entry.movie_id)
-            if entry.movie_id == movie_id:
-                total_credits += 1
-            else:
-                pass
+    def preset_graph_credits(self):
+        """⧉ Position crédits × Genre personnage."""
+        title = 'Position crédits × Genre f/m'
 
-        counted = Counter(character.Character.all_movies_id)
-        total_movie_credits = len(counted)
+        self.msg.say('4_graph_creation', name=title)
+        self.msg.say('4_1_graph_access_data')
 
-        #print(character_id)
-        #print(movie_id)
-        #print(self_credits)
-        #print(total_credits)
-        ##print(f'{x}')
-        #print(f'{movie}')
-        #print(f'test: {totals.get(movie, 'error')}')
-        #print('x value:' + str(x))
-        #print(self_credits)
-        relative_credits = (self_credits / total_credits)# / total_movie_credits
-        return relative_credits
+        self.msg.say('graph_get_data')
+        try:
+            df_data_c1 = character.Character.all_credits_positions_id
+            df_data_c2 = character.Character.all_genders_id
+            df_data_c3 = character.Character.all_characters_id
+            self.msg.say('graph_get_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('graph_compute_data')
+        try:
+            df_data_total = {
+                'Position': df_data_c1,
+                'Gender': df_data_c2,
+                'Character_ID': df_data_c3,
+            }
+            self.msg.say('graph_compute_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('graph_dataframe_data')
+        try:
+            df = pd.DataFrame(data=df_data_total, columns=['Position', 'Gender', 'Character_ID'])
+            mask = df['Position'] == '?'
+            df = df[~mask]
+            self.msg.say('graph_dataframe_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('4_2_graph_create')
+        try:
+            graph = create_graph.CreateGraph(title=title, xlabel='Position')
+            graph.create_graph(x='Position', data=df, graph_type='box', hue='Gender')
+            self.msg.say('4_3_success')
+        except Exception as e:
+            print(e)
+            return
+
+    def preset_graph_dialog_network(self):
+        """⧉ Réseau de dialogues."""
+        title = 'Réseau de dialogues'
+
+        self.msg.say('4_graph_creation', name=title)
+        self.msg.say('4_1_graph_access_data')
+
+        self.msg.say('graph_get_data')
+        try:
+            df_data_c1 = random.sample(movie.Movie.all_movies_objects, 1)
+            df_data_c2 = conversation.Conversation.all_conversations_objects
+            self.msg.say('graph_get_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('graph_compute_data')
+        try:
+            movie_id = df_data_c1[0].movie_id
+            conversation_list = []
+            for entry in df_data_c2:
+                if entry.movie_id == movie_id:
+                    a = entry.characters_id['character_1']
+                    b = entry.characters_id['character_2']
+
+                    a = character.Character.get_name_id(character.Character.all_character_objects[0], a)
+                    b = character.Character.get_name_id(character.Character.all_character_objects[0], b)
+
+                    conversation_list.append((a, b))
+
+            c = Counter(map(tuple, conversation_list))
+            self.msg.say('graph_compute_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('4_2_graph_create')
+        try:
+            graph = create_graph.CreateGraph(title=title)
+            graph.create_graph(data=c, graph_type='network')
+            self.msg.say('4_3_success')
+        except Exception as e:
+            print(e)
+            return
+
 
 def main():
     """Main function. Initializes program."""

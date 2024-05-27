@@ -36,7 +36,7 @@ def read_data(file, **kwargs):
 
     # print(path)
     if not isinstance(path, Path):
-        print('not path :(')
+        print(f'not path :({chr(10)}')
         path = Path(path)  # If not Path(), make it so.
         # print(path)
 
@@ -50,11 +50,11 @@ def read_data(file, **kwargs):
     if '.zip' in path.name:  # Is it a zip?
         #print('its a zip!')
         if not kwargs["file_in_zip"]:  # If we're not told what to get inside the zip, error.
-            print('Please select a zip file.')
+            print(f'Please select a zip file.{chr(10)}')
             return
         file_in_zip = kwargs['file_in_zip']  # Else, get what was asked
         #print(file_in_zip)
-        print(f'{tab * 2}Accessing {file_in_zip}..')
+        #print(f'{tab * 2}Accessing {file_in_zip}..')
         try:
             #zip = zipfile.ZipFile(path)
             #print(zip.namelist())
@@ -68,7 +68,7 @@ def read_data(file, **kwargs):
                 return_data = zipped_data
             return return_data
         except zipfile.BadZipFile:
-            print(f'{error}Unzip error.')
+            print(f'{error}Unzip error.{chr(10)}')
             #logger_handler(logger, f'{tab * 2}Error unzipping {path.name}')
 
     else:
@@ -78,9 +78,9 @@ def read_data(file, **kwargs):
                 return data
         except FileNotFoundError or NotADirectoryError:
             #logger_handler(logger, f'{tab * 2}Error accessing {path.name}')
-            print(f'{error}Path does not exist.')
+            print(f'{error}Path does not exist.{chr(10)}')
         except PermissionError:
-            print(f'{error}File exists but permission error.')
+            print(f'{error}File exists but permission error.{chr(10)}')
 
 
 def logger_handler(logger, msg):

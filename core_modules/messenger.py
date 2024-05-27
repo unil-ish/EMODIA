@@ -36,7 +36,7 @@ class Messenger:
 
         for key in styles:
             styles[key] = "\033[" + styles[key]  # \033[ -> ANSI
-        styles.update({"tab": tab})  # Adding TAB to our styles.
+        styles.update({"tab": tab, "new_line": chr(10)})  # Adding TAB to our styles.
 
         return styles
 

@@ -72,33 +72,13 @@ class Line:
             list_content.append(merged_list[ids])
         return list_content
 
-    # la création du dataframe qui demande une liste d'id de conversation et une autre liste
-    @classmethod
-    def create_dataframe(cls, list_ids, attribute_list, another_attribute_list):
-        df = pandas.DataFrame(dict(zip(list_ids, attribute_list, another_attribute_list)))
-        return df
-
 # utilisé pour la lecture des données
     @staticmethod
     def create_line_dataset(provided_data):
         # fills Line class variables from read_data
 
-        #print(provided_data)
         for line in provided_data.splitlines():
-            #print(index, line)
-            #line = str(line)
             parts = line.split('\t')
-            #print(parts)
-
-            #             line_obj = Line(parts[0], parts[2], parts[1], parts[4])
-            #             list_line_id.append(parts[0])
-            #             list_char_id.append(parts[1])
-            #             list_content.append(parts[4])
-            #         except:
-            #             line_obj = Line("?", "?","?","?")
-            #             list_line_id.append(parts[0])
-            #             list_char_id.append(parts[1])
-            #             list_content.append("")
 
             try:
                 entries = {
@@ -123,7 +103,3 @@ class Line:
             Line.all_characters_id.append(entries.get('character_id', '?'))
             Line.all_movies_id.append(entries.get('movie_id', '?'))
             Line.all_lines_content.append(entries.get('line_content', '?'))
-
-        print(f'success! {len(Line.all_lines_objects)} objects created.')
-
-        #print(Line.all_lines_id)

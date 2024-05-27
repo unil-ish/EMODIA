@@ -96,14 +96,6 @@ class Character:
             list_all_credits_positions.append(merged_list[ids])
         return list_all_credits_positions
 
-    @classmethod
-    def create_dataframe(cls, list_ids, attribute_list):
-        df = pd.DataFrame(dict(zip(list_ids, attribute_list)))
-        return df
-
-
-class CharacterHolder:
-
     @staticmethod
     def create_character_dataset(provided_data):
         for line in provided_data.splitlines():
@@ -134,6 +126,4 @@ class CharacterHolder:
             Character.all_movies_id.append(entries['movie_id'])
             Character.all_genders_id.append(entries['gender_id'])
             Character.all_credits_positions_id.append(entries['credits_position_id'])
-
-        print(f'success! {len(Character.all_character_objects)} objects created.')
         return

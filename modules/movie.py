@@ -114,30 +114,17 @@ class Movie:
             list_all_genres_id.append(merged_list[ids])
         return list_all_genres_id
 
-    # création d'un dataframe df
-    @classmethod
-    def create_dataframe(cls, list_ids, attribute_list):
-        df = pd.DataFrame(dict(zip(list_ids, attribute_list)))
-        return df
-
-
-class MovieHolder:
-
     @staticmethod
     def create_movie_dataset(provided_data):
         # fills Movie class variables from read_data
-        #movie_data = MovieHolder.read_data(provided_data)
 
         for line in provided_data.splitlines():
-            #print(index, line)
-            #line = str(line)
             parts = line.split('\t')
             genres = parts[5].split(' ')
             clean_genres = []
             for entry in genres:
                 clean_genre = ''.join(l for l in entry if l in ascii_letters)
                 clean_genres.append(clean_genre)
-            #print(parts)
             # TODO: add proper type handling with try or smth like that
             entries = {
                 'movie_id': parts[0],
@@ -158,21 +145,3 @@ class MovieHolder:
             Movie.all_ratings_id.append(entries['ratings_id'])
             Movie.all_votes_id.append(entries['votes_id'])
             Movie.all_genres_id.append(entries['genres_id'])
-
-        print(f'success! {len(Movie.all_movies_id)} objects created.')
-
-        #print(Movie.all_titles_id)
-        # vérifie si les clés "id", "title", etc sont présentes
-        #for movie in movie_data:
-        #    if 'id' in movie:
-        #        Movie.all_movies_id.append(movie['id'])
-        #    if 'title' in movie:
-        #        Movie.all_titles_id.append(movie['title'])
-        #    if 'release_year' in movie:
-        #        Movie.all_release_years_id.append(movie['release_year'])
-        #    if 'rating' in movie:
-        #        Movie.all_ratings_id.append(movie['rating'])
-        #    if 'votes' in movie:
-        #        Movie.all_votes_id.append(movie['votes'])
-        #    if 'genres' in movie:
-        #        Movie.all_genres_id.append(movie['genres'])
