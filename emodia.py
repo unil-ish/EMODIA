@@ -38,6 +38,7 @@ from modules import create_graph
 from modules import line
 from modules import movie
 from modules import character
+from modules import process_file
 import pandas as pd
 import numpy as np
 from collections import Counter
@@ -702,6 +703,9 @@ class PresetCommands(Commands):
             return
 
         self.msg.say('4_2_graph_create')
+
+        senticnet_path = PurePath.joinpath(REL_DATA_DIR, 'senticnet.tsv')
+        sent_analysis = process_file.ProcessFile(df, senticnet_path)
         #try:
         #    graph = create_graph.CreateGraph(title=title)
         #    graph.create_graph(data=c, graph_type='network')
@@ -710,7 +714,6 @@ class PresetCommands(Commands):
         #    print(e)
         #    return
         print(df)
-
 
 def main():
     """Fonction principale. Initialise le programme."""
