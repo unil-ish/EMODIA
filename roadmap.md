@@ -50,11 +50,11 @@ Feuille de route du projet
     * Create preset_commands for data visualisation
       * Erica, Lorelei (d> 26.05) ToDo
     * Translate comments and UI
-      * Lorelei (d> 28.05) ToDo
+      * Lorelei (d> 28.05) DONE
   * Documentation
-    * README in branch-erica (> 27.05) ToDo 
+    * README in branch-erica (> 27.05) DONE
     * Structure: Erica
-    * UML (d> 24.05) ToDo
+    * UML (d> 24.05) DONE
     * Each person documents the code they've written ToDo
   * Presentation
     * PowerPoint: Erica (d> 26.05), shared on MS365 ToDo
