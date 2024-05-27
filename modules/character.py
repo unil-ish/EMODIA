@@ -12,6 +12,14 @@ class Character:
     all_credits_positions_id = []
 
     def __init__(self, character_id, name_id, movie_id, gender_id, credits_position_id):
+        """ Initialise character avec les attributs
+                Args :
+        character_id : string, ID d'un character en particulier
+        name_id : string, ID du nom du personnage
+        movie_id : string, ID du film du personnage
+        gender_id : string, genre du personnage
+        credits_position_id : string, position des crédits du personnage
+        """
         self.character_id = character_id  # id d'un character en particulier
         self.name_id = name_id
         self.movie_id = movie_id

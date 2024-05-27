@@ -19,10 +19,19 @@ class Movie:
     all_release_years_id = []
     all_ratings_id = []
     all_votes_id = []
-    all_genres_id = []  # liste de listes de genres de chaque film
+    all_genres_id = []  # liste de listes de genres de chaque movie
 
     def __init__(self, movie_id, title_id, release_year_id, ratings_id, votes_id, genres_id):
-        self.movie_id = movie_id  # id d'un movie en particulier
+        """ Initialise movie avec les attributs
+                Args :
+                    movie_id : string, ID d'un movie en particulier
+                    title_id : string, ID du titre du movie
+                    release_year_id : string, année de sortie du film
+                    ratings_id : float, note attribuée au film
+                    votes_id : integer, nombre de votes pour le film
+                    genres_id : une liste des genres qui appartiennent à un film
+        """
+        self.movie_id = movie_id
         self.title_id = title_id
         self.release_year_id = release_year_id
         self.ratings_id = ratings_id
