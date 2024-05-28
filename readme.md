@@ -69,10 +69,21 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
    les URL à partir desquelles les sources brutes ont été récupérées
 
 ### Installation et utilisation du programme
-1. 
-2. 
-3. 
-...
+1. Prérequis:
+   * Python3.10+
+   * Modules: MatPlotLib, seaborn, tqdm, spaCy, pandas, numpy, networkx
+   * Un venv pour une utilisation adéquate.
+   * Le programme
+3. Installation
+   1. Copier la repository.
+   2. Lancer emodia.py.
+   3. C'est fait :)
+5. Utilisation
+   * Le programme dispose d'une interface en ligne de commande pour les options prédéfinies.
+   * Il est possible de rajouter des commandes en modifiant la classe PresetCommands dans emodia.py.
+   * La plupart des messages imprimés dans la console sont modifiables, tant contenu que style, dans les fichiers .json dans le répertoire 'resources'.
+   * Les données se trouvent dans 'data'.
+   * Une fonction de rechargement de modules permet de changer l'apparence des graphes sans redémarrer le programme.  
 
 ### Structure logique du projet 
 
@@ -86,7 +97,7 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
 
 📁 data 
 
-      -  movie_dialog.zip
+      - movie_dialog.zip
       - senticnet.tsv
 
 📁 model
@@ -101,13 +112,12 @@ Dans tous les fichiers, le séparateur de champs original était " +++$+++ " et 
       - analysis_navier_stocker.py
       - character.py
       - conversation.py
-      - create_dataframe.py
       - create_graph.py
       - file_parser.py
-      - keyowrds.py
+      - keywords_module.py
       - line.py
       - movie.py
-      - process_file.py
+      - process_file_lei.py
       - read_data.py
 
 📁 ressources
