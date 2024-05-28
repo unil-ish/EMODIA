@@ -4,6 +4,10 @@ import pandas as pd
 from scipy.integrate import odeint
 from tqdm import tqdm
 
+# tqdm : progress bar
+
+
+
 class SentimentDynamics:
     def __init__(self, keywords):
         self.keywords = keywords
@@ -29,28 +33,29 @@ class SentimentDynamics:
             pressure_term = np.zeros_like(s)
         else:
             pressure_term = -1 / rho_sent * np.gradient(p_sent)
-        
+
         grad_s = np.gradient(s)
         laplacian_s = np.gradient(grad_s)
-        
+
         if np.any(np.isnan(s)) or np.any(np.isinf(s)) or np.any(np.isnan(grad_s)) or np.any(np.isinf(grad_s)):
             logging.warning("Warning: NaN or inf detected in s or grad_s. Skipping this iteration.")
             return None
 
         convective_term = s * grad_s
         viscous_term = nu_sent * laplacian_s
-        
+
         rhs = convective_term + pressure_term + viscous_term + g_context
-        
+
         np.clip(rhs, -1e10, 1e10, out=rhs)
-        
+
         if np.any(np.isnan(rhs)) or np.any(np.isinf(rhs)):
             logging.warning("Warning: NaN or inf detected in rhs. Skipping this iteration.")
             return None
-        
+
         logging.debug(f"Sentiment flow: {rhs}")
-        
+
         return rhs
+
 
 class SpeechAnalysis:
     def __init__(self, data, sentiment_dynamics):
@@ -77,18 +82,16 @@ class SpeechAnalysis:
 
     def calculate_navier_stocker(self):
         all_s = {}
-        sentiment_columns = self.data.columns.difference(['title','speaker', 'speech', 'POLARITY'])
-        
+        sentiment_columns = self.data.columns.difference(['title', 'speaker', 'speech', 'POLARITY'])
+
         for speaker in tqdm(self.data['speaker'].unique(), desc="Processing speakers"):
             speaker_data = self.data[self.data['speaker'] == speaker]
             title = speaker_data.iloc[0]['title']
             logging.info(f"Processing speaker: {speaker}, number of speeches: {len(speaker_data)}")
-            
+
+
 
         return all_s
-
-
-
 
 #ATTENTION: You have to map your_df columns to the columns' names: 'title', 'speaker', 'speech' before using this class.
 

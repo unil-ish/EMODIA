@@ -1,8 +1,8 @@
 [
   "analysis_navier_stocker",
   "create_graph",
-  "keywords",
-  "process_file",
+  "keywords_module",
+  "process_file_lei",
   "read_data",
   "line",
   "conversation",

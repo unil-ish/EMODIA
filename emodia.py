@@ -38,6 +38,9 @@ from modules import create_graph
 from modules import line
 from modules import movie
 from modules import character
+from modules import analysis_navier_stocker
+from modules import process_file_lei
+from modules import keywords_module
 import pandas as pd
 import numpy as np
 from collections import Counter
@@ -514,6 +517,7 @@ class PresetCommands(Commands):
         except Exception as e:
             print(e)
             return
+
     def preset_graph_rating(self):
         """⧉ Exécute le graphique du nombre notes × Score film."""
         title = 'Nombre notes × Score film'
@@ -537,7 +541,7 @@ class PresetCommands(Commands):
                 'Votes': df_data_c1,
                 'Ratings': df_data_c2,
                 'Movie': df_data_c3,
-                }
+            }
             self.msg.say('graph_compute_data_ok')
         except Exception as e:
             print(e)
@@ -652,6 +656,206 @@ class PresetCommands(Commands):
         except Exception as e:
             print(e)
             return
+
+    def preset_graph_sentiment_analysis(self):
+        """⧉ Analyse Sentiment dans le temps."""
+        title = 'Sentiment × Temps'
+
+        self.msg.say('4_graph_creation', name=title)
+        self.msg.say('4_1_graph_access_data')
+
+        self.msg.say('graph_get_data')
+        try:
+            one_movie = random.sample(movie.Movie.all_movies_objects, 1)[0]
+            all_lines = line.Line.all_lines_objects
+            self.msg.say('graph_get_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('graph_compute_data')
+        try:
+            movie_id = one_movie.movie_id
+
+            speaker_list = []
+            speech_list = []
+            for entry in all_lines:
+                if entry.movie_id == movie_id:
+                    speaker = entry.character_id  # Get character ID for this line
+                    speech = entry.line_content  # Get line content for this line
+
+                    # Get full character name from their ID
+                    speaker = character.Character.get_name_id(character.Character.all_character_objects[0], speaker)
+                    #b = character.Character.get_name_id(character.Character.all_character_objects[0], b)
+
+                    speaker_list.append(speaker)
+                    speech_list.append(speech)
+
+            df_sentiment = {
+                'title': None,
+                'speaker': speaker_list,
+                'speech': speech_list
+            }
+
+            df = pd.DataFrame(data=df_sentiment, columns=['title', 'speaker', 'speech'])
+            df['title'] = movie_id
+            self.msg.say('graph_compute_data_ok')
+            senticnet_path = PurePath.joinpath(REL_DATA_DIR, 'senticnet.tsv')
+            sent_analysis = process_file_lei.ProcessFile(df, senticnet_path)
+            results = sent_analysis.process_speeches()
+            try:
+                df = results[['ATTITUDE', 'ATTITUDE#anger', 'ATTITUDE#pleasantness', 'POLARITY']].copy()
+            except KeyError:
+                print(f'{TAB}{TAB}Certaines émotions ne sont pas présentes dans le passage;')
+                print(f'{TAB}{TAB}Passage en mode toutes émotions.')
+                df = results
+
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('4_2_graph_create')
+
+
+        #print(results)
+        try:
+            graph = create_graph.CreateGraph(title=title, xlabel='Temps', ylabel='Intensité')
+            graph.create_graph(data=df, color='coral', graph_type='line')
+            self.msg.say('4_3_success')
+        except Exception as e:
+            print(e)
+            return
+
+    def preset_graph_sentiment_analysis_polarity(self):
+        """⧉ Analyse Polarité sentiment dans le temps."""
+        title = 'Polarité sentiment × Temps'
+
+        self.msg.say('4_graph_creation', name=title)
+        self.msg.say('4_1_graph_access_data')
+
+        self.msg.say('graph_get_data')
+        try:
+            one_movie = random.sample(movie.Movie.all_movies_objects, 1)[0]
+            all_lines = line.Line.all_lines_objects
+            self.msg.say('graph_get_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('graph_compute_data')
+        try:
+            movie_id = one_movie.movie_id
+
+            speaker_list = []
+            speech_list = []
+            for entry in all_lines:
+                if entry.movie_id == movie_id:
+                    speaker = entry.character_id  # Get character ID for this line
+                    speech = entry.line_content  # Get line content for this line
+
+                    # Get full character name from their ID
+                    speaker = character.Character.get_name_id(character.Character.all_character_objects[0], speaker)
+                    #b = character.Character.get_name_id(character.Character.all_character_objects[0], b)
+
+                    speaker_list.append(speaker)
+                    speech_list.append(speech)
+
+            df_sentiment = {
+                'title': None,
+                'speaker': speaker_list,
+                'speech': speech_list
+            }
+
+            df = pd.DataFrame(data=df_sentiment, columns=['title', 'speaker', 'speech'])
+            df['title'] = movie_id
+            self.msg.say('graph_compute_data_ok')
+            senticnet_path = PurePath.joinpath(REL_DATA_DIR, 'senticnet.tsv')
+            sent_analysis = process_file_lei.ProcessFile(df, senticnet_path)
+            results = sent_analysis.process_speeches()
+
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('4_2_graph_create')
+
+        #print(results)
+        try:
+            graph = create_graph.CreateGraph(title=title, xlabel='Temps', ylabel='Polarité')
+            graph.create_graph(x=results.index, y='POLARITY', data=results, color='coral', graph_type='line')
+            self.msg.say('4_3_success')
+        except Exception as e:
+            print(e)
+            return
+
+    def preset_emodia(self):
+        """⧉ Analyse via Navier Stocker."""
+        title = 'Flux Émotionnels × Temps'
+
+        self.msg.say('4_graph_creation', name=title)
+        self.msg.say('4_1_graph_access_data')
+
+        self.msg.say('graph_get_data')
+        try:
+            one_movie = random.sample(movie.Movie.all_movies_objects, 1)[0]
+            all_lines = line.Line.all_lines_objects
+            self.msg.say('graph_get_data_ok')
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('graph_compute_data')
+        try:
+            movie_id = one_movie.movie_id
+
+            speaker_list = []
+            speech_list = []
+            for entry in all_lines:
+                if entry.movie_id == movie_id:
+                    speaker = entry.character_id  # Get character ID for this line
+                    speech = entry.line_content  # Get line content for this line
+
+                    # Get full character name from their ID
+                    speaker = character.Character.get_name_id(character.Character.all_character_objects[0], speaker)
+                    #b = character.Character.get_name_id(character.Character.all_character_objects[0], b)
+
+                    speaker_list.append(speaker)
+                    speech_list.append(speech)
+
+            df_sentiment = {
+                'title': None,
+                'speaker': speaker_list,
+                'speech': speech_list
+            }
+
+            df = pd.DataFrame(data=df_sentiment, columns=['title', 'speaker', 'speech'])
+            df['title'] = movie_id
+            self.msg.say('graph_compute_data_ok')
+            senticnet_path = PurePath.joinpath(REL_DATA_DIR, 'senticnet.tsv')
+            sent_analysis = process_file_lei.ProcessFile(df, senticnet_path)
+            results = sent_analysis.process_speeches()
+
+            keywords = keywords_module.get_keywords()
+            sentiment_dynamics = analysis_navier_stocker.SentimentDynamics(keywords)
+            speech_analysis = analysis_navier_stocker.SpeechAnalysis(results, sentiment_dynamics)
+            all_s = speech_analysis.calculate_navier_stocker()
+            print()
+
+        except Exception as e:
+            print(e)
+            return
+
+        self.msg.say('4_2_graph_create')
+
+        #print(results)
+        try:
+            graph = create_graph.CreateGraph(title=title, xlabel='Temps', ylabel='Polarité')
+            graph.create_graph(x=results.index, y='POLARITY', data=results, color='coral', graph_type='line')
+            self.msg.say('4_3_success')
+        except Exception as e:
+            print(e)
+            return
+
 
 
 def main():

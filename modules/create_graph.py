@@ -58,6 +58,8 @@ class CreateGraph:
             self.create_dist_chart(data, **kwargs)
         elif graph_type == 'box':
             self.create_box_chart(data, **kwargs)
+        elif graph_type == 'line':
+            self.create_line_graph(data, **kwargs)
         else:
             print("Ce type de graphe n'est pas pris en compte par le programme :(")
 
@@ -220,4 +222,19 @@ class CreateGraph:
         nx.draw(G, pos, with_labels=True, node_color='skyblue', node_size=1500, font_size=10, font_weight='bold',
                 edge_color='gray')
         plt.title(self.title)
+        plt.show()
+
+    def create_line_graph(self, data, x=None, hue=None, y=None, palette=None, color=None):
+        """
+        Affichage du graphe linéaire.
+
+        Args:
+            data (dict): Les données à utiliser pour le graphique sous forme de dictionnaire.
+        """
+        sns.lineplot(data=data, x=x, y=y, hue=hue, palette=palette,
+                     color=color)
+        plt.tight_layout()
+        plt.title(self.title, y=1.0, pad=-14)
+        plt.xlabel(self.xlabel)
+        plt.ylabel(self.ylabel)
         plt.show()

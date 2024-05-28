@@ -4,6 +4,8 @@ import spacy
 import pandas as pd
 from tqdm import tqdm
 
+# tqdm -> progress bar
+# spacy -> natural language processing
 
 class ProcessFile:
 
@@ -89,8 +91,9 @@ class ProcessFile:
                         #logging.debug(f"Token: {token_text}, polarity: {polarity}")
                         polaritylist.append(polarity)
                     else:
-                        print(f"Token: {token_text}, no matching row found")
+                        #print(f"Token: {token_text}, no matching row found")
                         #logging.debug(f"Token: {token_text}, no matching row found")
+                        pass
 
             # Calculate averages for each emotion category
             emotion_avg = {emotion: sum(values) / len(values) if values else 0 for emotion, values in accumulators.items()}

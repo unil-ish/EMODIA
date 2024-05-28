@@ -45,7 +45,7 @@ class Line:
         Args:
             line_id (str) : id de la ligne
         Returns:
-            character_id (str) : id du film
+            movie_id (str) : id du film
         Examples:
             >> line_id = L3
             >> get_movie_id(line_id)
