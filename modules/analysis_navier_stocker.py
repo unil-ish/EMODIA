@@ -89,6 +89,8 @@ class SpeechAnalysis:
             title = speaker_data.iloc[0]['title']
             logging.info(f"Processing speaker: {speaker}, number of speeches: {len(speaker_data)}")
 
+
+
         return all_s
 
 #ATTENTION: You have to map your_df columns to the columns' names: 'title', 'speaker', 'speech' before using this class.
