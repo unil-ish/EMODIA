@@ -56,35 +56,30 @@ class Character:
         merged_list = dict(zip(self.all_characters_id, self.all_credits_positions_id))
         return merged_list[character_id]
 
-    # création de @property pour pouvoir accéder aux attributs (avant __init__)
+
     @property
     def _all_names_id(self):
-        """Accéder à l'attribut de classe all_names_id
-
-            Returns :
-            La création d'une méthode avec un @property permet d'accéder
-            aux attributs de classe
-        """
+        """Accéder à la liste des IDs de noms"""
         return self.all_names_id
 
     @property
     def _all_movies_id(self):
-        """Accéder à l'attribut de classe all_movies_id"""
+        """Accéder à la liste des IDs de films"""
         return self.all_movies_id
 
     @property
     def _all_genders_id(self):
-        """Accéder à l'attribut de classe all_genders_id"""
+        """Accéder à la liste des IDs de genres"""
         return self.all_genders_id
 
     @property
     def _all_credits_positions_id(self):
-        """Accéder à l'attribut de classe all_credits_positions_id"""
+        """Accéder à la liste des IDs de positions dans les crédits"""
         return self.all_credits_positions_id
 
     @property
     def _all_characters_id(self):
-        """Accéder à l'attribut de classe all_characters_id"""
+        """Accéder à la liste des IDs de personnages"""
         return self.all_characters_id
 
     # création de @classmethod
@@ -145,6 +140,8 @@ class Character:
             Args :
                 provided_data : châine de caractères contenant des données
                 tabulées où chaque ligne représente un personnage.
+
+            Example : provided_data = "u2, CAMERON, m0, 10 things i hate about you, m, 3"
 
             Returns :
                 La méthode sépare le string de provided_data en parties et extrait les

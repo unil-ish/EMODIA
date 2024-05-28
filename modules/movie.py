@@ -75,37 +75,32 @@ class Movie:
 
     @property
     def _all_titles_id(self):
-        """Accéder à l'attribut de classe all_titles_id
-
-            Returns :
-            La création d'une méthode avec un @property permet d'accéder
-            aux attributs de classe
-        """
+        """Accéder à la liste des IDs de titres"""
         return self.all_titles_id
 
     @property
     def _all_release_years_id(self):
-        """Accéder à l'attribut de classe all_release_years_id"""
+        """Accéder à la liste des IDs des années de sortie"""
         return self.all_release_years_id
 
     @property
     def _all_ratings_id(self):
-        """Accéder à l'attribut de classe all_ratings_id"""
+        """Accéder à la liste des IDs de notes"""
         return self.all_ratings_id
 
     @property
     def _all_votes_id(self):
-        """Accéder à l'attribut de classe all_votes_id"""
+        """Accéder à la liste des IDs de votes"""
         return self.all_votes_id
 
     @property
     def _all_genres_id(self):
-        """Accéder à l'attribut de classe all_genres_id"""
+        """Accéder à une liste de listes des IDs de genres"""
         return self.all_genres_id
 
     @property
     def _all_movies_id(self):
-        """Accéder à l'attribut de classe all_movies_id"""
+        """Accéder à la liste des IDs de films"""
         return self.all_movies_id
 
     # création de @classmethod
@@ -173,6 +168,9 @@ class Movie:
                 Args :
                     provided_data : châine de caractères contenant des données
                     tabulées où chaque ligne représente un film.
+
+                Example : provided_data = "m0, 10 things i hate about you, 1999, 6.90, 62847,
+                ['comedy''romance]"
 
                 Returns :
                     La méthode sépare le string de provided_data en parties et
